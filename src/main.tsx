@@ -1,9 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+import HomePage from '@/pages/homePage';
 import './index.css';
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <HomePage />,
+    },
+]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <h1>Hello</h1>
+        <RouterProvider router={router} />
     </React.StrictMode>
 );
