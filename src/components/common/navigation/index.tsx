@@ -1,9 +1,14 @@
-import styles from './navigation.module.scss';
+import styles from './navigation.module.css';
 
-export default function Navigation() {
+type NavigationProps = {
+    children: React.ReactNode;
+};
+
+export default function Navigation(props: NavigationProps) {
+    const { children } = props;
     return (
         <nav className={styles.nav}>
-            <ul className={styles.list}></ul>
+            <ul className={styles.list}>{children}</ul>
         </nav>
     );
 }

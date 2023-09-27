@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+
+import styles from './navigation-item.module.css';
 
 type NavigationItemsProps = {
     href: string;
@@ -8,8 +10,10 @@ type NavigationItemsProps = {
 export default function NavigationItem(props: NavigationItemsProps) {
     const { href = '#', text } = props;
     return (
-        <li>
-            <Link to={href}>{text}</Link>
+        <li className={styles.item}>
+            <NavLink to={href} className={styles.link}>
+                {text}
+            </NavLink>
         </li>
     );
 }

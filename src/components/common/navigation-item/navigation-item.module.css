@@ -1,0 +1,11 @@
+.item {
+    font-size: var(--fs-500);
+    font-weight: 600;
+    list-style: none;
+    padding: 0;
+}
+
+.link {
+    color: var(--color-text);
+    text-decoration: none;
+}
