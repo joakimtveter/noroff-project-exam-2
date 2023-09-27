@@ -1,7 +1,10 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useGetVenueByIdQuery } from '@/services/holidaze';
 import { useState, useEffect } from 'react';
 import { getVenueById } from '@/api/';
 import { VenueDetailed } from '@/types/venue';
+import Layout from '@/components/layout/standard-layout';
+import Container from '@/components/common/container';
 
 const initialVenue: VenueDetailed = {
     name: '',
@@ -37,52 +40,59 @@ const initialVenue: VenueDetailed = {
 };
 
 export default function VenuePage() {
+    const navigate = useNavigate();
     const { venueId } = useParams();
-    const [venue, setVenue] = useState(initialVenue);
+    if (venueId == undefined) navigate('/404');
+    const { data, error, isLoading } = useGetVenueByIdQuery(venueId || '');
 
-    const fetchVenue = async () => {
-        if (!venueId) return;
-        const venue = await getVenueById(venueId);
-        console.log('venue: ', venue);
-        setVenue(venue);
-    };
-    useEffect(() => {
-        fetchVenue();
-    }, []);
+    if (error) console.log(error);
+
     return (
         <>
-            <div>
-                {venue.media.length == 1 ? <img style={{ width: '400px' }} src={venue.media[0]} alt='' /> : null}
-                {venue.media.length > 1
-                    ? venue.media.map((media, index) => (
-                          <img key={index} style={{ width: '400px' }} src={media} alt='' />
-                      ))
-                    : null}
-                <h1>{venue.name}</h1>
-                <p>{venue.description}</p>
-                <div>
-                    <p>Max no. of Guests: {venue.maxGuests}</p>
-                    <p>Wifi Available: {venue.meta.wifi ? 'Yes' : 'No'}</p>
-                    <p>Pets Allowed: {venue.meta.pets ? 'Yes' : 'No'}</p>
-                    <p>Parking Available: {venue.meta.parking ? 'Yes' : 'No'}</p>
-                    <p>Breakfast Served: {venue.meta.breakfast ? 'Yes' : 'No'}</p>
-                    <p>Rating: {venue.rating}</p>
-                </div>
-                <div>
-                    <p>Owner: {venue.owner.name}</p>
-                    <img style={{ width: '200px' }} src={venue.owner.avatar} alt='' />
-                </div>
-                <div>
-                    <p>Address: {venue.location.address}</p>
-                    <p>City: {venue.location.city}</p>
-                    <p>Zip: {venue.location.zip}</p>
-                    <p>Country: {venue.location.country}</p>
-                    <p>Continent: {venue.location.continent}</p>
-                    {venue.location.lat ? <p>Lat: {venue.location.lat}</p> : null}
-                    {venue.location.lng ? <p>Lng: {venue.location.lng}</p> : null}
-                </div>
-                <p>Price: ${venue.price} per night</p>
-            </div>
+            <Layout>
+                <Container>
+                    {error ? (
+                        <p>Oh no, there was an error</p>
+                    ) : isLoading ? (
+                        <p>Loading...</p>
+                    ) : data ? (
+                        <div>
+                            {data.media.length == 1 ? (
+                                <img style={{ width: '400px' }} src={data.media[0]} alt='' />
+                            ) : null}
+                            {data.media.length > 1
+                                ? data.media.map((media, index) => (
+                                      <img key={index} style={{ width: '400px' }} src={media} alt='' />
+                                  ))
+                                : null}
+                            <h1>{data.name}</h1>
+                            <p>{data.description}</p>
+                            <div>
+                                <p>Max no. of Guests: {data.maxGuests}</p>
+                                <p>Wifi Available: {data.meta.wifi ? 'Yes' : 'No'}</p>
+                                <p>Pets Allowed: {data.meta.pets ? 'Yes' : 'No'}</p>
+                                <p>Parking Available: {data.meta.parking ? 'Yes' : 'No'}</p>
+                                <p>Breakfast Served: {data.meta.breakfast ? 'Yes' : 'No'}</p>
+                                <p>Rating: {data.rating}</p>
+                            </div>
+                            <div>
+                                <p>Owner: {data.owner.name}</p>
+                                <img style={{ width: '200px' }} src={data.owner.avatar} alt='' />
+                            </div>
+                            <div>
+                                <p>Address: {data.location.address}</p>
+                                <p>City: {data.location.city}</p>
+                                <p>Zip: {data.location.zip}</p>
+                                <p>Country: {data.location.country}</p>
+                                <p>Continent: {data.location.continent}</p>
+                                {data.location.lat ? <p>Lat: {data.location.lat}</p> : null}
+                                {data.location.lng ? <p>Lng: {data.location.lng}</p> : null}
+                            </div>
+                            <p>Price: ${data.price} per night</p>
+                        </div>
+                    ) : null}
+                </Container>
+            </Layout>
         </>
     );
 }

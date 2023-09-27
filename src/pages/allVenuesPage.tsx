@@ -1,29 +1,28 @@
 import Layout from '@/components/layout/standard-layout';
-import { getVenues } from '@/api/';
-import { Venue } from '@/types/venue';
-import { useState, useEffect } from 'react';
+import { useGetVenuesQuery } from '@/services/holidaze';
 import VenueCard from '@/components/venue/venue-card';
+import Container from '@/components/common/container';
 
 export default function AllVenuesPage() {
-    const [venues, setVenues] = useState<Venue[]>([]);
-    const fetchVenues = async () => {
-        const venues: Promise<Venue[]> = await getVenues();
-        setVenues(await venues);
-    };
-    useEffect(() => {
-        fetchVenues();
-    }, []);
-    console.log('venues: ', venues);
+    const { data, error, isLoading } = useGetVenuesQuery('');
 
     return (
         <>
             <Layout>
-                <h1> All venues</h1>
-                <ul>
-                    {venues.map((venue) => (
-                        <VenueCard key={venue.id} {...venue} />
-                    ))}
-                </ul>
+                <Container>
+                    <h1> All venues</h1>
+                    {error ? (
+                        <p>Oh no, there was an error</p>
+                    ) : isLoading ? (
+                        <p>Loading...</p>
+                    ) : data ? (
+                        <ul>
+                            {data.map((venue) => (
+                                <VenueCard key={venue.id} {...venue} />
+                            ))}
+                        </ul>
+                    ) : null}
+                </Container>
             </Layout>
         </>
     );
