@@ -16,3 +16,9 @@ export interface UserObject extends BaseUserObject {
 export interface LoginResponse extends UserObject {
     token: string;
 }
+
+export interface UserState {
+    isLogged: boolean;
+    token: string;
+    user: UserObject;
+}

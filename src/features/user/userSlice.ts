@@ -1,22 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { LoginResponse, UserObject } from '@/types/profile';
-
-export interface UserState {
-    value: number;
-    isLogged: boolean;
-    token: string;
-    user: UserObject;
-}
+import type { LoginResponse, UserState } from '@/types/user';
 
 const initialState: UserState = {
-    value: 0, //TODO: Remove this when finished
     isLogged: false,
     token: '',
     user: { id: '', name: '', email: '', avatar: '', venueManager: false },
 };
 
-const loadState = () => {
+function loadState(): UserState | undefined {
     try {
         const serializedState = localStorage.getItem('user');
         if (serializedState === null) {
@@ -27,9 +19,9 @@ const loadState = () => {
         console.error(error);
         return undefined;
     }
-};
+}
 
-export const saveState = (state: UserState) => {
+function saveState(state: UserState) {
     try {
         const serializedState = JSON.stringify(state);
         localStorage.setItem('user', serializedState);
@@ -37,7 +29,7 @@ export const saveState = (state: UserState) => {
         // ignore write errors
         console.error(error);
     }
-};
+}
 
 export const userSlice = createSlice({
     name: 'counter',
@@ -48,9 +40,11 @@ export const userSlice = createSlice({
             const { token, ...user } = action.payload;
             state.token = token;
             state.user = user;
+            saveState(state);
         },
         logOut: (state) => {
             state = initialState;
+            saveState(state);
         },
     },
 });

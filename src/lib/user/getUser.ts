@@ -1,4 +1,4 @@
-import type { UserObject } from '@/types/profile';
+import type { UserObject } from '@/types/user';
 
 /**
  * Gets the user object from local storage.
