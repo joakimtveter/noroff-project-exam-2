@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import profileReducer from '@/features/profile/profileSlice';
+import userReducer from '@/features/user/userSlice';
 import { holidazeApi } from './services/holidaze';
 
 export const store = configureStore({
     reducer: {
         [holidazeApi.reducerPath]: holidazeApi.reducer,
-        profile: profileReducer,
+        profile: userReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(holidazeApi.middleware),
 });

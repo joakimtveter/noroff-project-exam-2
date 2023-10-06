@@ -1,9 +1,20 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { RootState } from '@/store';
+
 import type { Venue, VenueDetailed } from '@/types/venue';
 
 export const holidazeApi = createApi({
     reducerPath: 'holidazeApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'https://api.noroff.dev/api/v1/holidaze/' }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: 'https://api.noroff.dev/api/v1/holidaze/',
+        prepareHeaders: (headers, { getState }) => {
+            const token = (getState() as RootState).profile.token;
+            if (token) {
+                headers.set('authorization', `Bearer ${token}`);
+            }
+            return headers;
+        },
+    }),
     endpoints: (builder) => ({
         getVenueById: builder.query<VenueDetailed, string>({
             query: (id) => `venues/${id}?_owner=true&_bookings=true`,
@@ -19,7 +30,7 @@ export const holidazeApi = createApi({
         }),
         registerProfile: builder.mutation<any, any>({
             query: (body) => ({
-                url: `profiles`,
+                url: `auth/register`,
                 method: 'POST',
                 body,
             }),

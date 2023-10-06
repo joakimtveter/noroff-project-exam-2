@@ -1,4 +1,4 @@
-export interface BaseUserObject {
+interface BaseUserObject {
     name: string;
     email: string;
     avatar?: string;
@@ -11,4 +11,8 @@ export interface RegisterUserObject extends BaseUserObject {
 
 export interface UserObject extends BaseUserObject {
     id: string;
+}
+
+export interface LoginResponse extends UserObject {
+    token: string;
 }

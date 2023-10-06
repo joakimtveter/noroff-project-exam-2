@@ -5,7 +5,7 @@ import Layout from '@/components/layout/standard-layout';
 import VenueCard from '@/components/venue/venue-card';
 import Container from '@/components/common/container';
 
-export default function homePage() {
+export default function HomePage() {
     const { data, error, isLoading } = useGetTrendingVenuesQuery('');
     console.log('venues: ', data);
 
