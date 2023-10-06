@@ -1,16 +1,45 @@
-import { Venue } from '@/types/venue';
-import styles from './venue-card.module.css';
-import { Link } from 'react-router-dom';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { Box, Button, CardActionArea, CardActions } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { visuallyHidden } from '@mui/utils';
 
-export default function VenueCard(props: Venue) {
+interface VenueCardProps {
+    id: string;
+    name: string;
+    description: string;
+    media: string[];
+}
+
+export default function VenueCard(props: VenueCardProps) {
+    const { id, name, description, media } = props;
+    const navigate = useNavigate();
+    const handleClick = () => {
+        navigate(`/venues/${id}`);
+    };
     return (
-        <li className={styles.card}>
-            <img src={props?.media[0]} alt='' className={styles.image} />
-            <h3>{props.name}</h3>
-            <p>{props.description}</p>
-            <p>Price per night: ${props.price}</p>
-            <p>{props.maxGuests}</p>
-            <Link to={`/venues/${props.id}`}>View</Link>
-        </li>
+        <Card sx={{ maxWidth: 345 }}>
+            <CardActionArea onClick={handleClick}>
+                <CardMedia component='img' sx={{ aspectRatio: '1/1' }} image={media[0]} alt={name} />
+                <CardContent>
+                    <Typography gutterBottom variant='h5' component='div'>
+                        {name}
+                    </Typography>
+                    <Typography variant='body2' color='text.secondary'>
+                        {description}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+            <CardActions>
+                <Button component={Link} to={`/venues/${id}`} size='small' color='primary'>
+                    View
+                    <Box component={'span'} style={visuallyHidden}>
+                        {' ' + name}
+                    </Box>
+                </Button>
+            </CardActions>
+        </Card>
     );
 }

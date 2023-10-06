@@ -1,16 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { persistor, store } from '@/store';
+import { store } from '@/store';
 import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
 
-import HomePage from '@/pages/homePage';
-import AllVenuesPage from '@/pages/allVenuesPage';
-import VenuePage from '@/pages/venuePage';
-import ProfilePage from '@/pages/profilePage';
-import LoginPage from '@/pages/loginPage';
-import RegisterPage from '@/pages/registerPage';
+import HomePage from '@/pages';
+import AllVenuesPage from '@/pages/venues';
+import VenuePage from '@/pages/venues/id';
+import ProfilePage from '@/pages/profile';
+import LoginPage from '@/pages/login';
+import RegisterPage from '@/pages/register';
 
 import './global.css';
 
@@ -48,9 +47,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-                <RouterProvider router={router} />
-            </PersistGate>
+            <RouterProvider router={router} />
         </Provider>
     </React.StrictMode>
 );

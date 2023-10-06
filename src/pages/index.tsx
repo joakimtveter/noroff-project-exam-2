@@ -5,6 +5,8 @@ import Layout from '@/components/layout/standard-layout';
 import VenueCard from '@/components/venue/venue-card';
 import Container from '@/components/common/container';
 
+import type { Venue } from '@/types/venue';
+
 export default function HomePage() {
     const { data, error, isLoading } = useGetTrendingVenuesQuery('');
     console.log('venues: ', data);
@@ -22,7 +24,7 @@ export default function HomePage() {
                         <>
                             <h2>Trending Vacation homes</h2>
                             <ul>
-                                {data.map((venue) => (
+                                {data.map((venue: Venue) => (
                                     <VenueCard key={venue.id} {...venue} />
                                 ))}
                             </ul>

@@ -56,3 +56,36 @@ export interface VenueWithBookings extends Venue {
 }
 
 export interface VenueDetailed extends VenueWithOwner, VenueWithBookings {}
+
+export const initialVenue: VenueDetailed = {
+    name: '',
+    description: '',
+    media: [],
+    price: 0,
+    maxGuests: 0,
+    rating: 0,
+    meta: {
+        wifi: false,
+        pets: false,
+        parking: false,
+        breakfast: false,
+    },
+    owner: {
+        name: '',
+        email: '',
+        avatar: '',
+    },
+    id: '',
+    created: '',
+    updated: '',
+    location: {
+        address: '',
+        city: '',
+        zip: '',
+        country: '',
+        continent: '',
+        lat: 0,
+        lng: 0,
+    },
+    bookings: [],
+};
