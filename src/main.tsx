@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { store } from '@/store';
 import { Provider } from 'react-redux';
+import { ThemeProvider } from '@mui/material/styles';
+import defaultTheme from '@/themes/default';
 
 import HomePage from '@/pages';
 import AllVenuesPage from '@/pages/venues';
@@ -47,7 +49,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <Provider store={store}>
-            <RouterProvider router={router} />
+            <ThemeProvider theme={defaultTheme}>
+                <RouterProvider router={router} />
+            </ThemeProvider>
         </Provider>
     </React.StrictMode>
 );
