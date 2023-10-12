@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '@/store';
 
 import type { Venue, VenueDetailed } from '@/types/venue';
+import type { UserWithBookings } from '@/types/user';
 
 export const holidazeApi = createApi({
     reducerPath: 'holidazeApi',
@@ -25,7 +26,7 @@ export const holidazeApi = createApi({
         getTrendingVenues: builder.query<Venue[], string>({
             query: () => `venues?sort=rating&limit=3`,
         }),
-        getProfileByName: builder.query<VenueDetailed, string>({
+        getProfileByName: builder.query<UserWithBookings, string>({
             query: (name) => `profiles/${name}?_owner=true&_bookings=true`,
         }),
         registerProfile: builder.mutation<any, any>({

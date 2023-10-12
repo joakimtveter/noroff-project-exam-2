@@ -1,3 +1,9 @@
+interface Owner {
+    name: string;
+    email: string;
+    avatar: string;
+}
+
 export type VenueMeta = {
     wifi: boolean;
     parking: boolean;
@@ -15,17 +21,11 @@ export type Location = {
     lng: number;
 };
 
-interface Owner {
-    name: string;
-    email: string;
-    avatar: string;
-}
-
-interface Booking {
+export interface Booking {
     id: string;
     dateFrom: string;
     dateTo: string;
-    guests: 0;
+    guests: number;
     created: string;
     updated: string;
 }

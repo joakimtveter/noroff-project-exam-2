@@ -1,3 +1,5 @@
+import { Booking } from './venue';
+
 interface BaseUserObject {
     name: string;
     email: string;
@@ -21,4 +23,9 @@ export interface UserState {
     isLoggedIn: boolean;
     accessToken: string;
     user: UserObject;
+}
+
+export interface UserWithBookings extends UserObject {
+    bookings: Booking[];
+    _count: { bookings: number; venues: number };
 }
