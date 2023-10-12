@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Box, ImageList, ImageListItem } from '@mui/material';
+import VenuePlaceholder from '@/assets/venue-placeholder.svg';
 
 interface VenueGalleryProps {
     images: string[];
@@ -16,7 +17,7 @@ export default function VenueGallery(props: VenueGalleryProps) {
     return (
         <Box>
             <Box>
-                <img src={images[currentImage]} />
+                <img src={images[currentImage] ?? VenuePlaceholder} />
             </Box>
             {images.length > 1 && (
                 <Box>
