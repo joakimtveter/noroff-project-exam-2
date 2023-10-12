@@ -1,7 +1,7 @@
 import { useGetTrendingVenuesQuery } from '@/services/holidaze';
 import { Link } from 'react-router-dom';
 
-import Layout from '@/components/layout/standard-layout';
+import Layout from '@/components/layout';
 import VenueCard from '@/components/venue/venue-card';
 import Container from '@/components/common/container';
 

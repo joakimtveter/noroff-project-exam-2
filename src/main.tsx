@@ -10,8 +10,8 @@ import HomePage from '@/pages';
 import AllVenuesPage from '@/pages/venues';
 import VenuePage from '@/pages/venues/id';
 import ProfilePage from '@/pages/profile';
-import LoginPage from '@/pages/login';
-import RegisterPage from '@/pages/register';
+import LoginPage from '@/pages/sign-in';
+import RegisterPage from '@/pages/sign-up';
 
 import './global.css';
 
@@ -37,11 +37,11 @@ const router = createBrowserRouter([
         element: <ProfilePage />,
     },
     {
-        path: 'login',
+        path: 'sign-in',
         element: <LoginPage />,
     },
     {
-        path: 'register',
+        path: 'sign-up',
         element: <RegisterPage />,
     },
 ]);
