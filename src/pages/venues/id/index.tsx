@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGetVenueByIdQuery } from '@/services/holidaze';
-import Layout from '@/components/layout/standard-layout';
+import Layout from '@/components/layout';
 import Container from '@/components/common/container';
 import ProfileCard from '@/components/common/profile-card';
 import Rating from '@mui/material/Rating';

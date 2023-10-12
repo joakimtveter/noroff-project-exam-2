@@ -1,4 +1,4 @@
-import Layout from '@/components/layout/standard-layout';
+import Layout from '@/components/layout';
 import { useGetVenuesQuery } from '@/services/holidaze';
 import VenueCard from '@/components/venue/venue-card';
 import Container from '@/components/common/container';
