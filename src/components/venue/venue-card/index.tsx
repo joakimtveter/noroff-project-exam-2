@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import { Box, Button, CardActionArea, CardActions } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { visuallyHidden } from '@mui/utils';
+import VenuePlaceholder from '@/assets/venue-placeholder.svg';
 
 interface VenueCardProps {
     id: string;
@@ -22,7 +23,12 @@ export default function VenueCard(props: VenueCardProps) {
     return (
         <Card sx={{ maxWidth: 345 }}>
             <CardActionArea onClick={handleClick}>
-                <CardMedia component='img' sx={{ aspectRatio: '1/1' }} image={media[0]} alt={name} />
+                <CardMedia
+                    component='img'
+                    sx={{ aspectRatio: '1/1', objectFit: 'cover' }}
+                    image={media[0] ?? VenuePlaceholder}
+                    alt={name}
+                />
                 <CardContent>
                     <Typography gutterBottom variant='h5' component='div'>
                         {name}
@@ -33,7 +39,7 @@ export default function VenueCard(props: VenueCardProps) {
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Button component={Link} to={`/venues/${id}`} size='small' color='primary'>
+                <Button component={Link} to={`/venues/${id}`} size='small' sx={{ color: 'text.green' }}>
                     View
                     <Box component={'span'} style={visuallyHidden}>
                         {' ' + name}
