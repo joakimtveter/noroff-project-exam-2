@@ -8,7 +8,7 @@ export const holidazeApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'https://api.noroff.dev/api/v1/holidaze/',
         prepareHeaders: (headers, { getState }) => {
-            const token = (getState() as RootState).profile.accessToken;
+            const token = (getState() as RootState).user.accessToken;
             if (token) {
                 headers.set('authorization', `Bearer ${token}`);
             }

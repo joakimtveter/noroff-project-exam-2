@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import type { LoginResponse, UserState } from '@/types/user';
 
 const initialState: UserState = {
-    isLogged: false,
+    isLoggedIn: false,
     accessToken: '',
     user: { id: '', name: '', email: '', avatar: '', venueManager: false },
 };
@@ -36,7 +36,7 @@ export const userSlice = createSlice({
     initialState: loadState() || initialState,
     reducers: {
         logIn: (state, action: PayloadAction<LoginResponse>) => {
-            state.isLogged = true;
+            state.isLoggedIn = true;
             const { accessToken, ...user } = action.payload;
             state.accessToken = accessToken;
             state.user = user;

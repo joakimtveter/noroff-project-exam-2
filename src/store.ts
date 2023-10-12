@@ -5,7 +5,7 @@ import { holidazeApi } from './services/holidaze';
 export const store = configureStore({
     reducer: {
         [holidazeApi.reducerPath]: holidazeApi.reducer,
-        profile: userReducer,
+        user: userReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(holidazeApi.middleware),
 });

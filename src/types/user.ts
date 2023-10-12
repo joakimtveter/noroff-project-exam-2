@@ -18,7 +18,7 @@ export interface LoginResponse extends UserObject {
 }
 
 export interface UserState {
-    isLogged: boolean;
+    isLoggedIn: boolean;
     accessToken: string;
     user: UserObject;
 }
