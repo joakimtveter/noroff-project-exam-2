@@ -1,23 +1,118 @@
-import Navigation from '@/components/common/navigation';
-import NavigationItem from '@/components/common/navigation-item';
-import ProfileLink from '@/components/common/profile-link';
-import Search from '@/components/common/search';
-import Container from '@/components/common/container';
-import Logo from '@/components/common/logo';
+import { useState, MouseEvent } from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
 
-import styles from './header.module.css';
+import ProfileMenu from '../profile-menu';
+import { Link } from 'react-router-dom';
 
-export default function Header() {
+const pages = ['Products', 'Pricing', 'Blog'];
+
+export default function CustomAppBar() {
+    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+
+    const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
+        setAnchorElNav(event.currentTarget);
+    };
+
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
+
     return (
-        <header className={styles.header}>
-            <Container type='full'>
-                <Navigation>
-                    <Logo />
-                    <NavigationItem href='/venues' text='Find a venue' />
-                    <ProfileLink />
-                    <Search />
-                </Navigation>
+        <AppBar position='static'>
+            <Container maxWidth='xl'>
+                <Toolbar disableGutters>
+                    <Typography
+                        variant='h6'
+                        noWrap
+                        component='a'
+                        href='/'
+                        sx={{
+                            mr: 2,
+                            display: { xs: 'none', md: 'flex' },
+                            fontFamily: 'monospace',
+                            fontWeight: 700,
+                            letterSpacing: '.3rem',
+                            color: 'inherit',
+                            textDecoration: 'none',
+                        }}>
+                        <HolidayVillageIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                        Holidaze
+                    </Typography>
+
+                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                        <IconButton
+                            size='large'
+                            aria-label='account of current user'
+                            aria-controls='menu-appbar'
+                            aria-haspopup='true'
+                            onClick={handleOpenNavMenu}
+                            color='inherit'>
+                            <MenuIcon />
+                        </IconButton>
+                        <Menu
+                            id='menu-appbar'
+                            anchorEl={anchorElNav}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                            }}
+                            open={Boolean(anchorElNav)}
+                            onClose={handleCloseNavMenu}
+                            sx={{
+                                display: { xs: 'block', md: 'none' },
+                            }}>
+                            {pages.map((page) => (
+                                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                                    <Typography textAlign='center'>{page}</Typography>
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                    </Box>
+                    <HolidayVillageIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+                    <Typography
+                        variant='h5'
+                        noWrap
+                        component='a'
+                        href='#app-bar-with-responsive-menu'
+                        sx={{
+                            mr: 2,
+                            display: { xs: 'flex', md: 'none' },
+                            flexGrow: 1,
+                            fontFamily: 'monospace',
+                            fontWeight: 700,
+                            letterSpacing: '.3rem',
+                            color: 'inherit',
+                            textDecoration: 'none',
+                        }}>
+                        LOGO
+                    </Typography>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        <Button
+                            component={Link}
+                            to={'/venues'}
+                            onClick={handleCloseNavMenu}
+                            sx={{ my: 2, color: 'white', display: 'block' }}>
+                            All Venues
+                        </Button>
+                    </Box>
+                    <ProfileMenu />
+                </Toolbar>
             </Container>
-        </header>
+        </AppBar>
     );
 }
