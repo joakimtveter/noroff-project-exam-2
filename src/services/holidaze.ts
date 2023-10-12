@@ -8,7 +8,7 @@ export const holidazeApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'https://api.noroff.dev/api/v1/holidaze/',
         prepareHeaders: (headers, { getState }) => {
-            const token = (getState() as RootState).profile.token;
+            const token = (getState() as RootState).profile.accessToken;
             if (token) {
                 headers.set('authorization', `Bearer ${token}`);
             }
@@ -35,8 +35,21 @@ export const holidazeApi = createApi({
                 body,
             }),
         }),
+        login: builder.mutation<any, any>({
+            query: (body) => ({
+                url: `auth/login`,
+                method: 'POST',
+                body,
+            }),
+        }),
     }),
 });
 
-export const { useGetVenueByIdQuery, useGetVenuesQuery, useGetTrendingVenuesQuery, useGetProfileByNameQuery } =
-    holidazeApi;
+export const {
+    useGetVenueByIdQuery,
+    useGetVenuesQuery,
+    useGetTrendingVenuesQuery,
+    useGetProfileByNameQuery,
+    useLoginMutation,
+    useRegisterProfileMutation,
+} = holidazeApi;

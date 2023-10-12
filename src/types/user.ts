@@ -14,11 +14,11 @@ export interface UserObject extends BaseUserObject {
 }
 
 export interface LoginResponse extends UserObject {
-    token: string;
+    accessToken: string;
 }
 
 export interface UserState {
     isLogged: boolean;
-    token: string;
+    accessToken: string;
     user: UserObject;
 }

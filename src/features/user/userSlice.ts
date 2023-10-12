@@ -4,7 +4,7 @@ import type { LoginResponse, UserState } from '@/types/user';
 
 const initialState: UserState = {
     isLogged: false,
-    token: '',
+    accessToken: '',
     user: { id: '', name: '', email: '', avatar: '', venueManager: false },
 };
 
@@ -37,8 +37,8 @@ export const userSlice = createSlice({
     reducers: {
         logIn: (state, action: PayloadAction<LoginResponse>) => {
             state.isLogged = true;
-            const { token, ...user } = action.payload;
-            state.token = token;
+            const { accessToken, ...user } = action.payload;
+            state.accessToken = accessToken;
             state.user = user;
             saveState(state);
         },
