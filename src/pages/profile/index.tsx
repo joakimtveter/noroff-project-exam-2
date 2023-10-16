@@ -1,17 +1,21 @@
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 
 import Container from '@/components/common/container';
 import Layout from '@/components/layout';
 import { useGetProfileByNameQuery } from '@/services/holidaze';
-import { Avatar, Box } from '@mui/material';
+import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import VenueCard from '@/components/venue/venue-card';
 
 export default function ProfilePage() {
-    // Get the profile name from the url
-    // If the profile name is undefined, then we are on the current user profile
+    const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
     const { profileName } = useParams<{ profileName: string }>();
-    // Get the current user from the redux store
+    if (!isLoggedIn && !profileName) {
+        const navigate = useNavigate();
+        navigate('/sign-in');
+    }
     const user = useSelector((state: RootState) => state.user.user);
     // if (!user.name && !profileName) {
     //     // If the user is not logged in, redirect to login page
@@ -24,7 +28,7 @@ export default function ProfilePage() {
 
     // if the current user is not logged in, redirect to login page.
 
-    console.log('data: ', data);
+    console.log('user: ', data);
     return (
         <>
             <Layout>
@@ -38,11 +42,32 @@ export default function ProfilePage() {
                         <p>Loading...</p>
                     ) : data ? (
                         <Box>
-                            <h1> Profile {data.name}</h1>
+                            <Stack direction='row' alignItems='center' gap={2}>
                             <Avatar
-                                alt={data.name.toUpperCase()}
+                                alt={data.name.toLocaleUpperCase()}
                                 src={data.avatar !== '' ? data.avatar : 'this string ensures a letter'}
+                                sx={{ width: 200, height: 200 }}
                             />
+                                <Stack component='hgroup'>
+                                    <Typography component='h1' variant='h3'> {data.name}  
+                                        <IconButton aria-label='edit profile' component={Link} to={'/profile/edit'}>
+                                            <EditIcon />
+                                        </IconButton>
+                                    </Typography>
+                                    <Typography component='p' variant='subtitle1'> {data.email}</Typography>
+                                </Stack>
+                            </Stack>
+                            {data.venueManager  && 
+                            <Box>
+                                <Typography component='h2' variant='h4'>Venues</Typography>
+                                <Stack component='ul' sx={{listStyleType: 'none', padding: 0}}>
+                                    {data.venues.map((venue) => (
+                                        <VenueCard key={venue.id} headingLevel={2} {...venue} />
+                                    ))}
+                                </Stack>
+                            </Box>
+                            }
+                            <pre>{JSON.stringify(data, null, 2)}</pre>
                         </Box>
                     ) : null}
                 </Container>
