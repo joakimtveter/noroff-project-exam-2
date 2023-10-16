@@ -1,3 +1,4 @@
+import { amber, deepOrange, orange, red } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
 // declare module '@mui/material/styles/createPalette' {
@@ -10,14 +11,10 @@ import { createTheme } from '@mui/material/styles';
 const defaultTheme = createTheme({
     palette: {
         primary: {
-            main: '#4db6ac',
+            main: red[500],
         },
         secondary: {
-            main: '#ce93d8',
-        },
-        background: {
-            default: '#f7fdfc',
-            paper: '#f7fdfc',
+            main: amber[500],
         },
         // text: {
         //     green: '#09725d',
