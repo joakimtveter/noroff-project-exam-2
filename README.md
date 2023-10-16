@@ -27,6 +27,17 @@ I have used the following technologies in this project:
 - [Material UI](https://mui.com/) as the Component Library
 - [React Toastify](https://fkhadra.github.io/react-toastify/introduction/) for displaying messages
 
+### Devlivery
+
+These are the deliverables for this project:
+
+1. [A Gantt chart for project timing](https://github.com/users/joakimtveter/projects/5/views/4)
+2. A design prototype - TBA
+3. A style guide - TBA
+4. [A kanban project board](https://github.com/users/joakimtveter/projects/5/views/1)
+5. [A repository link](https://github.com/joakimtveter/noroff-project-exam-2)
+6. [A hosted application demo link](https://pe2.tveter.dev/)
+
 ## Development
 
 ### Prerequisites
@@ -50,7 +61,7 @@ The site can be found at [https://pe2.tveter.dev/](https://pe2.tveter.dev/).
 
 ## Contributing
 
-Here you can detail any information you want to provide regarding contributing to the project. For big projects you will usually have a separate `CONTRIBUTING.md` and link to it, but for smaller projects you can simply include instructions here. These instructions can simply detail the process you want a person to take, such as to make sure to open a pull request so code can be reviewed.
+This is a school project, so I will not be accepting any contributions.
 
 ## Contact
 
