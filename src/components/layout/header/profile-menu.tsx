@@ -61,7 +61,7 @@ export default function ProfileMenu() {
                     </Menu>
                 </>
             ) : (
-                <Button component={Link} to={'/login'} variant='contained' color='secondary'>
+                <Button component={Link} to={'/sign-in'} variant='contained' color='secondary'>
                     Sign in
                 </Button>
             )}
