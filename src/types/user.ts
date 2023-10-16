@@ -1,4 +1,4 @@
-import { Booking } from './venue';
+import { Booking, Venue } from './venue';
 
 interface BaseUserObject {
     name: string;
@@ -27,5 +27,10 @@ export interface UserState {
 
 export interface UserWithBookings extends UserObject {
     bookings: Booking[];
+    _count: { bookings: number; venues: number };
+}
+
+export interface UserWithVenues extends UserObject {
+    venues: Venue[];
     _count: { bookings: number; venues: number };
 }
