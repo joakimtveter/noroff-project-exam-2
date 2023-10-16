@@ -11,8 +11,6 @@ export default function ProfileMenu() {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
     const user = useSelector((state: RootState) => state.user.user);
-    console.log('user: ', user);
-    console.log('isLoggedIn: ', isLoggedIn);
     const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
         setAnchorElement(event.currentTarget);
     };
