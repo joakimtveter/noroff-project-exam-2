@@ -23,16 +23,17 @@ export default function VenueGallery(props: VenueGalleryProps) {
                 <Box>
                     <ImageList
                         // cols={images.length > 4 ? images.length : 4}
-                        cols={3}
+                        cols={6}
                         rowHeight={200}
-                        gap={1}
-                        sx={{ width: '100%', height: 200 }}>
+                        // sx={{ width: '100%',  }}
+                        variant='quilted'
+                        >
                         {images.map((image, index) => (
                             <ImageListItem
-                                sx={{ cursor: 'pointer' }}
                                 key={image}
+                                sx={{ cursor: 'pointer'}}
                                 onClick={() => handleImageClick(index)}>
-                                <img src={image} alt='' loading='lazy' style={{ aspectRatio: '1/1' }} />
+                                <img src={image} alt='' loading='lazy' style={{ objectFit: 'fill'}} />
                             </ImageListItem>
                         ))}
                     </ImageList>
