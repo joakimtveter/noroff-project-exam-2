@@ -24,7 +24,7 @@ export default function AllVenuesPage() {
                     ) : data ? (
                         <Grid container component='ul' gap={2} sx={{ listStyleType: 'none', padding: 0 }}>
                             {data.map((venue) => (
-                                <VenueCard key={venue.id} {...venue} />
+                                <VenueCard key={venue.id} headingLevel={2} {...venue} />
                             ))}
                         </Grid>
                     ) : null}
