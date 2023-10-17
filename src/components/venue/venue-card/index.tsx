@@ -18,7 +18,7 @@ interface VenueCardProps {
     name: string;
     description: string;
     media: string[];
-    headingLevel: 2 | 3 | 4 | 5 | 6;
+    headingLevel?: 2 | 3 | 4 | 5 | 6;
 }
 
 export default function VenueCard(props: VenueCardProps) {

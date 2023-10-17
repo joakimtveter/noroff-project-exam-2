@@ -25,7 +25,7 @@ export default function HomePage() {
                             <h2>Trending Vacation homes</h2>
                             <ul>
                                 {data.map((venue: Venue) => (
-                                    <VenueCard key={venue.id} {...venue} />
+                                    <VenueCard key={venue.id} headingLevel={3} {...venue} />
                                 ))}
                             </ul>
                             <Link to='/venues'>View all venues</Link>
