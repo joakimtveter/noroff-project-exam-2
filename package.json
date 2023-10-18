@@ -17,6 +17,7 @@
         "@mui/material": "^5.14.12",
         "@reduxjs/toolkit": "^1.9.6",
         "react": "^18.2.0",
+        "react-aria-components": "^1.0.0-beta.1",
         "react-dom": "^18.2.0",
         "react-helmet-async": "^1.3.0",
         "react-hook-form": "^7.46.2",
