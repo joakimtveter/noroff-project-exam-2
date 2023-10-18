@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import {  useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useGetProfileByNameQuery } from '@/services/holidaze';
@@ -7,9 +7,7 @@ import { RootState } from '@/store';
 import Container from '@/components/common/container';
 import Layout from '@/components/layout';
 
-import { Avatar, Box, Chip, IconButton, Stack, TextField, Typography } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-
+import { Avatar, Box, TextField, Typography } from '@mui/material';
 export default function EditProfilePage() {
     const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
     const { profileName } = useParams<{ profileName: string }>();
