@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, ImageList, ImageListItem } from '@mui/material';
+import { Box, ImageList, ImageListItem, Paper } from '@mui/material';
 import VenuePlaceholder from '@/assets/venue-placeholder.svg';
 
 interface VenueGalleryProps {
@@ -15,25 +15,21 @@ export default function VenueGallery(props: VenueGalleryProps) {
     };
 
     return (
-        <Box>
-            <Box>
-                <img src={images[currentImage] ?? VenuePlaceholder} />
-            </Box>
+        <Box sx={{padding: 1}}>
+            <img src={images[currentImage] ?? VenuePlaceholder} style={{objectFit: 'contain', display: 'block', width: '100%', height: '400px'}}/>
             {images.length > 1 && (
-                <Box>
+                <Box paddingBlock={1}>
                     <ImageList
-                        // cols={images.length > 4 ? images.length : 4}
-                        cols={6}
-                        rowHeight={200}
-                        // sx={{ width: '100%',  }}
+                        cols={4}
+                        rowHeight={150}
                         variant='quilted'
                         >
                         {images.map((image, index) => (
                             <ImageListItem
-                                key={image}
-                                sx={{ cursor: 'pointer'}}
-                                onClick={() => handleImageClick(index)}>
-                                <img src={image} alt='' loading='lazy' style={{ objectFit: 'fill'}} />
+                            key={image}
+                            sx={{ cursor: 'pointer'}}
+                            onClick={() => handleImageClick(index)}>
+                                <img src={image} alt='' loading='lazy' style={{ objectFit: 'cover'}} />
                             </ImageListItem>
                         ))}
                     </ImageList>
