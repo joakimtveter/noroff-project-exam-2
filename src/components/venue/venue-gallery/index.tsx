@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { Box, ImageList, ImageListItem, Paper } from '@mui/material';
+
+import Box from '@mui/material/Box';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
 import VenuePlaceholder from '@/assets/venue-placeholder.svg';
 
 interface VenueGalleryProps {

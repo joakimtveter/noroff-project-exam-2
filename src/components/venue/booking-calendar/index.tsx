@@ -7,6 +7,7 @@ type BookingCalendarProps = {
 
 export default function BookingCalendar(props: BookingCalendarProps) {
     const {bookings} = props;
+    console.log('bookings: ', bookings);
   return (
     <RangeCalendar aria-label="Trip dates" style={{width: 'max-content'}}>
     <Box component='header' sx={{display: 'flex', justifyContent: 'space-between'}}>
