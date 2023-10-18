@@ -14,6 +14,7 @@ import LoginPage from '@/pages/sign-in';
 import RegisterPage from '@/pages/sign-up';
 
 import './global.css';
+import EditProfilePage from './pages/profile/edit';
 
 const router = createBrowserRouter([
     {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
     {
         path: 'profile',
         element: <ProfilePage />,
+    },
+    {
+        path: 'profile/edit',
+        element: <EditProfilePage />,
     },
     {
         path: 'profile/:profileName',
