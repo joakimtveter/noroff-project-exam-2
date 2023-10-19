@@ -31,6 +31,15 @@ function saveState(state: UserState) {
     }
 }
 
+function deleteState() {
+    try {
+        localStorage.removeItem('user');
+    } catch (error) {
+        // ignore write errors
+        console.error(error);
+    }
+}
+
 export const userSlice = createSlice({
     name: 'counter',
     initialState: loadState() || initialState,
@@ -43,8 +52,10 @@ export const userSlice = createSlice({
             saveState(state);
         },
         logOut: (state) => {
-            state = initialState;
-            saveState(state);
+            state.isLoggedIn = false;
+            state.accessToken = '';
+            state.user = initialState.user;
+            deleteState();
         },
     },
 });
