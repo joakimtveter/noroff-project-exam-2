@@ -18,7 +18,7 @@ import { dateToShortMonth } from "@/utils/date/dateToShortMonth";
 import { dateToDayNumber } from "@/utils/date/dateToDayNumber";
 import { datesToNumberOfDays } from "@/utils/date/datesToNumberOfDays";
 import { dateToReadableFormat } from "@/utils/date/dateToReadableFormat";
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 
 type VenueBookingListProps = {
     bookings: Booking[];
@@ -28,13 +28,13 @@ export default function VenueBookingList(props: VenueBookingListProps) {
     const {bookings =[]} = props;
     const [value, setValue] = useState('1');
 
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    const handleChange = (_event: SyntheticEvent, newValue: string) => {
       setValue(newValue);
     };
     return (<>
         <TabContext value={value}>
   <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-    <TabList onChange={handleChange} aria-label="lab API tabs example">
+    <TabList onChange={handleChange} aria-label="Booking tabs">
       <Tab label="Current Bookings" value="1" />
       <Tab label="Past Bookings" value="2" />
     </TabList>

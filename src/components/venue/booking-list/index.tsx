@@ -90,6 +90,8 @@ const testData =  [
 
 export default function BookingList(props: BookingListProps) {
     const { bookings } = props;
+    console.log(bookings)
+    // TODO: replace with real data
 
   return (
     <List dense={false} sx={{maxWidth:'500px'}}>

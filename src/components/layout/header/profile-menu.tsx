@@ -4,7 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logOut } from '@/features/user/userSlice';
 import { RootState } from '@/store';
 
-import { Avatar, Box, Button, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
 export default function ProfileMenu() {
     const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);

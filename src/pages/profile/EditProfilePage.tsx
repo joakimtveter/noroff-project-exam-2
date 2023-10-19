@@ -7,7 +7,12 @@ import { RootState } from '@/store';
 import Container from '@/components/common/container';
 import Layout from '@/components/layout';
 
-import { Avatar, Box, CircularProgress, TextField, Typography } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+
 export default function EditProfilePage() {
     const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
     const { profileName } = useParams<{ profileName: string }>();
