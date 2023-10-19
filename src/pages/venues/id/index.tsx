@@ -17,6 +17,7 @@ import Layout from '@/components/layout';
 import ProfileCard from '@/components/common/profile-card';
 import VenueGallery from '@/components/venue/venue-gallery';
 
+import CircularProgress from '@mui/material/CircularProgress';
 import WifiOutlinedIcon from '@mui/icons-material/WifiOutlined';
 import PetsOutlinedIcon from '@mui/icons-material/PetsOutlined';
 import LocalParkingOutlinedIcon from '@mui/icons-material/LocalParkingOutlined';
@@ -41,7 +42,7 @@ export default function VenuePage() {
                     {error ? (
                         <p>Oh no, there was an error</p>
                     ) : isLoading ? (
-                        <p>Loading...</p>
+                        <CircularProgress />
                     ) : data ? (
                         <Grid container spacing={2} mt={2}>
                             <Grid item xs={12} md={6} >
