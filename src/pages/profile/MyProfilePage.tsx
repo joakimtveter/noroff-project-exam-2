@@ -7,9 +7,11 @@ import { RootState } from '@/store';
 import Container from '@/components/common/container';
 import Layout from '@/components/layout';
 
-import { Avatar, Box, Chip, CircularProgress, IconButton, Stack, Typography } from '@mui/material';
+import { Avatar, Badge, Box, Chip, CircularProgress, IconButton, Stack, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
 import VenueCard from '@/components/venue/venue-card';
+import BookingList from '@/components/venue/booking-list';
 
 export default function OwnProfilePage() {
     const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
@@ -64,9 +66,16 @@ export default function OwnProfilePage() {
                                     {data.venueManager  && <Chip label="Venue manager" color='primary' sx={{width: 'max-content'}} />}
                                 </Stack>
                             </Stack>
+                            <Stack direction='row' alignItems='center' gap={1}>
+                                <Typography component='h2' variant='h4'>My Bookings</Typography>
+                                <Badge color='primary' badgeContent={data._count.bookings}>
+                                    <TodayOutlinedIcon  fontSize='large'/>
+                                </Badge>
+                            </Stack>
+                            <BookingList bookings={data.bookings} />
                             {data.venueManager && data._count.venues > 0 &&
                             <Box>
-                                <Typography component='h2' variant='h4'>Venues</Typography>
+                                <Typography component='h2' variant='h4'>My Venues</Typography>
                                 <Stack component='ul' sx={{listStyleType: 'none', padding: 0}}>
                                     {data.venues.map((venue) => (
                                         <VenueCard key={venue.id} headingLevel={2} {...venue} />

@@ -6,6 +6,7 @@ import VenueCard from '@/components/venue/venue-card';
 import Container from '@/components/common/container';
 
 import type { Venue } from '@/types/venue';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function HomePage() {
     const { data, error, isLoading } = useGetTrendingVenuesQuery('');
@@ -19,7 +20,7 @@ export default function HomePage() {
                     {error ? (
                         <p>Oh no, there was an error</p>
                     ) : isLoading ? (
-                        <p>Loading...</p>
+                        <CircularProgress />
                     ) : data ? (
                         <>
                             <h2>Trending Vacation homes</h2>

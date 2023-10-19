@@ -9,15 +9,16 @@ import defaultTheme from '@/themes/default';
 
 import HomePage from '@/pages';
 import AllVenuesPage from '@/pages/venues';
-import VenuePage from '@/pages/venues/id';
-import MyProfilePage from '@/pages/profile';
-import ProfilePage from '@/pages/profile/id';
-import EditProfilePage from '@/pages/profile/edit';
+import VenuePage from '@/pages/venues/SingleVenuePage';
+import MyProfilePage from '@/pages/profile/MyProfilePage';
+import ProfilePage from '@/pages/profile/ProfilePage';
+import EditProfilePage from '@/pages/profile/EditProfilePage';
 import LoginPage from '@/pages/sign-in';
 import RegisterPage from '@/pages/sign-up';
 
 import './global.css';
 import 'react-toastify/dist/ReactToastify.css';
+import VenueAdminPage from './pages/profile/VenueAdminPage';
 
 const router = createBrowserRouter([
     {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
     {
         path: 'profile/edit',
         element: <EditProfilePage />,
+    },
+    {
+        path: 'profile/venue/:venueId',
+        element: <VenueAdminPage />,
     },
     {
         path: 'profile/:profileName',

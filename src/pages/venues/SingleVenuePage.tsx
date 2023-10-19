@@ -25,7 +25,7 @@ import BakeryDiningOutlinedIcon from '@mui/icons-material/BakeryDiningOutlined';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import Paper from '@mui/material/Paper';
 
-export default function VenuePage() {
+export default function SingleVenuePage() {
     const navigate = useNavigate();
     const { venueId } = useParams();
     if (venueId == undefined) navigate('/404');
