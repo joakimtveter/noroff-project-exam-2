@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useGetProfileByNameQuery } from '@/services/holidaze';
@@ -7,14 +7,14 @@ import { RootState } from '@/store';
 import Container from '@/components/common/container';
 import Layout from '@/components/layout';
 
-import { Avatar, Box, Chip, CircularProgress, IconButton, Stack, Typography } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { Avatar, Box, Chip, CircularProgress, Stack, Typography } from '@mui/material';
 import VenueCard from '@/components/venue/venue-card';
 
-export default function OwnProfilePage() {
+export default function ProfilePage() {
     const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+    const { profileName } = useParams<{ profileName: string }>();
 
-    // If the user is not logged in, redirect to login page
+    // If the user is not logged in and is not trying to access his own profile, redirect to login page
     if (!isLoggedIn) {
         toast.info('You are not logged in', {
             position: "top-center",
@@ -28,13 +28,16 @@ export default function OwnProfilePage() {
             toastId: 'not-logged-in'
         });
         const navigate = useNavigate();
-        navigate('/sign-in');
+        navigate('/');
     }
-    const user = useSelector((state: RootState) => state.user.user);
 
     // Get the profile data from RTK query
-    const { data, error, isLoading } = useGetProfileByNameQuery(user?.name);
+    if (!profileName) return null;
+    const { data, error, isLoading } = useGetProfileByNameQuery(profileName);
 
+    // if the current user is not logged in, redirect to login page.
+
+    console.log('user: ', data);
     return (
         <>
             <Layout>
@@ -55,10 +58,7 @@ export default function OwnProfilePage() {
                                 sx={{ width: 200, height: 200 }}
                             />
                                 <Stack component='hgroup' spacing={1}>
-                                    <Typography component='h1' variant='h3'> {data.name}
-                                        <IconButton aria-label='edit profile' component={Link} to={'/profile/edit'}>
-                                            <EditIcon />
-                                        </IconButton>
+                                    <Typography component='h1' variant='h3'> {data.name} 
                                     </Typography>
                                     <Typography component='p' variant='subtitle1'> {data.email}</Typography>
                                     {data.venueManager  && <Chip label="Venue manager" color='primary' sx={{width: 'max-content'}} />}

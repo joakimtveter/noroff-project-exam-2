@@ -7,7 +7,7 @@ import { RootState } from '@/store';
 import Container from '@/components/common/container';
 import Layout from '@/components/layout';
 
-import { Avatar, Box, TextField, Typography } from '@mui/material';
+import { Avatar, Box, CircularProgress, TextField, Typography } from '@mui/material';
 export default function EditProfilePage() {
     const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
     const { profileName } = useParams<{ profileName: string }>();
@@ -48,7 +48,7 @@ export default function EditProfilePage() {
                             {console.error(error)}
                         </>
                     ) : isLoading ? (
-                        <p>Loading...</p>
+                        <CircularProgress />
                     ) : data ? (
                         <Box mt={3}>
                             <Typography component='h1' variant='h2'> Edit Profile</Typography>

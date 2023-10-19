@@ -3,18 +3,21 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { store } from '@/store';
 import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 import { ThemeProvider } from '@mui/material/styles';
 import defaultTheme from '@/themes/default';
 
 import HomePage from '@/pages';
 import AllVenuesPage from '@/pages/venues';
 import VenuePage from '@/pages/venues/id';
-import ProfilePage from '@/pages/profile';
+import MyProfilePage from '@/pages/profile';
+import ProfilePage from '@/pages/profile/id';
+import EditProfilePage from '@/pages/profile/edit';
 import LoginPage from '@/pages/sign-in';
 import RegisterPage from '@/pages/sign-up';
 
 import './global.css';
-import EditProfilePage from './pages/profile/edit';
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter([
     {
@@ -31,7 +34,7 @@ const router = createBrowserRouter([
     },
     {
         path: 'profile',
-        element: <ProfilePage />,
+        element: <MyProfilePage />,
     },
     {
         path: 'profile/edit',
@@ -56,6 +59,18 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Provider store={store}>
             <ThemeProvider theme={defaultTheme}>
                 <RouterProvider router={router} />
+                <ToastContainer 
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover
+                theme="colored"
+            />
             </ThemeProvider>
         </Provider>
     </React.StrictMode>
