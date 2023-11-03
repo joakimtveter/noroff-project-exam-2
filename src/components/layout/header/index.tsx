@@ -1,34 +1,34 @@
-import { useState, MouseEvent } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
+import { useState, type MouseEvent, type ReactElement } from 'react'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
+import Menu from '@mui/material/Menu'
+import MenuIcon from '@mui/icons-material/Menu'
+import Container from '@mui/material/Container'
+import Button from '@mui/material/Button'
+import MenuItem from '@mui/material/MenuItem'
+import HolidayVillageIcon from '@mui/icons-material/HolidayVillage'
 
-import ProfileMenu from './profile-menu';
-import { Link } from 'react-router-dom';
+import ProfileMenu from './profile-menu'
+import { Link } from 'react-router-dom'
 
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = ['Products', 'Pricing', 'Blog']
 
-export default function CustomAppBar() {
-    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+export default function CustomAppBar (): ReactElement {
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
 
-    const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget);
-    };
+  const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget)
+  }
 
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
-    };
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null)
+  }
 
-    return (
-        <AppBar position='static'>
+  return (
+        <AppBar position='static' color={'primary'} >
             <Container maxWidth='xl'>
                 <Toolbar disableGutters>
                     <Typography
@@ -37,13 +37,13 @@ export default function CustomAppBar() {
                         component='a'
                         href='/'
                         sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
+                          mr: 2,
+                          display: { xs: 'none', md: 'flex' },
+                          fontFamily: 'monospace',
+                          fontWeight: 700,
+                          letterSpacing: '.3rem',
+                          color: 'inherit',
+                          textDecoration: 'none'
                         }}>
                         <HolidayVillageIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                         Holidaze
@@ -63,18 +63,18 @@ export default function CustomAppBar() {
                             id='menu-appbar'
                             anchorEl={anchorElNav}
                             anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
+                              vertical: 'bottom',
+                              horizontal: 'left'
                             }}
                             keepMounted
                             transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
+                              vertical: 'top',
+                              horizontal: 'left'
                             }}
                             open={Boolean(anchorElNav)}
                             onClose={handleCloseNavMenu}
                             sx={{
-                                display: { xs: 'block', md: 'none' },
+                              display: { xs: 'block', md: 'none' }
                             }}>
                             {pages.map((page) => (
                                 <MenuItem key={page} onClick={handleCloseNavMenu}>
@@ -90,14 +90,14 @@ export default function CustomAppBar() {
                         component='a'
                         href='#app-bar-with-responsive-menu'
                         sx={{
-                            mr: 2,
-                            display: { xs: 'flex', md: 'none' },
-                            flexGrow: 1,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
+                          mr: 2,
+                          display: { xs: 'flex', md: 'none' },
+                          flexGrow: 1,
+                          fontFamily: 'monospace',
+                          fontWeight: 700,
+                          letterSpacing: '.3rem',
+                          color: 'inherit',
+                          textDecoration: 'none'
                         }}>
                         LOGO
                     </Typography>
@@ -114,5 +114,5 @@ export default function CustomAppBar() {
                 </Toolbar>
             </Container>
         </AppBar>
-    );
+  )
 }

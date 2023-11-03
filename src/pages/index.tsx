@@ -1,39 +1,49 @@
-import { useGetTrendingVenuesQuery } from '@/services/holidaze';
-import { Link } from 'react-router-dom';
+import { ReactElement } from 'react'
+import { Link } from 'react-router-dom'
 
-import Layout from '@/components/layout';
-import VenueCard from '@/components/venue/venue-card';
-import Container from '@/components/common/container';
+import { Button, CircularProgress, Grid, Stack, Typography } from '@mui/material'
+import { visuallyHidden } from '@mui/utils'
 
-import type { Venue } from '@/types/venue';
-import CircularProgress from '@mui/material/CircularProgress';
+import Layout from '@/components/layout'
+import VenueCard from '@/components/venue/venue-card'
 
-export default function HomePage() {
-    const { data, error, isLoading } = useGetTrendingVenuesQuery('');
-    console.log('venues: ', data);
+import { useGetTrendingVenuesQuery } from '@/services/holidaze'
+
+export default function HomePage(): ReactElement {
+    const { data, error, isLoading } = useGetTrendingVenuesQuery('')
 
     return (
         <>
             <Layout>
-                <Container>
-                    <h1> Holidaze</h1>
-                    {error ? (
-                        <p>Oh no, there was an error</p>
-                    ) : isLoading ? (
-                        <CircularProgress />
-                    ) : data ? (
-                        <>
-                            <h2>Trending Vacation homes</h2>
-                            <ul>
-                                {data.map((venue: Venue) => (
+                <Typography component="h1" style={visuallyHidden}>
+                    {' '}
+                    Holidaze - Find your next Holiday Stay!
+                </Typography>
+                {error != null ? (
+                    <p>Oh no, there was an error</p>
+                ) : isLoading ? (
+                    <CircularProgress />
+                ) : data != null ? (
+                    <>
+                        <Typography component="h2" variant="h2">
+                            Trending Vacation homes
+                        </Typography>
+                        <Typography component="p" variant="subtitle2"></Typography>
+                        <Grid container component="ul" spacing={2} sx={{ listStyleType: 'none', padding: 0 }}>
+                            {data.map((venue) => (
+                                <Grid item xs={12} md={4}>
                                     <VenueCard key={venue.id} headingLevel={3} {...venue} />
-                                ))}
-                            </ul>
-                            <Link to='/venues'>View all venues</Link>
-                        </>
-                    ) : null}
-                </Container>
+                                </Grid>
+                            ))}
+                        </Grid>
+                        <Stack direction="row" justifyContent="center" paddingBlock={4}>
+                            <Button component={Link} to="/venues" variant="contained">
+                                View All Venues
+                            </Button>
+                        </Stack>
+                    </>
+                ) : null}
             </Layout>
         </>
-    );
+    )
 }

@@ -1,56 +1,115 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { RootState } from '@/store';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import type { Venue, VenueDetailed } from '@/types/venue';
-import type { UserWithBookings, UserWithVenues } from '@/types/user';
+import { RootState } from '@/store'
+import { CreateVenue, Venue, VenueDetailed } from '@/types/venue'
+import {
+    LoginResponse,
+    UserObject,
+    UserWithBookings,
+    UserWithVenues,
+    LoginRequest,
+    RegisterUserObject,
+} from '@/types/user'
 
 export const holidazeApi = createApi({
     reducerPath: 'holidazeApi',
     baseQuery: fetchBaseQuery({
         baseUrl: 'https://api.noroff.dev/api/v1/holidaze/',
         prepareHeaders: (headers, { getState }) => {
-            const token = (getState() as RootState).user.accessToken;
-            if (token) {
-                headers.set('authorization', `Bearer ${token}`);
+            const token = (getState() as RootState).user.accessToken
+            if (token != null) {
+                headers.set('authorization', `Bearer ${token}`)
             }
-            return headers;
+            return headers
         },
     }),
+    tagTypes: ['Profile', 'Venue'],
     endpoints: (builder) => ({
         getVenueById: builder.query<VenueDetailed, string>({
             query: (id) => `venues/${id}?_owner=true&_bookings=true`,
+            providesTags: ['Venue'],
         }),
         getVenues: builder.query<Venue[], string>({
-            query: () => `venues`,
+            query: () => 'venues?sort=created',
         }),
+
         getTrendingVenues: builder.query<Venue[], string>({
-            query: () => `venues?sort=rating&limit=3`,
+            query: () => 'venues?sort=rating&limit=3',
+        }),
+        getOwnProfile: builder.query<UserWithBookings & UserWithVenues, string>({
+            query: (name) => `profiles/${name}?_bookings=true&_venues=true`,
+            providesTags: ['Profile'],
         }),
         getProfileByName: builder.query<UserWithBookings & UserWithVenues, string>({
-            query: (name) => `profiles/${name}?_owner=true&_bookings=true&_venues=true`,
+            query: (name) => `profiles/${name}?_venues=true`,
         }),
-        registerProfile: builder.mutation<any, any>({
+        updateUserAvatar: builder.mutation<UserObject, { name: string; body: { avatar: string } }>({
+            query: (query) => ({
+                url: `profiles/${query.name}/media`,
+                method: 'PUT',
+                body: query.body,
+            }),
+            invalidatesTags: ['Profile'],
+        }),
+        becomeVenueManager: builder.mutation<UserObject, string>({
+            query: (name) => ({
+                url: `profiles/${name}`,
+                method: 'PUT',
+                body: {
+                    venueManager: true,
+                },
+            }),
+            invalidatesTags: ['Profile'],
+        }),
+        registerProfile: builder.mutation<UserObject, RegisterUserObject>({
             query: (body) => ({
-                url: `auth/register`,
+                url: 'auth/register',
                 method: 'POST',
                 body,
             }),
         }),
-        login: builder.mutation<any, any>({
+        login: builder.mutation<LoginResponse, LoginRequest>({
             query: (body) => ({
-                url: `auth/login`,
+                url: 'auth/login',
                 method: 'POST',
                 body,
             }),
+        }),
+        createVenue: builder.mutation<Venue, CreateVenue>({
+            query: (body) => ({
+                url: 'venues',
+                method: 'POST',
+                body,
+            }),
+        }),
+        updateVenue: builder.mutation<Venue, CreateVenue>({
+            query: (body) => ({
+                url: 'venues',
+                method: 'POST',
+                body,
+            }),
+        }),
+        deleteVenue: builder.mutation<Venue, string>({
+            query: (venueId) => ({
+                url: `venues/${venueId}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Profile', 'Venue'],
         }),
     }),
-});
+})
 
 export const {
     useGetVenueByIdQuery,
     useGetVenuesQuery,
     useGetTrendingVenuesQuery,
+    useGetOwnProfileQuery,
     useGetProfileByNameQuery,
+    useBecomeVenueManagerMutation,
     useLoginMutation,
     useRegisterProfileMutation,
-} = holidazeApi;
+    useUpdateUserAvatarMutation,
+    useCreateVenueMutation,
+    useUpdateVenueMutation,
+    useDeleteVenueMutation,
+} = holidazeApi

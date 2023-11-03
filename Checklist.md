@@ -36,13 +36,13 @@
 1. design login page
 1. design register page
 
-1. Bootstrap project with vite
-1. Add react router dom
-1. Add tanstack query
+1. Bootstrap project with vite x
+1. Add react router dom x
+1. Add tanstack query x
 
-1. Add a venue directory page
+1. Add a venue directory page x
 1. Add a venue search field
-1. Add a single venue page
+1. Add a single venue page x
 1. Add a calendar to the single venue page with available dates
 
 1. Create a customer registration page

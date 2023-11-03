@@ -1,8 +1,9 @@
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { useCreateVenueMutation } from '@/services/holidaze'
+import { useUpdateVenueMutation, useGetVenueByIdQuery } from '@/services/holidaze'
 
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material'
 import PeopleIcon from '@mui/icons-material/People'
 import EuroIcon from '@mui/icons-material/Euro'
 import AddLocationIcon from '@mui/icons-material/AddLocation'
@@ -81,9 +82,41 @@ const defaultValues = {
 }
 
 export default function CreateVenuePage(): ReactElement {
-    const [createVenue] = useCreateVenueMutation()
+    const { venueId } = useParams()
+    // const [updateVenue] = useUpdateVenueMutation()
+
+    const fetchValues = async (): Promise<FormValues> => {
+        try {
+            if (venueId === undefined) return defaultValues
+            const { data, error } = useGetVenueByIdQuery(venueId)
+            if (error != null) throw new Error(`Fetch error`)
+            console.log('formData: ', data)
+            return {
+                name: data?.name ?? '',
+                description: data?.description ?? '',
+                media: data?.media ?? [],
+                price: data?.price ?? 0,
+                maxGuests: data?.maxGuests ?? 1,
+                rating: data?.rating ?? 0,
+                wifi: data?.meta.wifi ?? false,
+                parking: data?.meta.parking ?? false,
+                breakfast: data?.meta.breakfast ?? false,
+                pets: data?.meta.pets ?? false,
+                address: data?.location.address ?? '',
+                city: data?.location.city ?? '',
+                zip: data?.location.zip ?? '',
+                country: data?.location.country ?? '',
+                continent: data?.location.continent ?? '',
+                lat: data?.location.lat ?? 0,
+                lng: data?.location.lng ?? 0,
+            }
+        } catch (error) {
+            console.error(error)
+            return defaultValues
+        }
+    }
     const { control, handleSubmit, register } = useForm<FormValues>({
-        defaultValues,
+        defaultValues: async () => await fetchValues(),
         resolver: yupResolver(schema),
     })
 
@@ -112,13 +145,13 @@ export default function CreateVenuePage(): ReactElement {
             },
         }
         console.log('submitted: ', body)
-        createVenue(body)
+        // updateVenue(body)
     }
 
     return (
         <Layout>
             <Typography component="h1" variant="h2">
-                Add Venue
+                Update Venue
             </Typography>
             <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ maxWidth: '600px' }}>
                 <CustomTextField control={control} name={'name'} label={'Name'} fullWidth={true} />
@@ -167,7 +200,7 @@ export default function CreateVenuePage(): ReactElement {
                 />
 
                 <Button type="submit" variant="contained" sx={{ marginBlock: 3 }}>
-                    Create Venue
+                    Update Venue
                 </Button>
             </Box>
         </Layout>

@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import Box from '@mui/material/Box';
+import type { ReactNode } from 'react';
+import Container from "@mui/material/Container";
 
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
@@ -8,9 +8,9 @@ export default function StandardLayout({ children }: { children: ReactNode }) {
     return (
         <>
             <Header />
-            <Box component='main' id='main-content'>
+            <Container maxWidth="lg" component="main" id="main-content" sx={{paddingBlock: 2}}>
                 {children}
-            </Box>
+            </Container>
             <Footer />
         </>
     );

@@ -69,17 +69,6 @@ th {
     font-style: normal;
 }
 
-hr {
-    box-sizing: content-box;
-    height: 0;
-    overflow: visible;
-}
-
-pre {
-    font-family: monospace, monospace;
-    font-size: 1em;
-    white-space: pre-wrap;
-}
 
 p,
 h1,
@@ -91,40 +80,8 @@ h6 {
     overflow-wrap: break-word;
 }
 
-:root {
-    --color-text: hsl(0, 0%, 0%, 0.87);
-    --color-text-primary: hsl(168, 86%, 24%);
-    --color-text-accent: hsl(309, 85%, 38%);
-    --color-primary: hsl(168, 87%, 61%);
-    --color-secondary: hsl(348, 100%, 93%);
-    --color-accent: hsl(309, 85%, 59%);
-    --color-background: hsl(170, 60%, 98%);
-
-    --content-width: 1200px;
-    --max-width: 1400px;
-    --ff-body: 'Open Sans', sans-serif;
-
-    --fs-100: 0.75rem;
-    --fs-200: 0.875rem;
-    --fs-300: 1rem;
-    --fs-400: 1.25rem;
-    --fs-500: 1.5rem;
-    --fs-600: 2rem;
-    --fs-700: 3rem;
-    --fs-800: 4rem;
-    --fs-900: 6rem;
-}
-
-body {
-    font-family: var(--ff-body);
-    background-color: var(--color-background);
-}
-
-a.active {
-    color: var(--color-text-primary);
-}
-
-.visually-hidden {
+.visually-hidden,
+.skip-link {
     clip: rect(0 0 0 0);
     clip-path: inset(50%);
     height: 1px;

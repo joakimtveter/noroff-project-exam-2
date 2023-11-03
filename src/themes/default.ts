@@ -1,5 +1,4 @@
-import { amber, red } from '@mui/material/colors';
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles'
 
 // declare module '@mui/material/styles/createPalette' {
 //     interface TypeText {
@@ -9,18 +8,25 @@ import { createTheme } from '@mui/material/styles';
 // }
 
 const defaultTheme = createTheme({
-    palette: {
-        primary: {
-            main: red[500],
-        },
-        secondary: {
-            main: amber[500],
-        },
-        // text: {
-        //     green: '#09725d',
-        //     purple: '#b30f9b',
-        // },
+  palette: {
+    primary: {
+      dark: '#05445E',
+      main: '#0088A3',
+      light: '#D4F1F4'
     },
-});
+    secondary: {
+      dark: '#00726F',
+      main: '#0abab5',
+      light: '#0CE6DF'
+    },
+    background: {
+      paper: '#E7F7F9'
+    }
+    // text: {
+    //     green: '#09725d',
+    //     purple: '#b30f9b',
+    // },
+  }
+})
 
-export default defaultTheme;
+export default defaultTheme
