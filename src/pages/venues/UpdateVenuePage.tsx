@@ -1,9 +1,9 @@
-import { ReactElement, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { ReactElement } from 'react'
+import { useParams } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { useUpdateVenueMutation, useGetVenueByIdQuery } from '@/services/holidaze'
+import { useGetVenueByIdQuery } from '@/services/holidaze'
 
-import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import PeopleIcon from '@mui/icons-material/People'
 import EuroIcon from '@mui/icons-material/Euro'
 import AddLocationIcon from '@mui/icons-material/AddLocation'
@@ -88,8 +88,7 @@ export default function CreateVenuePage(): ReactElement {
     const fetchValues = async (): Promise<FormValues> => {
         try {
             if (venueId === undefined) return defaultValues
-            const { data, error } = useGetVenueByIdQuery(venueId)
-            if (error != null) throw new Error(`Fetch error`)
+            const { data } = useGetVenueByIdQuery(venueId)
             console.log('formData: ', data)
             return {
                 name: data?.name ?? '',
@@ -117,6 +116,9 @@ export default function CreateVenuePage(): ReactElement {
     }
     const { control, handleSubmit, register } = useForm<FormValues>({
         defaultValues: async () => await fetchValues(),
+        // TODO: fix yup reslover types
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         resolver: yupResolver(schema),
     })
 

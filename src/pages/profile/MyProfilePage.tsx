@@ -33,7 +33,6 @@ import EditIcon from '@mui/icons-material/Edit'
 import Layout from '@/components/layout'
 import BookingList from '@/components/venue/booking-list'
 import VenueListItem from '@/components/venue/venue-list-item'
-import IconButton from '@mui/material/IconButton'
 
 export default function OwnProfilePage(): ReactElement {
     // Local State

@@ -84,6 +84,8 @@ export default function CreateVenuePage(): ReactElement {
     const [createVenue] = useCreateVenueMutation()
     const { control, handleSubmit, register } = useForm<FormValues>({
         defaultValues,
+        // TODO:  fix types in yup resolver
+        // @ts-expect-error
         resolver: yupResolver(schema),
     })
 

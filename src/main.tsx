@@ -39,16 +39,16 @@ const router = createBrowserRouter([
         element: <UpdateVenuePage />,
     },
     {
+        path: 'venues/:venueId/admin',
+        element: <VenueAdminPage />,
+    },
+    {
         path: 'venues/add',
         element: <CreateVenuePage />,
     },
     {
         path: 'profile',
         element: <MyProfilePage />,
-    },
-    {
-        path: 'profile/venue/:venueId',
-        element: <VenueAdminPage />,
     },
     {
         path: 'profile/:profileName',
