@@ -2,18 +2,14 @@ import { ReactElement } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useGetVenueByIdQuery } from '@/services/holidaze'
 
-import { Badge, Box, CircularProgress, Container, Grid, Paper, Rating, Stack, Tooltip, Typography } from '@mui/material'
+import { Box, CircularProgress, Container, Grid, Paper, Typography } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
-import WifiOutlinedIcon from '@mui/icons-material/WifiOutlined'
-import PetsOutlinedIcon from '@mui/icons-material/PetsOutlined'
-import LocalParkingOutlinedIcon from '@mui/icons-material/LocalParkingOutlined'
-import BakeryDiningOutlinedIcon from '@mui/icons-material/BakeryDiningOutlined'
-import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined'
 
 import BookingCalendar from '@/components/venue/booking-calendar'
 import Layout from '@/components/layout'
 import ProfileCard from '@/components/common/profile-card'
 import VenueGallery from '@/components/venue/venue-gallery'
+import VenueInfo from '@/components/venue/venue-info'
 
 export default function SingleVenuePage(): ReactElement {
     const navigate = useNavigate()
@@ -46,40 +42,17 @@ export default function SingleVenuePage(): ReactElement {
                                 <VenueGallery images={data.media} />
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <Typography component="h1" variant="h2">
+                                <Typography component="h1" variant="h2" sx={{ marginBlockEnd: 4 }}>
                                     {data.name}
                                 </Typography>
-                                <Stack spacing={3} direction={'row'} alignItems={'center'} pb={2}>
-                                    <Stack spacing={1} direction={'row'} alignItems="center">
-                                        <Rating name="read-only" value={data.rating} readOnly />
-                                        <Typography>{data.rating}</Typography>
-                                    </Stack>
-                                    <Tooltip title={`Maximum ${data.maxGuests} guests`}>
-                                        <Badge badgeContent={data.maxGuests} color="primary">
-                                            <PeopleOutlinedIcon sx={{ color: 'text.purple' }} />
-                                        </Badge>
-                                    </Tooltip>
-                                    {data.meta.wifi && (
-                                        <Tooltip title={'Has Wifi'}>
-                                            <WifiOutlinedIcon sx={{ color: 'text.purple' }} />
-                                        </Tooltip>
-                                    )}
-                                    {data.meta.pets && (
-                                        <Tooltip title={'Pets allowed'}>
-                                            <PetsOutlinedIcon sx={{ color: 'text.purple' }} />
-                                        </Tooltip>
-                                    )}
-                                    {data.meta.parking && (
-                                        <Tooltip title={'Parking available'}>
-                                            <LocalParkingOutlinedIcon sx={{ color: 'text.purple' }} />
-                                        </Tooltip>
-                                    )}
-                                    {data.meta.breakfast && (
-                                        <Tooltip title={'Breakfast included'}>
-                                            <BakeryDiningOutlinedIcon sx={{ color: 'text.purple' }} />
-                                        </Tooltip>
-                                    )}
-                                </Stack>
+                                <VenueInfo
+                                    wifi={data.meta.wifi}
+                                    pets={data.meta.pets}
+                                    rating={data.rating}
+                                    breakfast={data.meta.breakfast}
+                                    parking={data.meta.parking}
+                                    maxGuests={data.maxGuests}
+                                />
                                 <Typography component="p" variant="subtitle1" mb={2}>
                                     {data.description}
                                 </Typography>
@@ -142,7 +115,10 @@ export default function SingleVenuePage(): ReactElement {
                                     </Typography>
                                 </Paper>
                                 <Box sx={{ marginBlock: 2 }}>
-                                    {data.location.lat & data.location.lng ? (
+                                    {data.location.lat != null &&
+                                    data.location.lat !== 0 &&
+                                    data.location.lng != null &&
+                                    data.location.lng !== 0 ? (
                                         <Typography component="p">
                                             Latitude: {data.location.lat} Longitude: {data.location.lng}
                                         </Typography>
