@@ -8,9 +8,10 @@ interface CustomTextFieldProps {
     label: string
     fullWidth: boolean
     helperText?: string
+    autoComplete?: string
 }
 export default function CustomTextField(props: CustomTextFieldProps): ReactElement {
-    const { control, name, label, fullWidth = true, helperText = '' } = props
+    const { control, name, label, fullWidth = true, helperText = '', autoComplete = 'on' } = props
     const {
         field,
         fieldState: { error },
@@ -22,6 +23,7 @@ export default function CustomTextField(props: CustomTextFieldProps): ReactEleme
             fullWidth={fullWidth}
             error={error?.message != null}
             helperText={error?.message ?? helperText}
+            autoComplete={autoComplete}
             margin={'normal'}
             {...field}
         />

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import { RootState } from '@/store'
-import { CreateVenue, Venue, VenueDetailed } from '@/types/venue'
+import { CreateVenue, UpdateVenue, Venue, VenueDetailed } from '@/types/venue'
 import {
     LoginResponse,
     UserObject,
@@ -23,7 +23,7 @@ export const holidazeApi = createApi({
             return headers
         },
     }),
-    tagTypes: ['Profile', 'Venue'],
+    tagTypes: ['Profile', 'Venue', 'VenueList'],
     endpoints: (builder) => ({
         getVenueById: builder.query<VenueDetailed, string>({
             query: (id) => `venues/${id}?_owner=true&_bookings=true`,
@@ -31,6 +31,7 @@ export const holidazeApi = createApi({
         }),
         getVenues: builder.query<Venue[], string>({
             query: () => 'venues?sort=created',
+            providesTags: ['VenueList'],
         }),
 
         getTrendingVenues: builder.query<Venue[], string>({
@@ -82,12 +83,13 @@ export const holidazeApi = createApi({
                 body,
             }),
         }),
-        updateVenue: builder.mutation<Venue, CreateVenue>({
-            query: (body) => ({
-                url: 'venues',
-                method: 'POST',
+        updateVenue: builder.mutation<Venue, UpdateVenue>({
+            query: ({ venueId, body }) => ({
+                url: `venues/${venueId}`,
+                method: 'PUT',
                 body,
             }),
+            invalidatesTags: ['Venue'],
         }),
         deleteVenue: builder.mutation<Venue, string>({
             query: (venueId) => ({

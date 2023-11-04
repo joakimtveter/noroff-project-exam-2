@@ -15,7 +15,7 @@ import ProfilePage from '@/pages/profile/ProfilePage'
 import LoginPage from '@/pages/sign-in'
 import RegisterPage from '@/pages/sign-up'
 import VenueAdminPage from './pages/profile/VenueAdminPage'
-import CreateVenuePage from '@/pages/venues/CreateVenuePage.tsx'
+import AddVenuePage from '@/pages/venues/AddVenuePage.tsx'
 import UpdateVenuePage from '@/pages/venues/UpdateVenuePage.tsx'
 
 import './global.css'
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
     },
     {
         path: 'venues/add',
-        element: <CreateVenuePage />,
+        element: <AddVenuePage />,
     },
     {
         path: 'profile',

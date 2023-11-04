@@ -1,198 +1,116 @@
-import { type FormEvent, type MutableRefObject, type ReactElement, useState } from 'react'
-import { Box, Button, FormControlLabel, InputAdornment, Rating, Stack, Switch, TextField, Typography } from '@mui/material'
+import { ReactElement } from 'react'
+import { Control, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form'
+import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 
-import EuroSymbolIcon from '@mui/icons-material/EuroSymbol'
+import CustomTextField from '@/components/forms/form-components/text-field'
+import CustomNumberField from '@/components/forms/form-components/number-field'
+import MediaFields from '@/components/forms/form-components/media'
+import CustomRating from '@/components/forms/form-components/rating'
+import CustomSwitch from '@/components/forms/form-components/switch'
+
+import EuroIcon from '@mui/icons-material/Euro'
 import PeopleIcon from '@mui/icons-material/People'
+import AddLocationIcon from '@mui/icons-material/AddLocation'
 
-import { type VenueFormTypes } from '@/types/venue.ts'
+import { FormValues } from '@/pages/venues/AddVenuePage.tsx'
 
 interface VenueFormProps {
-  formRef: MutableRefObject<HTMLFormElement | null>
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void
-  defaultValues: VenueFormTypes
+    onSubmit: (e: FormValues) => void
+    handleSubmit: UseFormHandleSubmit<FormValues>
+    control: Control<FormValues>
+    register: UseFormRegister<FormValues>
+
+    submitText: string
 }
 
-export default function VenueForm (props: VenueFormProps): ReactElement {
-  const { onSubmit, defaultValues, formRef } = props
-  const [imageFields, setImageFields] = useState<string[]>(['image'])
-  const addField = (): void => {
-    setImageFields(
-      [...imageFields, `image${imageFields.length}`]
-    )
-  }
+export default function VenueForm(props: VenueFormProps): ReactElement {
+    const { submitText, control, handleSubmit, onSubmit, register } = props
 
-  return (
-        <Stack ref={formRef} gap={2} component={'form'} onSubmit={onSubmit} sx={{ maxWidth: '500px' }} >
-            <TextField
-                name='name'
-                label='Name'
-                defaultValue={defaultValues.name}
-                variant="outlined"
-                fullWidth={true}
-                error={false}
-                helperText={''}
-            />
-            <TextField
-                name='description'
-                label='Description'
-                defaultValue={defaultValues.description}
-                variant="outlined"
-                fullWidth={true}
-                error={false}
-                helperText={''}
-            />
-            <Stack direction='row'>
-                <TextField
-                    name='price'
-                    label='Price per night'
-                    defaultValue={defaultValues.price}
-                    variant="outlined"
-                    fullWidth={false}
-                    error={false}
-                    helperText={''}
-                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', style: { textAlign: 'end' } }}
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start"><EuroSymbolIcon /></InputAdornment>
-                    }}
-                />
-                <TextField
-                    name='maxGuests'
-                    label='Maximum number of Guests'
-                    defaultValue={defaultValues.maxGuests}
-                    variant="outlined"
-                    fullWidth={false}
-                    error={false}
-                    helperText={''}
-                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', style: { textAlign: 'end' } }}
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start"><PeopleIcon /></InputAdornment>
-                    }}
+    return (
+        //
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ maxWidth: '600px' }}>
+            <CustomTextField control={control} name={'name'} label={'Name'} fullWidth={true} />
+            <CustomTextField control={control} name={'description'} label={'Description'} fullWidth={true} />
+            <Stack sx={{ maxWidth: '250px' }}>
+                <CustomNumberField control={control} name={'price'} label={'Price per night'} icon={<EuroIcon />} />
+                <CustomNumberField
+                    control={control}
+                    name={'maxGuests'}
+                    label={'Maximum number of guest'}
+                    icon={<PeopleIcon />}
                 />
             </Stack>
-                <Typography variant='h4'>Images</Typography>
-            { imageFields.map((field) => (
-
-                <TextField
-                    key={field}
-                    name='image'
-                    label='Image'
-                    defaultValue={defaultValues.name}
-                    variant="outlined"
-                    fullWidth={true}
-                    error={false}
-                    helperText={''}
-                />
-            ))
-
-            }
-<Button type='button' onClick={addField}>add</Button>
-            <Box>
-                <Typography component="legend">Rating</Typography>
-                <Rating
-                    name={'rating'}
-                    precision={0.5}
-                    size="large"
-                    defaultValue={defaultValues.rating}
-                />
-            </Box>
-
-            <Typography variant='h4'>Amenities</Typography>
-            <FormControlLabel
-                name='wifi'
-                control={<Switch />}
-                label='Wifi available'
-                labelPlacement={'start'}
-            />
-            <FormControlLabel
-                name='parking'
-                label='Parking on property'
-                labelPlacement={'start'}
-                control={<Switch />}
-            />
-            <FormControlLabel
-                name='breakfast'
-                label='Breakfast included'
-                labelPlacement={'start'}
-                control={<Switch />}
-            />
-            <FormControlLabel
-                name='pets'
-                label='Pets allowed'
-                labelPlacement={'start'}
-                control={<Switch />}
-            />
-
-            <Typography variant='h4'>Location</Typography>
-            <TextField
-                name='address'
-                label='Address'
-                variant="outlined"
+            <MediaFields control={control} register={register} />
+            <CustomRating control={control} name={'rating'} label={'Rating'} />
+            <Stack sx={{ maxWidth: '400px', marginBlock: 4 }}>
+                <Paper sx={{ padding: 4 }}>
+                    <Typography component="legend" variant="h4">
+                        Meta
+                    </Typography>
+                    <CustomSwitch control={control} name={'wifi'} label={'Wifi available'} />
+                    <CustomSwitch control={control} name={'parking'} label={'Parking available'} />
+                    <CustomSwitch control={control} name={'breakfast'} label={'Breakfast included'} />
+                    <CustomSwitch control={control} name={'pets'} label={'Pets Allowed'} />
+                </Paper>
+            </Stack>
+            <Typography component="h2" variant="h4">
+                Location
+            </Typography>
+            <CustomTextField
+                control={control}
+                name={'address'}
+                label={'Address'}
                 fullWidth={true}
-                error={false}
-                helperText={''}
+                autoComplete={'street-address'}
             />
-            <TextField
-                name='city'
-                label='City'
-                variant="outlined"
+            <CustomTextField
+                control={control}
+                name={'zip'}
+                label={'Zip Code'}
                 fullWidth={true}
-                error={false}
-                helperText={''}
+                autoComplete={'postal-code'}
+            />
+            <CustomTextField
+                control={control}
+                name={'city'}
+                label={'City'}
+                fullWidth={true}
+                autoComplete={'address-level1'}
+            />
+            <CustomTextField
+                control={control}
+                name={'country'}
+                label={'Country'}
+                fullWidth={true}
+                autoComplete={'country-name'}
+            />
+            <CustomTextField
+                control={control}
+                name={'continent'}
+                label={'Continent'}
+                fullWidth={true}
+                autoComplete={'on'}
+            />
+            <CustomNumberField
+                control={control}
+                name={'lat'}
+                label={'Latitude'}
+                fullWidth={true}
+                position={true}
+                icon={<AddLocationIcon />}
+            />
+            <CustomNumberField
+                control={control}
+                name={'lng'}
+                label={'Longitude'}
+                fullWidth={true}
+                position={true}
+                icon={<AddLocationIcon />}
             />
 
-            <TextField
-                name='zip'
-                label='Zip Code'
-                variant="outlined"
-                fullWidth={true}
-                error={false}
-                helperText={''}
-            />
-            <TextField
-                name='country'
-                label='Country'
-                variant="outlined"
-                fullWidth={true}
-                error={false}
-                helperText={''}
-            />
-
-            <TextField
-                name='continent'
-                label='Continent'
-                variant="outlined"
-                fullWidth={true}
-                error={false}
-                helperText={''}
-            />
-            <TextField
-                name='lat'
-                label='Latitude'
-                defaultValue={defaultValues.price}
-                variant="outlined"
-                fullWidth={false}
-                error={false}
-                helperText={''}
-                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', style: { textAlign: 'end' } }}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start"><EuroSymbolIcon /></InputAdornment>
-                }}
-            />
-            <TextField
-                name='lng'
-                label='Longitude'
-                defaultValue={defaultValues.price}
-                variant="outlined"
-                fullWidth={false}
-                error={false}
-                helperText={''}
-                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', style: { textAlign: 'end' } }}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start"><EuroSymbolIcon /></InputAdornment>
-                }}
-            />
-
-            <Button component='button' type='submit' variant="contained">Create Venue</Button>
-        </Stack>
-  )
+            <Button type="submit" variant="contained" sx={{ marginBlock: 3 }}>
+                {submitText}
+            </Button>
+        </Box>
+    )
 }

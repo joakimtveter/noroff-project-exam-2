@@ -44,6 +44,20 @@ export interface CreateVenue {
     location: Location
 }
 
+export interface UpdateVenue {
+    venueId: string
+    body: {
+        name: string
+        description: string
+        media: string[]
+        price: number
+        maxGuests: number
+        rating: number
+        meta: VenueMeta
+        location: Location
+    }
+}
+
 export interface Venue extends CreateVenue {
     id: string
     created: string

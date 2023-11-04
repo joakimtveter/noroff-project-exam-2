@@ -1,7 +1,8 @@
-import { useFieldArray } from 'react-hook-form'
-import { Button, TextField } from '@mui/material'
-
 import { ReactElement } from 'react'
+import { useFieldArray } from 'react-hook-form'
+import { Box, Button, Stack, IconButton, TextField } from '@mui/material'
+
+import ClearIcon from '@mui/icons-material/Clear'
 
 interface MediaFieldsProps {
     control: any
@@ -10,30 +11,41 @@ interface MediaFieldsProps {
 
 export default function MediaFields(props: MediaFieldsProps): ReactElement {
     const { control, register } = props
-    const { fields, append } = useFieldArray({ name: 'media', control })
+    const { fields, append, remove } = useFieldArray({ name: 'media', control })
 
     return (
-        <>
+        <Box sx={{ marginBlock: 2 }}>
             {fields.map((field, index: number) => (
-                <TextField
-                    key={field.id}
-                    label={`Image ${index + 1}`}
-                    variant={'outlined'}
-                    fullWidth={true}
-                    // error={((error?.message) != null)}
-                    // helperText={(error?.message) ?? helperText}
-                    margin={'normal'}
-                    {...register(`media.${index}` as const)}
-                />
+                <Stack key={field.id} direction="row">
+                    <TextField
+                        key={field.id}
+                        label={`Image ${index + 1}`}
+                        type="url"
+                        variant={'outlined'}
+                        fullWidth={true}
+                        // error={((error?.message) != null)}
+                        // helperText={(error?.message) ?? helperText}
+                        margin={'normal'}
+                        {...register(`media.${index}` as const)}
+                    />
+                    <IconButton
+                        onClick={(): void => {
+                            remove(index)
+                        }}
+                    >
+                        <ClearIcon color="error" />
+                    </IconButton>
+                </Stack>
             ))}
             <Button
+                variant="outlined"
                 type="button"
                 onClick={() => {
                     append('')
                 }}
             >
-                Add Field
+                Add Image
             </Button>
-        </>
+        </Box>
     )
 }

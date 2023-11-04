@@ -1,3 +1,4 @@
+import { ReactElement } from 'react'
 import { Badge, Rating, Stack, Tooltip, Typography } from '@mui/material'
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined'
 import WifiOutlinedIcon from '@mui/icons-material/WifiOutlined'
@@ -13,7 +14,7 @@ interface VenueInfoProps {
     parking: boolean
     maxGuests: number
 }
-export default function VenueInfo(props: VenueInfoProps): ReactComponent {
+export default function VenueInfo(props: VenueInfoProps): ReactElement {
     const { wifi, pets, breakfast, parking, maxGuests, rating } = props
     return (
         <Stack spacing={3} direction={'row'} alignItems={'center'} paddingBlock={2} marginBlock={2}>

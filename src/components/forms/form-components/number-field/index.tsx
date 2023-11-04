@@ -15,7 +15,7 @@ export default function CustomNumberField(props: CustomNumberFieldProps): ReactE
     const { name, control, label, fullWidth, icon, helperText, position = false } = props
     const { field, fieldState } = useController({ control, name })
     const { error } = fieldState
-    const pattern: string = position ? '^-?[0-9]{1,3}(?:.[0-9]{1,10})?$' : '[0-9]*'
+    const pattern: string = position ? '^[\\-]{0,1}[0-9]*\\.[0-9]*$' : '[0-9].*'
     return (
         <TextField
             label={label}

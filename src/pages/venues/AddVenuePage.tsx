@@ -1,8 +1,6 @@
-import { ReactElement, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { ReactElement } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { useGetVenueByIdQuery, useUpdateVenueMutation } from '@/services/holidaze'
-
+import { useCreateVenueMutation } from '@/services/holidaze'
 import { Typography } from '@mui/material'
 
 import Layout from '@/components/layout'
@@ -10,6 +8,7 @@ import Layout from '@/components/layout'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import VenueForm from '@/components/forms/venue-form'
+import { useNavigate } from 'react-router-dom'
 
 const schema = yup
     .object()
@@ -54,40 +53,36 @@ export interface FormValues {
     lng: number
 }
 
-export default function CreateVenuePage(): ReactElement {
-    const { venueId } = useParams()
-    if (venueId === undefined) return <p>There was an error</p>
-    const { data, isError, isLoading } = useGetVenueByIdQuery(venueId)
-    const [updateVenue] = useUpdateVenueMutation()
-    const navigate = useNavigate()
+const defaultValues = {
+    name: '',
+    description: '',
+    media: [],
+    price: 0,
+    maxGuests: 1,
+    rating: 2,
+    wifi: false,
+    parking: false,
+    breakfast: false,
+    pets: false,
+    address: '',
+    city: '',
+    zip: '',
+    country: '',
+    continent: '',
+    lat: 0,
+    lng: 0,
+}
 
-    const initialValue = {
-        name: data?.name ?? '',
-        description: data?.description ?? '',
-        media: data?.media ?? [],
-        price: data?.price ?? 0,
-        maxGuests: data?.maxGuests ?? 1,
-        rating: data?.rating ?? 0,
-        wifi: data?.meta.wifi ?? false,
-        parking: data?.meta.parking ?? false,
-        breakfast: data?.meta.breakfast ?? false,
-        pets: data?.meta.pets ?? false,
-        address: data?.location.address ?? '',
-        city: data?.location.city ?? '',
-        zip: data?.location.zip ?? '',
-        country: data?.location.country ?? '',
-        continent: data?.location.continent ?? '',
-        lat: data?.location.lat ?? 0,
-        lng: data?.location.lng ?? 0,
-    }
+export default function AddVenuePage(): ReactElement {
+    const [createVenue] = useCreateVenueMutation()
 
-    const { control, handleSubmit, register, reset } = useForm<FormValues>({
-        defaultValues: initialValue,
-        // TODO: fix yup reslover types
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
+    const { control, handleSubmit, register } = useForm<FormValues>({
+        defaultValues,
+        // TODO:  fix types in yup resolver
+        // @ts-expect-error sds
         resolver: yupResolver(schema),
     })
+    const navigate = useNavigate()
 
     const onSubmit: SubmitHandler<FormValues> = async (data): Promise<void> => {
         const body = {
@@ -114,27 +109,27 @@ export default function CreateVenuePage(): ReactElement {
             },
         }
         console.log('submitted: ', body)
-        await updateVenue({ venueId, body })
-        navigate(`/venues/${venueId}`)
-    }
-
-    useEffect(() => {
-        if (!isLoading && !isError && data != null) {
-            reset(initialValue) // Initialize the form with data when it's available
+        try {
+            const response = await createVenue(body).unwrap()
+            if (response.id != null) {
+                navigate('/profile')
+            }
+        } catch (error) {
+            console.error(error)
         }
-    }, [data, isLoading, isError, reset])
+    }
 
     return (
         <Layout>
             <Typography component="h1" variant="h2">
-                Update Venue
+                Add a new venue
             </Typography>
             <VenueForm
                 onSubmit={onSubmit}
                 handleSubmit={handleSubmit}
                 control={control}
                 register={register}
-                submitText={'Update Venue'}
+                submitText={'Add Venue'}
             />
         </Layout>
     )
