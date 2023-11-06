@@ -1,16 +1,15 @@
+import { ReactElement } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 import { useGetProfileByNameQuery } from '@/services/holidaze'
 import { RootState } from '@/store'
 
-import Layout from '@/components/layout'
-
-import { Avatar, Box, Chip, CircularProgress, Container, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Chip, CircularProgress, Stack, Typography } from '@mui/material'
 
 import VenueCard from '@/components/venue/venue-card'
 
-export default function ProfilePage() {
+export default function ProfilePage(): ReactElement {
     const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
     const { profileName } = useParams<{ profileName: string }>()
     const navigate = useNavigate()
@@ -28,7 +27,7 @@ export default function ProfilePage() {
             theme: 'colored',
             toastId: 'not-logged-in',
         })
-        navigate('/sign-in')
+        navigate('/auth')
     }
 
     // Get the profile data from RTK query
@@ -39,54 +38,50 @@ export default function ProfilePage() {
     console.log('user: ', data)
     return (
         <>
-            <Layout>
-                <Container>
-                    {error ? (
-                        <>
-                            <p>Oh no, there was an error</p>
-                            {console.error(error)}
-                        </>
-                    ) : isLoading ? (
-                        <CircularProgress />
-                    ) : data ? (
-                        <Box mt={3}>
-                            <Stack direction="row" alignItems="center" gap={4}>
-                                <Avatar
-                                    alt={data.name.toLocaleUpperCase()}
-                                    src={data.avatar}
-                                    sx={{ width: 200, height: 200 }}
-                                />
-                                <Stack component="hgroup" spacing={1}>
-                                    <Typography component="h1" variant="h3">
-                                        {' '}
-                                        {data.name}
-                                    </Typography>
-                                    <Typography component="p" variant="subtitle1">
-                                        {' '}
-                                        {data.email}
-                                    </Typography>
-                                    {data.venueManager && (
-                                        <Chip label="Venue manager" color="primary" sx={{ width: 'max-content' }} />
-                                    )}
-                                </Stack>
-                            </Stack>
-                            {data.venueManager && data._count.venues > 0 && (
-                                <Box>
-                                    <Typography component="h2" variant="h4">
-                                        Venues
-                                    </Typography>
-                                    <Stack component="ul" sx={{ listStyleType: 'none', padding: 0 }}>
-                                        {data.venues.map((venue) => (
-                                            <VenueCard key={venue.id} headingLevel={2} {...venue} />
-                                        ))}
-                                    </Stack>
-                                </Box>
+            {error ? (
+                <>
+                    <p>Oh no, there was an error</p>
+                    {console.error(error)}
+                </>
+            ) : isLoading ? (
+                <CircularProgress />
+            ) : data ? (
+                <Box mt={3}>
+                    <Stack direction="row" alignItems="center" gap={4}>
+                        <Avatar
+                            alt={data.name.toLocaleUpperCase()}
+                            src={data.avatar}
+                            sx={{ width: 200, height: 200 }}
+                        />
+                        <Stack component="hgroup" spacing={1}>
+                            <Typography component="h1" variant="h3">
+                                {' '}
+                                {data.name}
+                            </Typography>
+                            <Typography component="p" variant="subtitle1">
+                                {' '}
+                                {data.email}
+                            </Typography>
+                            {data.venueManager && (
+                                <Chip label="Venue manager" color="primary" sx={{ width: 'max-content' }} />
                             )}
-                            <pre>{JSON.stringify(data, null, 2)}</pre>
+                        </Stack>
+                    </Stack>
+                    {data.venueManager && data._count.venues > 0 && (
+                        <Box>
+                            <Typography component="h2" variant="h4">
+                                Venues
+                            </Typography>
+                            <Stack component="ul" sx={{ listStyleType: 'none', padding: 0 }}>
+                                {data.venues.map((venue) => (
+                                    <VenueCard key={venue.id} headingLevel={2} {...venue} />
+                                ))}
+                            </Stack>
                         </Box>
-                    ) : null}
-                </Container>
-            </Layout>
+                    )}
+                    <pre>{JSON.stringify(data, null, 2)}</pre>
+                </Box>
+            ) : null}
         </>
     )
 }

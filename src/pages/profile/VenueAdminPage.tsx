@@ -2,7 +2,6 @@ import { ReactElement } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetVenueByIdQuery } from '@/services/holidaze'
 
-import Layout from '@/components/layout'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
@@ -16,7 +15,7 @@ export default function VenueAdminPage(): ReactElement {
     const { data, error, isLoading } = useGetVenueByIdQuery(venueId ?? '')
 
     return (
-        <Layout>
+        <>
             {error != null ? (
                 <p>Oh no, there was an error</p>
             ) : isLoading ? (
@@ -36,6 +35,6 @@ export default function VenueAdminPage(): ReactElement {
                     <pre> {JSON.stringify(data, null, 2)}</pre>
                 </Box>
             ) : null}
-        </Layout>
+        </>
     )
 }

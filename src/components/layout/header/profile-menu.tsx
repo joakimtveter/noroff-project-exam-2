@@ -67,7 +67,7 @@ export default function ProfileMenu(): ReactElement {
                     </Menu>
                 </>
             ) : (
-                <Button component={Link} to={'/sign-in'} variant="contained" color="secondary">
+                <Button component={Link} to={'/auth'} variant="contained" color="secondary">
                     Sign in
                 </Button>
             )}

@@ -30,7 +30,6 @@ import HolidayVillageIcon from '@mui/icons-material/HolidayVillage'
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 
-import Layout from '@/components/layout'
 import BookingList from '@/components/venue/booking-list'
 import VenueListItem from '@/components/venue/venue-list-item'
 
@@ -83,7 +82,7 @@ export default function OwnProfilePage(): ReactElement {
             theme: 'colored',
             toastId: 'not-logged-in',
         })
-        navigate('/sign-in')
+        navigate('/auth')
     }
 
     // Get the profile data from RTK query
@@ -96,153 +95,151 @@ export default function OwnProfilePage(): ReactElement {
 
     return (
         <>
-            <Layout>
-                {error != null ? (
-                    <>
-                        <p>Oh no, there was an error</p>
-                    </>
-                ) : isLoading ? (
-                    <CircularProgress />
-                ) : data != null ? (
-                    <Box mt={3}>
-                        <Stack direction="row" alignItems="center" gap={4}>
+            {error != null ? (
+                <>
+                    <p>Oh no, there was an error</p>
+                </>
+            ) : isLoading ? (
+                <CircularProgress />
+            ) : data != null ? (
+                <Box mt={3}>
+                    <Stack direction="row" alignItems="center" gap={4}>
+                        <Box
+                            component="button"
+                            onClick={handleClickOpen}
+                            sx={{
+                                position: 'relative',
+                                border: 'none',
+                                backgroundColor: 'transparent',
+                                cursor: 'pointer',
+                                borderRadius: '50%',
+                            }}
+                        >
                             <Box
-                                component="button"
-                                onClick={handleClickOpen}
                                 sx={{
-                                    position: 'relative',
-                                    border: 'none',
-                                    backgroundColor: 'transparent',
-                                    cursor: 'pointer',
+                                    display: 'grid',
+                                    placeItems: 'center',
+                                    position: 'absolute',
+                                    inset: 0,
+                                    zIndex: 4,
                                     borderRadius: '50%',
+                                    color: 'white',
+                                    opacity: 0,
+                                    backgroundColor: '#00000044',
+                                    padding: 0,
+                                    ':hover': { opacity: 1 },
+                                    ':focus': { opacity: 1 },
                                 }}
                             >
-                                <Box
-                                    sx={{
-                                        display: 'grid',
-                                        placeItems: 'center',
-                                        position: 'absolute',
-                                        inset: 0,
-                                        zIndex: 4,
-                                        borderRadius: '50%',
-                                        color: 'white',
-                                        opacity: 0,
-                                        backgroundColor: '#00000044',
-                                        padding: 0,
-                                        ':hover': { opacity: 1 },
-                                        ':focus': { opacity: 1 },
+                                <EditIcon />
+                            </Box>
+                            <Avatar
+                                alt={data.name.toLocaleUpperCase()}
+                                src={data.avatar}
+                                sx={{ width: 200, height: 200 }}
+                            />
+                            <Typography component="span" style={visuallyHidden}>
+                                Change Profile Picture
+                            </Typography>
+                        </Box>
+                        <Dialog open={open} fullWidth={true} onClose={handleClose}>
+                            <DialogTitle>Update Profile Picture</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>Enter a URL to the desired profile picture.</DialogContentText>
+                                <TextField
+                                    autoFocus
+                                    label="Avatar URL"
+                                    type="url"
+                                    fullWidth
+                                    variant="outlined"
+                                    margin="normal"
+                                    value={newAvatarURL}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>): void => {
+                                        handleUrl(e.target.value)
                                     }}
-                                >
-                                    <EditIcon />
-                                </Box>
-                                <Avatar
-                                    alt={data.name.toLocaleUpperCase()}
-                                    src={data.avatar}
-                                    sx={{ width: 200, height: 200 }}
                                 />
-                                <Typography component="span" style={visuallyHidden}>
-                                    Change Profile Picture
-                                </Typography>
-                            </Box>
-                            <Dialog open={open} fullWidth={true} onClose={handleClose}>
-                                <DialogTitle>Update Profile Picture</DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText>Enter a URL to the desired profile picture.</DialogContentText>
-                                    <TextField
-                                        autoFocus
-                                        label="Avatar URL"
-                                        type="url"
-                                        fullWidth
-                                        variant="outlined"
-                                        margin="normal"
-                                        value={newAvatarURL}
-                                        onChange={(e: ChangeEvent<HTMLInputElement>): void => {
-                                            handleUrl(e.target.value)
-                                        }}
-                                    />
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={handleClose}>Cancel</Button>
-                                    {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-                                    <Button variant="contained" onClick={handleSubmit}>
-                                        Update
-                                    </Button>
-                                </DialogActions>
-                            </Dialog>
-                            <Stack component="hgroup" spacing={1}>
-                                <Typography component="h1" variant="h3">
-                                    {' '}
-                                    {data.name}
-                                </Typography>
-                                <Typography component="p" variant="subtitle1">
-                                    {' '}
-                                    {data.email}
-                                </Typography>
-                                {data.venueManager === true && (
-                                    <Chip label="Venue manager" color="primary" sx={{ width: 'max-content' }} />
-                                )}
-                            </Stack>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose}>Cancel</Button>
+                                {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+                                <Button variant="contained" onClick={handleSubmit}>
+                                    Update
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                        <Stack component="hgroup" spacing={1}>
+                            <Typography component="h1" variant="h3">
+                                {' '}
+                                {data.name}
+                            </Typography>
+                            <Typography component="p" variant="subtitle1">
+                                {' '}
+                                {data.email}
+                            </Typography>
+                            {data.venueManager === true && (
+                                <Chip label="Venue manager" color="primary" sx={{ width: 'max-content' }} />
+                            )}
                         </Stack>
-                        {data?.venueManager === false && (
-                            <Box component="section" sx={{ marginBlock: 4 }}>
-                                <Typography component="h2" variant="h4">
-                                    Become a Venue Manager
-                                </Typography>
-                                <Typography component="p" variant="h5" sx={{ marginBlock: 2 }}>
-                                    You are not a venue manager. If you have a room, a cabin, or some other nice
-                                    accommodation you would like to rent out? Get started by pushing the button below.
-                                </Typography>
-                                <Button
-                                    variant="contained"
-                                    sx={{ marginBlock: 4 }}
-                                    onClick={async () => await becomeVenueManager(data.name)}
-                                >
-                                    Become A Venue Manager
-                                </Button>
-                            </Box>
-                        )}
-                        {data.venueManager === true && (
-                            <Box component="section" sx={{ marginBlock: 4 }}>
-                                <Stack direction="row" alignItems="center" gap={2}>
-                                    <Typography component="h2" variant="h4">
-                                        My Venues
-                                    </Typography>
-                                    <Badge color="primary" badgeContent={data._count.venues}>
-                                        <HolidayVillageIcon fontSize="large" />
-                                    </Badge>
-                                </Stack>
-
-                                <List component="ul" sx={{ listStyleType: 'none', padding: 0 }}>
-                                    {data.venues.length < 1 && <Typography>You have no venues</Typography>}
-                                    {data.venues.map((venue) => (
-                                        <VenueListItem key={venue.id} {...venue} />
-                                    ))}
-                                </List>
-                                <Button
-                                    component={Link}
-                                    to="/venues/add"
-                                    endIcon={<AddIcon />}
-                                    variant="contained"
-                                    sx={{ marginBlock: 2 }}
-                                >
-                                    Add venue
-                                </Button>
-                            </Box>
-                        )}
+                    </Stack>
+                    {data?.venueManager === false && (
                         <Box component="section" sx={{ marginBlock: 4 }}>
-                            <Stack direction="row" alignItems="center" gap={1}>
+                            <Typography component="h2" variant="h4">
+                                Become a Venue Manager
+                            </Typography>
+                            <Typography component="p" variant="h5" sx={{ marginBlock: 2 }}>
+                                You are not a venue manager. If you have a room, a cabin, or some other nice
+                                accommodation you would like to rent out? Get started by pushing the button below.
+                            </Typography>
+                            <Button
+                                variant="contained"
+                                sx={{ marginBlock: 4 }}
+                                onClick={async () => await becomeVenueManager(data.name)}
+                            >
+                                Become A Venue Manager
+                            </Button>
+                        </Box>
+                    )}
+                    {data.venueManager === true && (
+                        <Box component="section" sx={{ marginBlock: 4 }}>
+                            <Stack direction="row" alignItems="center" gap={2}>
                                 <Typography component="h2" variant="h4">
-                                    My Bookings
+                                    My Venues
                                 </Typography>
-                                <Badge color="primary" badgeContent={data._count.bookings}>
-                                    <TodayOutlinedIcon fontSize="large" />
+                                <Badge color="primary" badgeContent={data._count.venues}>
+                                    <HolidayVillageIcon fontSize="large" />
                                 </Badge>
                             </Stack>
-                            <BookingList bookings={data.bookings} />
+
+                            <List component="ul" sx={{ listStyleType: 'none', padding: 0 }}>
+                                {data.venues.length < 1 && <Typography>You have no venues</Typography>}
+                                {data.venues.map((venue) => (
+                                    <VenueListItem key={venue.id} {...venue} />
+                                ))}
+                            </List>
+                            <Button
+                                component={Link}
+                                to="/venues/add"
+                                endIcon={<AddIcon />}
+                                variant="contained"
+                                sx={{ marginBlock: 2 }}
+                            >
+                                Add venue
+                            </Button>
                         </Box>
+                    )}
+                    <Box component="section" sx={{ marginBlock: 4 }}>
+                        <Stack direction="row" alignItems="center" gap={1}>
+                            <Typography component="h2" variant="h4">
+                                My Bookings
+                            </Typography>
+                            <Badge color="primary" badgeContent={data._count.bookings}>
+                                <TodayOutlinedIcon fontSize="large" />
+                            </Badge>
+                        </Stack>
+                        <BookingList bookings={data.bookings} />
                     </Box>
-                ) : null}
-            </Layout>
+                </Box>
+            ) : null}
         </>
     )
 }

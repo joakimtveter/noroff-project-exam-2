@@ -3,8 +3,6 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { useCreateVenueMutation } from '@/services/holidaze'
 import { Typography } from '@mui/material'
 
-import Layout from '@/components/layout'
-
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import VenueForm from '@/components/forms/venue-form'
@@ -120,7 +118,7 @@ export default function AddVenuePage(): ReactElement {
     }
 
     return (
-        <Layout>
+        <>
             <Typography component="h1" variant="h2">
                 Add a new venue
             </Typography>
@@ -131,6 +129,6 @@ export default function AddVenuePage(): ReactElement {
                 register={register}
                 submitText={'Add Venue'}
             />
-        </Layout>
+        </>
     )
 }
