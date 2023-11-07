@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+
 *,
 *::before,
 *::after {
@@ -102,16 +104,16 @@ h6 {
 .react-aria-RangeCalendar {
     --highlight-background: slateblue;
     --highlight-foreground: white;
-    --button-background: var(--spectrum-global-color-gray-50);
-    --button-backgound-pressed: var(--spectrum-global-color-gray-100);
-    --button-border: var(--spectrum-global-color-gray-400);
-    --button-border-disabled: var(--spectrum-alias-border-color-disabled);
-    --text-color: var(--spectrum-alias-text-color);
-    --text-color-disabled: var(--spectrum-alias-text-color-disabled);
-    --text-color-invalid: var(--spectrum-global-color-red-600);
-    --pressed-color: var(--spectrum-global-color-gray-200);
-    --unavailable-color: var(--spectrum-global-color-red-600);
-    --invalid-color: var(--spectrum-global-color-static-red-600);
+    --button-background:  rgb(255, 255, 255);
+    --button-backgound-pressed: rgb(248, 248, 248);
+    --button-border: rgb(177, 177, 177);
+    --button-border-disabled: rgb(177, 177, 177);
+    --text-color: rgb(34, 34, 34);
+    --text-color-disabled: rgb(177, 177, 177);
+    --text-color-invalid: rgb(255, 124, 101);
+    --pressed-color: rgb(230, 230, 230);
+    --unavailable-color: rgb(255, 124, 101);
+    --invalid-color: rgb(255, 124, 101);
 
     width: fit-content;
     max-width: 100%;
@@ -206,12 +208,12 @@ h6 {
 }
 
 .react-aria-Button {
-    --button-background: var(--spectrum-global-color-gray-50);
-    --button-backgound-pressed: var(--spectrum-global-color-gray-100);
-    --button-border: var(--spectrum-global-color-gray-400);
-    --button-border-disabled: var(--spectrum-alias-border-color-disabled);
+    --button-background: rgb(255, 255, 255);
+    --button-backgound-pressed: rgb(248, 248, 248);
+    --button-border:rgb(177, 177, 177);
+    --button-border-disabled: rgb(230, 230, 230);
     --focus-ring-color: slateblue;
-    --text-color-disabled: var(--spectrum-alias-text-color-disabled);
+    --text-color-disabled: rgb(230, 230, 230);
 
     background: var(--button-background);
     border: 1px solid var(--button-border);

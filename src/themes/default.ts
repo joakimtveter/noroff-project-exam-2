@@ -8,25 +8,28 @@ import { createTheme } from '@mui/material/styles'
 // }
 
 const defaultTheme = createTheme({
-  palette: {
-    primary: {
-      dark: '#05445E',
-      main: '#0088A3',
-      light: '#D4F1F4'
+    palette: {
+        primary: {
+            dark: '#05445E',
+            main: '#0088A3',
+            light: '#D4F1F4',
+        },
+        secondary: {
+            dark: '#00726F',
+            main: '#0abab5',
+            light: '#0CE6DF',
+        },
+        background: {
+            paper: '#E7F7F9',
+        },
+        // text: {
+        //     green: '#09725d',
+        //     purple: '#b30f9b',
+        // },
     },
-    secondary: {
-      dark: '#00726F',
-      main: '#0abab5',
-      light: '#0CE6DF'
+    typography: {
+        fontFamily: '"Open Sans", "Helvetica", "Arial", sans-serif',
     },
-    background: {
-      paper: '#E7F7F9'
-    }
-    // text: {
-    //     green: '#09725d',
-    //     purple: '#b30f9b',
-    // },
-  }
 })
 
 export default defaultTheme
