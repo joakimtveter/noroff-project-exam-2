@@ -9,6 +9,7 @@ import BookingCalendar from '@/components/venue/booking-calendar'
 import ProfileCard from '@/components/common/profile-card'
 import VenueGallery from '@/components/venue/venue-gallery'
 import VenueInfo from '@/components/venue/venue-info'
+import { I18nProvider } from 'react-aria'
 
 export default function SingleVenuePage(): ReactElement {
     const navigate = useNavigate()
@@ -17,7 +18,7 @@ export default function SingleVenuePage(): ReactElement {
     const { data, error, isLoading } = useGetVenueByIdQuery(venueId ?? '')
 
     if (error != null) console.log(error)
-    const formatedPrice =
+    const formattedPrice =
         data != null
             ? new Intl.NumberFormat('en-GB', {
                   style: 'currency',
@@ -57,7 +58,7 @@ export default function SingleVenuePage(): ReactElement {
                             <Box component="span" style={visuallyHidden}>
                                 Price:
                             </Box>
-                            {formatedPrice} per night
+                            {formattedPrice} per night
                         </Typography>
                         <ProfileCard name={data.owner.name} avatar={data.owner.avatar} email={data.owner.email} />
                         <Paper elevation={2} sx={{ padding: 2, maxWidth: '500px', marginBlock: 2 }}>
@@ -117,7 +118,9 @@ export default function SingleVenuePage(): ReactElement {
                                 </Typography>
                             ) : null}
                         </Box>
-                        <BookingCalendar bookings={[]} />
+                        <I18nProvider locale="en-NO">
+                            <BookingCalendar bookings={[]} maxGuests={data.maxGuests} venueId={data.id} />
+                        </I18nProvider>
                     </Grid>
                 </Grid>
             ) : null}

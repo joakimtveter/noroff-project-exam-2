@@ -10,6 +10,7 @@ import {
     LoginRequest,
     RegisterUserObject,
 } from '@/types/user'
+import { BookingWithVenue, CreateBooking, UpdateBooking } from '@/types/booking'
 
 export const holidazeApi = createApi({
     reducerPath: 'holidazeApi',
@@ -98,6 +99,27 @@ export const holidazeApi = createApi({
             }),
             invalidatesTags: ['Profile', 'Venue'],
         }),
+        createBooking: builder.mutation<BookingWithVenue, CreateBooking>({
+            query: (body) => ({
+                url: 'bookings',
+                method: 'POST',
+                body,
+            }),
+        }),
+        updateBooking: builder.mutation<BookingWithVenue, UpdateBooking>({
+            query: ({ bookingId, body }) => ({
+                url: `bookings/${bookingId}`,
+                method: 'PUT',
+                body,
+            }),
+            invalidatesTags: ['Venue'],
+        }),
+        deleteBooking: builder.mutation<BookingWithVenue, string>({
+            query: (bookingId) => ({
+                url: `bookings/${bookingId}`,
+                method: 'DELETE',
+            }),
+        }),
     }),
 })
 
@@ -114,4 +136,7 @@ export const {
     useCreateVenueMutation,
     useUpdateVenueMutation,
     useDeleteVenueMutation,
+    useCreateBookingMutation,
+    useUpdateBookingMutation,
+    useDeleteBookingMutation,
 } = holidazeApi

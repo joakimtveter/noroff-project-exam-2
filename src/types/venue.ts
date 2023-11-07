@@ -1,3 +1,5 @@
+import { Booking } from '@/types/booking.ts'
+
 interface Owner {
     name: string
     email: string
@@ -19,18 +21,6 @@ export interface Location {
     continent: string
     lat: number
     lng: number
-}
-
-export interface Booking {
-    id: string
-    dateFrom: string
-    dateTo: string
-    guests: number
-    created: string
-    updated: string
-}
-export interface BookingWithVenue extends Booking {
-    venue: Venue
 }
 
 export interface CreateVenue {
