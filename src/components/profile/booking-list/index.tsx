@@ -1,16 +1,13 @@
-import Avatar from '@mui/material/Avatar'
-import IconButton from '@mui/material/IconButton'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemAvatar from '@mui/material/ListItemAvatar'
-import ListItemText from '@mui/material/ListItemText'
+import { ReactElement } from 'react'
+import { useDeleteBookingMutation } from '@/services/holidaze.ts'
 
+import { Avatar, Button, IconButton, List, ListItem, ListItemAvatar, ListItemText, Tooltip } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Placeholder from '@/assets/venue-placeholder.svg'
 
-import { BookingWithVenue } from '@/types/venue'
-import { dateToReadableFormat } from '@/utils/date/dateToReadableFormat'
-import { ReactElement } from 'react'
+import { dateToReadableFormat } from '@/utils/date/dateToReadableFormat.ts'
+import { BookingWithVenue } from '@/types/booking.ts'
+import { Link } from 'react-router-dom'
 
 interface BookingListProps {
     bookings: BookingWithVenue[]
@@ -18,6 +15,12 @@ interface BookingListProps {
 
 export default function BookingList(props: BookingListProps): ReactElement {
     const { bookings } = props
+    const [deleteBooking] = useDeleteBookingMutation()
+
+    const handleDelete = async (id: string): Promise<void> => {
+        console.log('deleted booking: ', id)
+        await deleteBooking(id)
+    }
     return (
         <List dense={false} sx={{ maxWidth: '500px' }}>
             {bookings.map((booking) => {
@@ -27,9 +30,23 @@ export default function BookingList(props: BookingListProps): ReactElement {
                     <ListItem
                         key={booking.id}
                         secondaryAction={
-                            <IconButton edge="end" aria-label="delete" color="error">
-                                <DeleteIcon />
-                            </IconButton>
+                            <>
+                                <Tooltip title={'Delete booking'}>
+                                    <IconButton
+                                        edge="end"
+                                        aria-label={`Delete booking at ${booking.venue.name}`}
+                                        color="error"
+                                        onClick={async () => {
+                                            await handleDelete(booking.id)
+                                        }}
+                                    >
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Button component={Link} to={`/bookings/${booking.id}`}>
+                                    View Booking
+                                </Button>
+                            </>
                         }
                     >
                         <ListItemAvatar>

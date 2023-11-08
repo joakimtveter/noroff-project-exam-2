@@ -1,5 +1,10 @@
 import { Venue } from '@/types/venue.ts'
 
+interface Customer {
+    name: 'string'
+    email: 'string'
+    avatar: 'string'
+}
 interface BookingBase {
     dateFrom: string
     dateTo: string
@@ -16,6 +21,10 @@ export interface Booking extends BookingBase {
 }
 export interface BookingWithVenue extends Booking {
     venue: Venue
+}
+
+export interface BookingDetailed extends BookingWithVenue {
+    customer: Customer
 }
 
 export interface UpdateBooking {

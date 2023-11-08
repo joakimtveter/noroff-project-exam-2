@@ -119,7 +119,7 @@ export default function SingleVenuePage(): ReactElement {
                             ) : null}
                         </Box>
                         <I18nProvider locale="en-NO">
-                            <BookingCalendar bookings={[]} maxGuests={data.maxGuests} venueId={data.id} />
+                            <BookingCalendar bookings={data.bookings} maxGuests={data.maxGuests} venueId={data.id} />
                         </I18nProvider>
                     </Grid>
                 </Grid>

@@ -1,6 +1,6 @@
 import { ChangeEvent, ReactElement, useState } from 'react'
-import { getLocalTimeZone, today } from '@internationalized/date'
-import { Button, CalendarCell, CalendarGrid, Heading, RangeCalendar } from 'react-aria-components'
+import { getLocalTimeZone, parseDate, today } from '@internationalized/date'
+import { Button, CalendarCell, CalendarGrid, DateValue, Heading, RangeCalendar } from 'react-aria-components'
 
 import { useCreateBookingMutation } from '@/services/holidaze'
 
@@ -23,7 +23,15 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
         end: today(getLocalTimeZone()),
     })
     const [guests, setGuests] = useState(1)
-    console.log('bookings: ', bookings)
+
+    const isDateUnavailable = (currentDate: DateValue): boolean => {
+        return bookings.some(
+            (booking) =>
+                currentDate.compare(parseDate(booking.dateFrom.split('T')[0])) >= 0 &&
+                currentDate.compare(parseDate(booking.dateTo.split('T')[0])) <= 0
+        )
+    }
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const guests = parseInt(e.target.value)
         if (isNaN(guests)) return
@@ -53,6 +61,7 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
                 onChange={setDates}
                 minValue={today(getLocalTimeZone())}
                 visibleDuration={{ months: 2 }}
+                isDateUnavailable={isDateUnavailable}
                 style={{ width: 'max-content' }}
             >
                 <Box component="header" sx={{ display: 'flex', justifyContent: 'space-between' }}>

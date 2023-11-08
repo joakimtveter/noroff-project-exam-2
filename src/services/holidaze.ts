@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import { RootState } from '@/store'
-import { CreateVenue, UpdateVenue, Venue, VenueDetailed } from '@/types/venue'
 import {
     LoginResponse,
     UserObject,
@@ -10,7 +9,8 @@ import {
     LoginRequest,
     RegisterUserObject,
 } from '@/types/user'
-import { BookingWithVenue, CreateBooking, UpdateBooking } from '@/types/booking'
+import { CreateVenue, UpdateVenue, Venue, VenueDetailed } from '@/types/venue'
+import { BookingDetailed, BookingWithVenue, CreateBooking, UpdateBooking } from '@/types/booking'
 
 export const holidazeApi = createApi({
     reducerPath: 'holidazeApi',
@@ -106,7 +106,10 @@ export const holidazeApi = createApi({
                 body,
             }),
         }),
-        updateBooking: builder.mutation<BookingWithVenue, UpdateBooking>({
+        getBooking: builder.query<BookingWithVenue[], string>({
+            query: (bookingId) => `bookings/${bookingId}?_venue=true&_customer=true`,
+        }),
+        updateBooking: builder.mutation<BookingDetailed, UpdateBooking>({
             query: ({ bookingId, body }) => ({
                 url: `bookings/${bookingId}`,
                 method: 'PUT',
@@ -137,6 +140,7 @@ export const {
     useUpdateVenueMutation,
     useDeleteVenueMutation,
     useCreateBookingMutation,
+    useGetBookingQuery,
     useUpdateBookingMutation,
     useDeleteBookingMutation,
 } = holidazeApi
