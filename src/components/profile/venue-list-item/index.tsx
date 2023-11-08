@@ -18,14 +18,14 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete'
 import ListItemText from '@mui/material/ListItemText'
 import VenuePlaceholder from '@/assets/venue-placeholder.svg'
-import { Location } from '@/types/venue.ts'
+import { VenueLocation } from '@/types/venue.ts'
 import { useDeleteVenueMutation } from '@/services/holidaze.ts'
 
 interface VenueCardProps {
     id: string
     name: string
     media: string[]
-    location: Location
+    location: VenueLocation
 }
 
 export default function VenueListItem(props: VenueCardProps): ReactElement {

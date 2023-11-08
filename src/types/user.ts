@@ -1,4 +1,5 @@
-import { BookingWithVenue, Venue } from './venue'
+import { Venue } from './venue'
+import { BookingWithVenue } from '@/types/booking.ts'
 
 interface BaseUserObject {
     name: string

@@ -1,6 +1,6 @@
 import { Booking } from '@/types/booking.ts'
 
-interface Owner {
+interface VenueOwner {
     name: string
     email: string
     avatar: string
@@ -13,7 +13,7 @@ export interface VenueMeta {
     pets: boolean
 }
 
-export interface Location {
+export interface VenueLocation {
     address: string
     city: string
     zip: string
@@ -31,7 +31,7 @@ export interface CreateVenue {
     maxGuests: number
     rating: number
     meta: VenueMeta
-    location: Location
+    location: VenueLocation
 }
 
 export interface UpdateVenue {
@@ -44,7 +44,7 @@ export interface UpdateVenue {
         maxGuests: number
         rating: number
         meta: VenueMeta
-        location: Location
+        location: VenueLocation
     }
 }
 
@@ -55,7 +55,7 @@ export interface Venue extends CreateVenue {
 }
 
 export interface VenueWithOwner extends Venue {
-    owner: Owner
+    owner: VenueOwner
 }
 
 export interface VenueWithBookings extends Venue {
