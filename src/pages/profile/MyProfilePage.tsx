@@ -30,8 +30,8 @@ import HolidayVillageIcon from '@mui/icons-material/HolidayVillage'
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 
-import BookingList from '@/components/venue/booking-list'
-import VenueListItem from '@/components/venue/venue-list-item'
+import BookingList from '@/components/profile/booking-list'
+import VenueListItem from '@/components/profile/venue-list-item'
 
 export default function OwnProfilePage(): ReactElement {
     // Local State

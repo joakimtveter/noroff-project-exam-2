@@ -12,6 +12,7 @@ import {
     IconButton,
     ListItem,
     ListItemAvatar,
+    Tooltip,
 } from '@mui/material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -58,11 +59,13 @@ export default function VenueListItem(props: VenueCardProps): ReactElement {
             divider={true}
             secondaryAction={
                 <Box>
-                    <IconButton aria-label={`Delete ${name}`} onClick={handleClickOpen} color="error">
-                        <DeleteIcon />
-                    </IconButton>
-                    <Button component={Link} to={`/venues/${id}`} aria-label={`View ${name}`}>
-                        View Venue
+                    <Tooltip title={'Delete Venue'}>
+                        <IconButton aria-label={`Delete venue ${name}`} onClick={handleClickOpen} color="error">
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Button component={Link} to={`/venues/admin/${id}`} aria-label={`View ${name}`}>
+                        Venue Admin
                     </Button>
                 </Box>
             }
