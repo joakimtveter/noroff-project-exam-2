@@ -18,10 +18,11 @@ import RegisterPage from '@/pages/auth/SignUpPage.tsx'
 import VenueAdminPage from './pages/profile/VenueAdminPage'
 import AddVenuePage from '@/pages/venues/AddVenuePage.tsx'
 import UpdateVenuePage from '@/pages/venues/UpdateVenuePage.tsx'
+import SingleBookingPage from '@/pages/bookings/SingleBooking.tsx'
+import SearchResultsPage from '@/pages/venues/SearchResults.tsx'
 
 import './global.css'
 import 'react-toastify/dist/ReactToastify.css'
-import SingleBookingPage from '@/pages/bookings/SingleBooking.tsx'
 
 const router = createBrowserRouter([
     {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
             {
                 path: '/',
                 element: <HomePage />,
+            },
+            {
+                path: '/search',
+                element: <SearchResultsPage />,
             },
             {
                 path: 'venues',

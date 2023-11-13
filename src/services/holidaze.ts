@@ -36,7 +36,7 @@ export const holidazeApi = createApi({
         }),
 
         getTrendingVenues: builder.query<Venue[], string>({
-            query: () => 'venues?sort=rating&limit=3',
+            query: () => 'venues?sort=price&offset=5&limit=3',
         }),
         getOwnProfile: builder.query<UserWithBookings & UserWithVenues, string>({
             query: (name) => `profiles/${name}?_bookings=true&_venues=true`,
@@ -122,6 +122,7 @@ export const holidazeApi = createApi({
                 url: `bookings/${bookingId}`,
                 method: 'DELETE',
             }),
+            invalidatesTags: ['Profile'],
         }),
     }),
 })

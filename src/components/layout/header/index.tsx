@@ -1,6 +1,6 @@
 import { useState, MouseEvent, ReactElement } from 'react'
-import { Link } from 'react-router-dom'
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Button } from '@mui/material'
+import { NavLink } from 'react-router-dom'
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Button, Stack } from '@mui/material'
 
 import MenuIcon from '@mui/icons-material/Menu'
 import HolidayVillageIcon from '@mui/icons-material/HolidayVillage'
@@ -17,28 +17,34 @@ export default function CustomAppBar(): ReactElement {
         setAnchorElNav(null)
     }
 
+    // const nav = {}
+
     return (
-        <AppBar position="static" color="primary">
+        <AppBar position="sticky" sx={{ backgroundColor: 'background.paper' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component={Link}
+                    <Stack
+                        direction="row"
+                        component={NavLink}
                         to="/"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
+                        gap={1}
+                        alignItems="center"
+                        sx={{ display: { xs: 'none', md: 'flex' }, textDecoration: 'none' }}
                     >
-                        <HolidayVillageIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                        Holidaze
-                    </Typography>
+                        <HolidayVillageIcon color="primary" fontSize="large" />
+                        <Typography
+                            variant="h5"
+                            component="span"
+                            noWrap
+                            sx={{
+                                letterSpacing: '.2rem',
+                                textDecoration: 'none',
+                                color: 'primary.dark',
+                            }}
+                        >
+                            Holidaze
+                        </Typography>
+                    </Stack>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
@@ -90,12 +96,7 @@ export default function CustomAppBar(): ReactElement {
                         LOGO
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        <Button
-                            component={Link}
-                            to={'/venues'}
-                            onClick={handleCloseNavMenu}
-                            sx={{ color: 'white', display: 'block' }}
-                        >
+                        <Button component={NavLink} to={'/venues'} sx={{ display: 'block' }}>
                             All Venues
                         </Button>
                     </Box>

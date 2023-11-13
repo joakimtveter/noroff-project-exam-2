@@ -4,13 +4,14 @@ const defaultTheme = createTheme({
     palette: {
         mode: 'light',
         primary: {
-            main: '#008577',
+            light: '#F55C8F',
+            main: '#DE2B68',
+            dark: '#E70D57',
         },
         secondary: {
-            main: '#0abab5',
-        },
-        background: {
-            paper: '#E8FAF9',
+            light: '#07F01D',
+            main: '#25842E',
+            dark: '#1C6423',
         },
     },
     typography: {

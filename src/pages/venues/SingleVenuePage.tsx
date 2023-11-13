@@ -1,5 +1,5 @@
 import { ReactElement } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useGetVenueByIdQuery } from '@/services/holidaze'
 
 import { Box, CircularProgress, Grid, Paper, Typography } from '@mui/material'
@@ -10,24 +10,16 @@ import ProfileCard from '@/components/common/profile-card'
 import VenueGallery from '@/components/venue/venue-gallery'
 import VenueInfo from '@/components/venue/venue-info'
 import { I18nProvider } from 'react-aria'
+import VenueBookingList from '@/components/venue/venue-booking-list'
+import formatCurrency from '@/utils/formatCurrency'
 
 export default function SingleVenuePage(): ReactElement {
-    const navigate = useNavigate()
     const { venueId } = useParams()
-    if (venueId === undefined) navigate('/404')
     const { data, error, isLoading } = useGetVenueByIdQuery(venueId ?? '')
 
     if (error != null) console.log(error)
-    const formattedPrice =
-        data != null
-            ? new Intl.NumberFormat('en-GB', {
-                  style: 'currency',
-                  currency: 'EUR',
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 0,
-              }).format(data.price ?? 0)
-            : ''
 
+    console.log('bookings: ', data?.bookings)
     return (
         <>
             {error != null ? (
@@ -58,7 +50,7 @@ export default function SingleVenuePage(): ReactElement {
                             <Box component="span" style={visuallyHidden}>
                                 Price:
                             </Box>
-                            {formattedPrice} per night
+                            {formatCurrency(data.price)} per night
                         </Typography>
                         <ProfileCard name={data.owner.name} avatar={data.owner.avatar} email={data.owner.email} />
                         <Paper elevation={2} sx={{ padding: 2, maxWidth: '500px', marginBlock: 2 }}>
@@ -121,6 +113,7 @@ export default function SingleVenuePage(): ReactElement {
                         <I18nProvider locale="en-NO">
                             <BookingCalendar bookings={data.bookings} maxGuests={data.maxGuests} venueId={data.id} />
                         </I18nProvider>
+                        <VenueBookingList bookings={data.bookings} />
                     </Grid>
                 </Grid>
             ) : null}
