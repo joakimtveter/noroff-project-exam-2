@@ -5,7 +5,7 @@ import VenueCard from '@/components/venue/venue-card'
 import { Venue } from '@/types/venue.ts'
 
 interface VenueListProps {
-    venues: Venue[] | undefined
+    venues: Venue[]
     cardHeadingLevel?: 2 | 3 | 4 | 5 | 6
 }
 export default function VenueList(props: VenueListProps): ReactElement {
@@ -13,7 +13,7 @@ export default function VenueList(props: VenueListProps): ReactElement {
 
     return (
         <Grid container component="ul" spacing={2} sx={{ listStyleType: 'none', padding: 0 }}>
-            {venues != null ? (
+            {venues.length > 0 ? (
                 venues.map((venue) => (
                     <Grid item key={venue.id} component="li" xs={12} sm={6} md={4}>
                         <VenueCard headingLevel={cardHeadingLevel} {...venue} />

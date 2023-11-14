@@ -10,6 +10,7 @@ import {
     Grid,
     Paper,
     Rating,
+    Slider,
     TextField,
     Typography,
     useTheme,
@@ -32,13 +33,26 @@ export default function AllVenuesPage(): ReactElement {
         setSearchParams(searchParams)
     }
 
+    const sliderValues = (values: string | null): number[] => {
+        if (values === null) return [1, 10000]
+        const array = values.split('-')
+        return array.map((value) => parseInt(value))
+    }
+
+    // const highPrice =
+    //     data?.reduce((max, current): number => {
+    //         return current.price > max ? current.price : max
+    //     }, data[0].price) ?? 1000000
+
     const filterVenues = (venues: Venue[], params: URLSearchParams): Venue[] => {
         return venues
             .filter((venue) => {
                 const q = params.get('q')
                 if (q === null) return true
-                const isMatch = Boolean(venue.name.toLowerCase().includes(q.toLowerCase()))
-                return isMatch
+                if (venue.name.toLowerCase().includes(q.toLowerCase())) return true
+                if (venue.location.city.toLowerCase().includes(q.toLowerCase())) return true
+                if (venue.location.country.toLowerCase().includes(q.toLowerCase())) return true
+                return venue.location.continent.toLowerCase().includes(q.toLowerCase())
             })
             .filter((venue) => {
                 if (params.get('wifi') === null) return true
@@ -59,12 +73,18 @@ export default function AllVenuesPage(): ReactElement {
             .filter((venue) => {
                 const rating = params.get('rating')
                 if (rating === null) return true
-                return rating != null && Number(rating) <= venue.rating
+                return Number(rating) <= venue.rating
             })
             .filter((venue) => {
                 const guests = params.get('guests')
                 if (guests === null) return true
-                return guests != null && Number(guests) <= venue.maxGuests
+                return Number(guests) <= venue.maxGuests
+            })
+            .filter((venue) => {
+                const price = params.get('price')
+                if (price === null) return true
+                const [min, max] = price.split('-')
+                return +min <= venue.price && +max >= venue.price
             })
     }
 
@@ -81,7 +101,7 @@ export default function AllVenuesPage(): ReactElement {
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={3}>
                         <Paper elevation={3}>
-                            <Box sx={{ width: '100%', padding: 1 }}>
+                            <Box sx={{ width: '100%', padding: 2 }}>
                                 <Typography>Filters</Typography>
                                 <TextField
                                     fullWidth={true}
@@ -136,10 +156,11 @@ export default function AllVenuesPage(): ReactElement {
                                         }}
                                     />
                                 </FormGroup>
-                                <Box>
+                                <Box marginBlock={1}>
                                     <Typography component="legend">Minimum rating:</Typography>
                                     <Rating
                                         color="primary"
+                                        size="large"
                                         value={Number(searchParams.get('rating'))}
                                         style={{ color: theme.palette.primary.main }}
                                         onChange={(_, newValue) => {
@@ -158,6 +179,21 @@ export default function AllVenuesPage(): ReactElement {
                                         setParams('guests', e.target.value)
                                     }}
                                 />
+                                <Box paddingInline={1} marginBlock={1}>
+                                    <Typography component="legend">Price Range:</Typography>
+                                    <Slider
+                                        getAriaLabel={() => 'Price range'}
+                                        min={1}
+                                        max={10000}
+                                        value={sliderValues(searchParams.get('price'))}
+                                        // @ts-expect-error there is no chance of a number
+                                        onChange={(_event, values: number[]): void => {
+                                            setParams('price', `${values[0]}-${values[1]}`)
+                                        }}
+                                        valueLabelDisplay="auto"
+                                        // getAriaValueText={`Price range`}
+                                    />
+                                </Box>
                             </Box>
                         </Paper>
                     </Grid>
