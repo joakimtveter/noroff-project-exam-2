@@ -19,7 +19,6 @@ export default function SingleVenuePage(): ReactElement {
 
     if (error != null) console.log(error)
 
-    console.log('bookings: ', data?.bookings)
     return (
         <>
             {error != null ? (
@@ -111,7 +110,12 @@ export default function SingleVenuePage(): ReactElement {
                             ) : null}
                         </Box>
                         <I18nProvider locale="en-NO">
-                            <BookingCalendar bookings={data.bookings} maxGuests={data.maxGuests} venueId={data.id} />
+                            <BookingCalendar
+                                bookings={data.bookings}
+                                maxGuests={data.maxGuests}
+                                venueId={data.id}
+                                enableBooking={false}
+                            />
                         </I18nProvider>
                         <VenueBookingList bookings={data.bookings} />
                     </Grid>

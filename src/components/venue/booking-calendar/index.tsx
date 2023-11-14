@@ -4,7 +4,7 @@ import { Button, CalendarCell, CalendarGrid, DateValue, Heading, RangeCalendar }
 
 import { useCreateBookingMutation } from '@/services/holidaze'
 
-import { Box, Button as MuiButton, InputAdornment, TextField } from '@mui/material'
+import { Box, Button as MuiButton, InputAdornment, Stack, TextField } from '@mui/material'
 import GroupIcon from '@mui/icons-material/Group'
 
 import { Booking } from '@/types/booking.ts'
@@ -13,16 +13,17 @@ interface BookingCalendarProps {
     bookings: Booking[]
     maxGuests: number
     venueId: string
+    enableBooking?: boolean
 }
 
 export default function BookingCalendar(props: BookingCalendarProps): ReactElement {
-    const { bookings, maxGuests = 100, venueId } = props
+    const { bookings, maxGuests = 100, venueId, enableBooking = false } = props
     const [createBooking] = useCreateBookingMutation()
+    const [guests, setGuests] = useState(1)
     const [dates, setDates] = useState({
         start: today(getLocalTimeZone()),
         end: today(getLocalTimeZone()),
     })
-    const [guests, setGuests] = useState(1)
 
     const isDateUnavailable = (currentDate: DateValue): boolean => {
         return bookings.some(
@@ -32,27 +33,12 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
         )
     }
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        const guests = parseInt(e.target.value)
-        if (isNaN(guests)) return
-        if (guests > maxGuests) {
-            setGuests(maxGuests)
-            return
-        }
-        if (guests < 1) {
-            setGuests(1)
-            return
-        }
-        setGuests(guests)
-    }
-
-    const handleClick = async (): Promise<void> => {
+    const handleBooking = async (): Promise<void> => {
         const dateFrom = new Date(dates.start.toString()).toISOString()
         const dateTo = new Date(dates.end.toString()).toISOString()
-        console.log('values: ', { dateTo, dateFrom, guests, venueId })
-
         await createBooking({ dateTo, dateFrom, guests, venueId })
     }
+
     return (
         <Box sx={{ marginBlock: 4 }}>
             <RangeCalendar
@@ -74,23 +60,33 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
                     <CalendarGrid offset={{ months: 1 }}>{(date) => <CalendarCell date={date} />}</CalendarGrid>
                 </Box>
             </RangeCalendar>
-
-            <Box>
-                <TextField
-                    label={'Number of guests'}
-                    variant={'outlined'}
-                    margin={'normal'}
-                    value={guests}
-                    onChange={handleChange}
-                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', style: { textAlign: 'end' } }}
-                    InputProps={{
-                        startAdornment: <InputAdornment position="start">{<GroupIcon />}</InputAdornment>,
-                    }}
-                />
-                <MuiButton variant="contained" onClick={handleClick} sx={{ marginBlock: 2 }}>
-                    Book Venue
-                </MuiButton>
-            </Box>
+            {enableBooking && (
+                <Stack direction="row" alignItems="center" gap={4} sx={{ marginBlock: 2 }}>
+                    <TextField
+                        label={'Guests'}
+                        variant={'outlined'}
+                        margin={'normal'}
+                        type={'number'}
+                        value={guests}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            setGuests(e.target.valueAsNumber)
+                        }}
+                        inputProps={{
+                            min: 1,
+                            max: maxGuests,
+                            inputMode: 'numeric',
+                            pattern: '[0-9]*',
+                            style: { textAlign: 'end' },
+                        }}
+                        InputProps={{
+                            startAdornment: <InputAdornment position="start">{<GroupIcon />}</InputAdornment>,
+                        }}
+                    />
+                    <MuiButton variant="contained" onClick={handleBooking} sx={{ marginBlock: 2 }}>
+                        Book Venue
+                    </MuiButton>
+                </Stack>
+            )}
         </Box>
     )
 }
