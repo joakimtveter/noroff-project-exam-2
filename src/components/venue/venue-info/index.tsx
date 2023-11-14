@@ -1,5 +1,5 @@
 import { ReactElement } from 'react'
-import { Badge, Rating, Stack, Tooltip, Typography } from '@mui/material'
+import { Badge, Rating, Stack, Tooltip, Typography, useTheme } from '@mui/material'
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined'
 import WifiOutlinedIcon from '@mui/icons-material/WifiOutlined'
 import PetsOutlinedIcon from '@mui/icons-material/PetsOutlined'
@@ -16,10 +16,11 @@ interface VenueInfoProps {
 }
 export default function VenueInfo(props: VenueInfoProps): ReactElement {
     const { wifi, pets, breakfast, parking, maxGuests, rating } = props
+    const theme = useTheme()
     return (
         <Stack spacing={3} direction={'row'} alignItems={'center'} paddingBlock={2} marginBlock={2}>
             <Stack spacing={1} direction={'row'} alignItems="center">
-                <Rating name="read-only" value={rating} readOnly />
+                <Rating size="large" value={rating} readOnly style={{ color: theme.palette.primary.main }} />
                 <Typography>{rating}</Typography>
             </Stack>
             <Tooltip title={`Maximum ${maxGuests} guests`}>

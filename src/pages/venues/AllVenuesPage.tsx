@@ -12,6 +12,7 @@ import {
     Rating,
     TextField,
     Typography,
+    useTheme,
 } from '@mui/material'
 
 import VenueList from '@/components/venue/venue-list'
@@ -20,9 +21,10 @@ import { Venue } from '@/types/venue.ts'
 export default function AllVenuesPage(): ReactElement {
     const { data, error, isLoading } = useGetVenuesQuery('')
     const [searchParams, setSearchParams] = useSearchParams()
+    const theme = useTheme()
 
     const setParams = (key: string, value: string): void => {
-        if (value === 'false' || value === '') {
+        if (value === 'false' || value === '' || value === '1') {
             searchParams.delete(key)
         } else {
             searchParams.set(key, value)
@@ -139,6 +141,7 @@ export default function AllVenuesPage(): ReactElement {
                                     <Rating
                                         color="primary"
                                         value={Number(searchParams.get('rating'))}
+                                        style={{ color: theme.palette.primary.main }}
                                         onChange={(_, newValue) => {
                                             setParams('rating', newValue != null ? newValue.toString() : '')
                                         }}
@@ -150,7 +153,7 @@ export default function AllVenuesPage(): ReactElement {
                                     label={'Guests'}
                                     type={'number'}
                                     inputProps={{ min: 1, max: 100 }}
-                                    value={searchParams.get('guests')}
+                                    value={searchParams.get('guests') === null ? 1 : Number(searchParams.get('guests'))}
                                     onChange={(e) => {
                                         setParams('guests', e.target.value)
                                     }}
