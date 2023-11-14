@@ -15,6 +15,7 @@ import {
 } from '@mui/material'
 
 import VenueList from '@/components/venue/venue-list'
+import { Venue } from '@/types/venue.ts'
 
 export default function AllVenuesPage(): ReactElement {
     const { data, error, isLoading } = useGetVenuesQuery('')
@@ -29,6 +30,42 @@ export default function AllVenuesPage(): ReactElement {
         setSearchParams(searchParams)
     }
 
+    const filterVenues = (venues: Venue[], params: URLSearchParams): Venue[] => {
+        return venues
+            .filter((venue) => {
+                const q = params.get('q')
+                if (q === null) return true
+                const isMatch = Boolean(venue.name.toLowerCase().includes(q.toLowerCase()))
+                return isMatch
+            })
+            .filter((venue) => {
+                if (params.get('wifi') === null) return true
+                return params.get('wifi') === 'true' && venue.meta.wifi
+            })
+            .filter((venue) => {
+                if (params.get('breakfast') === null) return true
+                return params.get('breakfast') === 'true' && venue.meta.breakfast
+            })
+            .filter((venue) => {
+                if (params.get('pets') === null) return true
+                return params.get('pets') === 'true' && venue.meta.pets
+            })
+            .filter((venue) => {
+                if (params.get('parking') === null) return true
+                return params.get('parking') === 'true' && venue.meta.parking
+            })
+            .filter((venue) => {
+                const rating = params.get('rating')
+                if (rating === null) return true
+                return rating != null && Number(rating) <= venue.rating
+            })
+            .filter((venue) => {
+                const guests = params.get('guests')
+                if (guests === null) return true
+                return guests != null && Number(guests) <= venue.maxGuests
+            })
+    }
+
     return (
         <>
             <Typography component="h1" variant="h2" marginBlock={3}>
@@ -41,7 +78,7 @@ export default function AllVenuesPage(): ReactElement {
             ) : data != null ? (
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={3}>
-                        <Paper>
+                        <Paper elevation={3}>
                             <Box sx={{ width: '100%', padding: 1 }}>
                                 <Typography>Filters</Typography>
                                 <TextField
@@ -100,6 +137,7 @@ export default function AllVenuesPage(): ReactElement {
                                 <Box>
                                     <Typography component="legend">Minimum rating:</Typography>
                                     <Rating
+                                        color="primary"
                                         value={Number(searchParams.get('rating'))}
                                         onChange={(_, newValue) => {
                                             setParams('rating', newValue != null ? newValue.toString() : '')
@@ -121,52 +159,7 @@ export default function AllVenuesPage(): ReactElement {
                         </Paper>
                     </Grid>
                     <Grid item xs={12} md={9}>
-                        <VenueList
-                            venues={data
-                                .filter((venue) => {
-                                    const q = searchParams.get('q')
-                                    if (q === null) {
-                                        return true
-                                    } else {
-                                        if (venue.name.toLowerCase().includes(q.toLowerCase())) return true
-                                    }
-                                    return false
-                                })
-                                .filter((venue) => {
-                                    if (searchParams.get('wifi') === null) return true
-                                    return searchParams.get('wifi') === 'true' && venue.meta.wifi
-                                })
-                                .filter((venue) => {
-                                    if (searchParams.get('breakfast') === null) return true
-                                    return searchParams.get('breakfast') === 'true' && venue.meta.breakfast
-                                })
-                                .filter((venue) => {
-                                    if (searchParams.get('pets') === null) return true
-                                    return searchParams.get('pets') === 'true' && venue.meta.pets
-                                })
-                                .filter((venue) => {
-                                    if (searchParams.get('parking') === null) return true
-                                    return searchParams.get('parking') === 'true' && venue.meta.parking
-                                })
-                                .filter((venue) => {
-                                    const rating = searchParams.get('rating')
-                                    if (rating === null) {
-                                        return true
-                                    } else {
-                                        if (Number(rating) <= venue.rating) return true
-                                    }
-                                    return false
-                                })
-                                .filter((venue) => {
-                                    const guests = searchParams.get('guests')
-                                    if (guests === null) {
-                                        return true
-                                    } else {
-                                        if (Number(guests) <= venue.maxGuests) return true
-                                    }
-                                    return false
-                                })}
-                        />
+                        <VenueList venues={filterVenues(data, searchParams)} />
                     </Grid>
                 </Grid>
             ) : null}
