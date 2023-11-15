@@ -105,6 +105,7 @@ export const holidazeApi = createApi({
                 method: 'POST',
                 body,
             }),
+            invalidatesTags: ['Venue'],
         }),
         getBooking: builder.query<BookingWithVenue[], string>({
             query: (bookingId) => `bookings/${bookingId}?_venue=true&_customer=true`,
@@ -115,7 +116,7 @@ export const holidazeApi = createApi({
                 method: 'PUT',
                 body,
             }),
-            invalidatesTags: ['Venue'],
+            invalidatesTags: ['Venue', 'Profile'],
         }),
         deleteBooking: builder.mutation<BookingWithVenue, string>({
             query: (bookingId) => ({

@@ -1,21 +1,26 @@
 import { ReactElement } from 'react'
 import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store.ts'
 import { useGetVenueByIdQuery } from '@/services/holidaze'
 
 import { Box, CircularProgress, Grid, Paper, Typography } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
+import { I18nProvider } from 'react-aria'
 
 import BookingCalendar from '@/components/venue/booking-calendar'
 import ProfileCard from '@/components/common/profile-card'
 import VenueGallery from '@/components/venue/venue-gallery'
 import VenueInfo from '@/components/venue/venue-info'
-import { I18nProvider } from 'react-aria'
 import VenueBookingList from '@/components/venue/venue-booking-list'
 import formatCurrency from '@/utils/formatCurrency'
 
 export default function SingleVenuePage(): ReactElement {
     const { venueId } = useParams()
     const { data, error, isLoading } = useGetVenueByIdQuery(venueId ?? '')
+    const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
+    const userName = useSelector((state: RootState) => state.user.user.name)
+    const isOwnVenue = userName === data?.owner.name
 
     if (error != null) console.log(error)
 
@@ -114,10 +119,10 @@ export default function SingleVenuePage(): ReactElement {
                                 bookings={data.bookings}
                                 maxGuests={data.maxGuests}
                                 venueId={data.id}
-                                enableBooking={false}
+                                enableBooking={isLoggedIn}
                             />
                         </I18nProvider>
-                        <VenueBookingList bookings={data.bookings} />
+                        {isOwnVenue && <VenueBookingList bookings={data.bookings} />}
                     </Grid>
                 </Grid>
             ) : null}

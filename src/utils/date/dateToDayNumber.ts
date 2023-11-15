@@ -1,5 +1,5 @@
-export function dateToDayNumber(date: Date) : String {
+export function dateToDayNumber(date: Date): string {
     return new Intl.DateTimeFormat('en-US', {
-        day: 'numeric'
+        day: 'numeric',
     }).format(date)
 }

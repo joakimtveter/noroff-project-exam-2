@@ -4,7 +4,7 @@ import { Button, CalendarCell, CalendarGrid, DateValue, Heading, RangeCalendar }
 
 import { useCreateBookingMutation } from '@/services/holidaze'
 
-import { Box, Button as MuiButton, InputAdornment, Stack, TextField } from '@mui/material'
+import { Box, Button as MuiButton, InputAdornment, Stack, TextField, Typography } from '@mui/material'
 import GroupIcon from '@mui/icons-material/Group'
 
 import { Booking } from '@/types/booking.ts'
@@ -42,6 +42,7 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
     return (
         <Box sx={{ marginBlock: 4 }}>
             <RangeCalendar
+                isReadOnly={!enableBooking}
                 aria-label="Trip dates"
                 value={dates}
                 onChange={setDates}
@@ -60,7 +61,7 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
                     <CalendarGrid offset={{ months: 1 }}>{(date) => <CalendarCell date={date} />}</CalendarGrid>
                 </Box>
             </RangeCalendar>
-            {enableBooking && (
+            {enableBooking ? (
                 <Stack direction="row" alignItems="center" gap={4} sx={{ marginBlock: 2 }}>
                     <TextField
                         label={'Guests'}
@@ -86,6 +87,11 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
                         Book Venue
                     </MuiButton>
                 </Stack>
+            ) : (
+                <Typography component="p" variant="h6" textAlign="center" marginBlock={2}>
+                    {' '}
+                    You must be logged in to book this venue.
+                </Typography>
             )}
         </Box>
     )
