@@ -186,12 +186,12 @@ export default function AllVenuesPage(): ReactElement {
                                         min={1}
                                         max={10000}
                                         value={sliderValues(searchParams.get('price'))}
-                                        // @ts-expect-error there is no chance of a number
-                                        onChange={(_event, values: number[]): void => {
-                                            setParams('price', `${values[0]}-${values[1]}`)
+                                        onChange={(_event, values): void => {
+                                            if (Array.isArray(values)) {
+                                                setParams('price', values[0] + '-' + values[1])
+                                            }
                                         }}
                                         valueLabelDisplay="auto"
-                                        // getAriaValueText={`Price range`}
                                     />
                                 </Box>
                             </Box>

@@ -29,7 +29,7 @@ export interface CreateVenue {
     media: string[]
     price: number
     maxGuests: number
-    rating: number
+    rating: 0 | 1 | 2 | 3 | 4 | 5
     meta: VenueMeta
     location: VenueLocation
 }
@@ -42,7 +42,7 @@ export interface UpdateVenue {
         media: string[]
         price: number
         maxGuests: number
-        rating: number
+        rating: 0 | 1 | 2 | 3 | 4 | 5
         meta: VenueMeta
         location: VenueLocation
     }
@@ -70,7 +70,7 @@ export interface VenueFormTypes {
     media: string[]
     price: number
     maxGuests: number
-    rating: number
+    rating: 0 | 1 | 2 | 3 | 4 | 5
     wifi: boolean
     parking: boolean
     breakfast: boolean

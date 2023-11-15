@@ -31,21 +31,20 @@ export default function ProfilePage(): ReactElement {
     }
 
     // Get the profile data from RTK query
-    const { data, error, isLoading } = useGetProfileByNameQuery(profileName || '')
+    const { data, error, isLoading } = useGetProfileByNameQuery(profileName ?? '')
 
     // if the current user is not logged in, redirect to login page.
+    if (error != null) console.error(error)
 
-    console.log('user: ', data)
     return (
         <>
-            {error ? (
+            {error != null ? (
                 <>
                     <p>Oh no, there was an error</p>
-                    {console.error(error)}
                 </>
             ) : isLoading ? (
                 <CircularProgress />
-            ) : data ? (
+            ) : data != null ? (
                 <Box mt={3}>
                     <Stack direction="row" alignItems="center" gap={4}>
                         <Avatar
@@ -62,12 +61,12 @@ export default function ProfilePage(): ReactElement {
                                 {' '}
                                 {data.email}
                             </Typography>
-                            {data.venueManager && (
+                            {data.venueManager === true && (
                                 <Chip label="Venue manager" color="primary" sx={{ width: 'max-content' }} />
                             )}
                         </Stack>
                     </Stack>
-                    {data.venueManager && data._count.venues > 0 && (
+                    {data.venueManager === true && data._count.venues > 0 && (
                         <Box>
                             <Typography component="h2" variant="h4">
                                 Venues

@@ -14,7 +14,7 @@ interface VenueCardProps {
     price: number
     location: VenueLocation
     headingLevel?: 2 | 3 | 4 | 5 | 6
-    rating: 1 | 2 | 3 | 4 | 5
+    rating: 0 | 1 | 2 | 3 | 4 | 5
 }
 
 export default function VenueCard(props: VenueCardProps): ReactElement {

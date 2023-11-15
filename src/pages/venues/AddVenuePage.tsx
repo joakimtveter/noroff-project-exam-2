@@ -37,7 +37,7 @@ export interface FormValues {
     media: string[]
     price: number
     maxGuests: number
-    rating: number
+    rating: 0 | 1 | 2 | 3 | 4 | 5
     wifi: boolean
     parking: boolean
     breakfast: boolean
@@ -75,9 +75,10 @@ export default function AddVenuePage(): ReactElement {
     const [createVenue] = useCreateVenueMutation()
 
     const { control, handleSubmit, register } = useForm<FormValues>({
-        defaultValues,
         // TODO:  fix types in yup resolver
-        // @ts-expect-error sds
+        // @ts-expect-error sda
+        defaultValues,
+        // @ts-expect-error resolver types
         resolver: yupResolver(schema),
     })
     const navigate = useNavigate()

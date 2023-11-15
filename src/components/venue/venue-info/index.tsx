@@ -9,7 +9,7 @@ import BakeryDiningOutlinedIcon from '@mui/icons-material/BakeryDiningOutlined'
 interface VenueInfoProps {
     wifi: boolean
     pets: boolean
-    rating: number
+    rating: 0 | 1 | 2 | 3 | 4 | 5
     breakfast: boolean
     parking: boolean
     maxGuests: number
