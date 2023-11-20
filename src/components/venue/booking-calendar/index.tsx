@@ -1,10 +1,11 @@
 import { ChangeEvent, ReactElement, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getLocalTimeZone, parseDate, today } from '@internationalized/date'
 import { Button, CalendarCell, CalendarGrid, DateValue, Heading, RangeCalendar } from 'react-aria-components'
 
 import { useCreateBookingMutation } from '@/services/holidaze'
 
-import { Box, Button as MuiButton, InputAdornment, Stack, TextField, Typography } from '@mui/material'
+import { Box, Button as MuiButton, InputAdornment, Stack, TextField, Typography, useMediaQuery } from '@mui/material'
 import GroupIcon from '@mui/icons-material/Group'
 
 import { Booking } from '@/types/booking.ts'
@@ -24,6 +25,8 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
         start: today(getLocalTimeZone()),
         end: today(getLocalTimeZone()),
     })
+    const navigate = useNavigate()
+    const isMobile = useMediaQuery('(width < 900px)')
 
     const isDateUnavailable = (currentDate: DateValue): boolean => {
         return bookings.some(
@@ -37,6 +40,7 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
         const dateFrom = new Date(dates.start.toString()).toISOString()
         const dateTo = new Date(dates.end.toString()).toISOString()
         await createBooking({ dateTo, dateFrom, guests, venueId })
+        navigate('/profile')
     }
 
     return (
@@ -47,7 +51,7 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
                 value={dates}
                 onChange={setDates}
                 minValue={today(getLocalTimeZone())}
-                visibleDuration={{ months: 2 }}
+                visibleDuration={{ months: isMobile ? 1 : 2 }}
                 isDateUnavailable={isDateUnavailable}
                 style={{ width: 'max-content' }}
             >
@@ -58,7 +62,9 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
                 </Box>
                 <Box sx={{ display: 'flex', gap: 2, overflow: 'auto' }}>
                     <CalendarGrid>{(date) => <CalendarCell date={date} />}</CalendarGrid>
-                    <CalendarGrid offset={{ months: 1 }}>{(date) => <CalendarCell date={date} />}</CalendarGrid>
+                    {!isMobile && (
+                        <CalendarGrid offset={{ months: 1 }}>{(date) => <CalendarCell date={date} />}</CalendarGrid>
+                    )}
                 </Box>
             </RangeCalendar>
             {enableBooking ? (
