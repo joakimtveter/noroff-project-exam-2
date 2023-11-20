@@ -24,26 +24,26 @@ export const holidazeApi = createApi({
             return headers
         },
     }),
-    tagTypes: ['Profile', 'Venue', 'VenueList'],
+    tagTypes: ['Booking', 'Profile', 'OwnProfile', 'Venue', 'VenueList'],
     endpoints: (builder) => ({
-        getVenueById: builder.query<VenueDetailed, string>({
-            query: (id) => `venues/${id}?_owner=true&_bookings=true`,
-            providesTags: ['Venue'],
-        }),
         getVenues: builder.query<Venue[], string>({
             query: () => 'venues?sort=created',
             providesTags: ['VenueList'],
         }),
-
         getTrendingVenues: builder.query<Venue[], string>({
             query: () => 'venues?sort=price&offset=5&limit=3',
         }),
+        getVenueById: builder.query<VenueDetailed, string>({
+            query: (id) => `venues/${id}?_owner=true&_bookings=true`,
+            providesTags: ['Venue'],
+        }),
         getOwnProfile: builder.query<UserWithBookings & UserWithVenues, string>({
             query: (name) => `profiles/${name}?_bookings=true&_venues=true`,
-            providesTags: ['Profile'],
+            providesTags: ['OwnProfile'],
         }),
         getProfileByName: builder.query<UserWithBookings & UserWithVenues, string>({
             query: (name) => `profiles/${name}?_venues=true`,
+            providesTags: ['Profile'],
         }),
         updateUserAvatar: builder.mutation<UserObject, { name: string; body: { avatar: string } }>({
             query: (query) => ({
@@ -51,7 +51,7 @@ export const holidazeApi = createApi({
                 method: 'PUT',
                 body: query.body,
             }),
-            invalidatesTags: ['Profile'],
+            invalidatesTags: ['OwnProfile'],
         }),
         becomeVenueManager: builder.mutation<UserObject, string>({
             query: (name) => ({
@@ -61,7 +61,7 @@ export const holidazeApi = createApi({
                     venueManager: true,
                 },
             }),
-            invalidatesTags: ['Profile'],
+            invalidatesTags: ['OwnProfile'],
         }),
         registerProfile: builder.mutation<UserObject, RegisterUserObject>({
             query: (body) => ({
@@ -76,6 +76,7 @@ export const holidazeApi = createApi({
                 method: 'POST',
                 body,
             }),
+            invalidatesTags: ['OwnProfile'],
         }),
         createVenue: builder.mutation<Venue, CreateVenue>({
             query: (body) => ({
@@ -83,6 +84,7 @@ export const holidazeApi = createApi({
                 method: 'POST',
                 body,
             }),
+            invalidatesTags: ['VenueList'],
         }),
         updateVenue: builder.mutation<Venue, UpdateVenue>({
             query: ({ venueId, body }) => ({
@@ -90,14 +92,14 @@ export const holidazeApi = createApi({
                 method: 'PUT',
                 body,
             }),
-            invalidatesTags: ['Venue'],
+            invalidatesTags: ['Venue', 'VenueList'],
         }),
         deleteVenue: builder.mutation<Venue, string>({
             query: (venueId) => ({
                 url: `venues/${venueId}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['Profile', 'Venue'],
+            invalidatesTags: ['OwnProfile', 'VenueList'],
         }),
         createBooking: builder.mutation<BookingWithVenue, CreateBooking>({
             query: (body) => ({
@@ -105,10 +107,11 @@ export const holidazeApi = createApi({
                 method: 'POST',
                 body,
             }),
-            invalidatesTags: ['Venue'],
+            invalidatesTags: ['OwnProfile', 'Venue'],
         }),
         getBooking: builder.query<BookingWithVenue[], string>({
             query: (bookingId) => `bookings/${bookingId}?_venue=true&_customer=true`,
+            providesTags: ['Booking'],
         }),
         updateBooking: builder.mutation<BookingDetailed, UpdateBooking>({
             query: ({ bookingId, body }) => ({
@@ -116,14 +119,14 @@ export const holidazeApi = createApi({
                 method: 'PUT',
                 body,
             }),
-            invalidatesTags: ['Venue', 'Profile'],
+            invalidatesTags: ['Booking', 'Venue', 'Profile'],
         }),
         deleteBooking: builder.mutation<BookingWithVenue, string>({
             query: (bookingId) => ({
                 url: `bookings/${bookingId}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['Profile'],
+            invalidatesTags: ['Profile', 'Booking'],
         }),
     }),
 })
