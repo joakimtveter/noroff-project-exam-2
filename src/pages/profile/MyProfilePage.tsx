@@ -85,7 +85,6 @@ export default function OwnProfilePage(): ReactElement {
         navigate('/auth')
     }
 
-    // Get the profile data from RTK query
     const { data, error, isLoading } = useGetOwnProfileQuery(user?.name)
 
     if (error != null) {
@@ -160,9 +159,11 @@ export default function OwnProfilePage(): ReactElement {
                                 />
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={handleClose}>Cancel</Button>
+                                <Button onClick={handleClose} sx={{ color: 'text.secondary' }}>
+                                    Cancel
+                                </Button>
                                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-                                <Button variant="contained" onClick={handleSubmit}>
+                                <Button variant="contained" color="success" onClick={handleSubmit}>
                                     Update
                                 </Button>
                             </DialogActions>
@@ -177,7 +178,12 @@ export default function OwnProfilePage(): ReactElement {
                                 {data.email}
                             </Typography>
                             {data.venueManager === true && (
-                                <Chip label="Venue manager" color="primary" sx={{ width: 'max-content' }} />
+                                <Chip
+                                    label="Venue manager"
+                                    variant="outlined"
+                                    color="secondary"
+                                    sx={{ width: 'max-content' }}
+                                />
                             )}
                         </Stack>
                     </Stack>
@@ -205,7 +211,7 @@ export default function OwnProfilePage(): ReactElement {
                                 <Typography component="h2" variant="h4">
                                     My Venues
                                 </Typography>
-                                <Badge color="primary" badgeContent={data._count.venues}>
+                                <Badge color="secondary" badgeContent={data._count.venues}>
                                     <HolidayVillageIcon fontSize="large" />
                                 </Badge>
                             </Stack>
@@ -232,7 +238,7 @@ export default function OwnProfilePage(): ReactElement {
                             <Typography component="h2" variant="h4">
                                 My Bookings
                             </Typography>
-                            <Badge color="primary" badgeContent={data._count.bookings}>
+                            <Badge color="secondary" badgeContent={data._count.bookings}>
                                 <TodayOutlinedIcon fontSize="large" />
                             </Badge>
                         </Stack>
