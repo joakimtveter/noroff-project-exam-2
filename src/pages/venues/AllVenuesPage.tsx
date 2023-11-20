@@ -2,19 +2,23 @@ import { ReactElement } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useGetVenuesQuery } from '@/services/holidaze'
 import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
     Box,
     Checkbox,
     CircularProgress,
     FormControlLabel,
     FormGroup,
     Grid,
-    Paper,
     Rating,
     Slider,
     TextField,
     Typography,
     useTheme,
 } from '@mui/material'
+import FilterIcon from '@mui/icons-material/FilterAltOutlined'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMoreOutlined'
 
 import VenueList from '@/components/venue/venue-list'
 import { Venue } from '@/types/venue.ts'
@@ -39,6 +43,7 @@ export default function AllVenuesPage(): ReactElement {
         return array.map((value) => parseInt(value))
     }
 
+    // Hardcoded value instead, due to a few very high-priced venues.
     // const highPrice =
     //     data?.reduce((max, current): number => {
     //         return current.price > max ? current.price : max
@@ -100,9 +105,14 @@ export default function AllVenuesPage(): ReactElement {
             ) : data != null ? (
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={3}>
-                        <Paper elevation={3}>
-                            <Box sx={{ width: '100%', padding: 2 }}>
-                                <Typography>Filters</Typography>
+                        <Accordion sx={{ width: '100%', padding: 2 }}>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                <FilterIcon />
+                                <Typography component="p" variant="h6">
+                                    Filters
+                                </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
                                 <TextField
                                     fullWidth={true}
                                     margin="normal"
@@ -194,8 +204,8 @@ export default function AllVenuesPage(): ReactElement {
                                         valueLabelDisplay="auto"
                                     />
                                 </Box>
-                            </Box>
-                        </Paper>
+                            </AccordionDetails>
+                        </Accordion>
                     </Grid>
                     <Grid item xs={12} md={9}>
                         <VenueList venues={filterVenues(data, searchParams)} />
