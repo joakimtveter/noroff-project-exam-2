@@ -4,14 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logOut } from '@/features/user/userSlice'
 import { RootState } from '@/store'
 
-import Avatar from '@mui/material/Avatar'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import Tooltip from '@mui/material/Tooltip'
-import Typography from '@mui/material/Typography'
+import { Avatar, Box, Button, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from '@mui/material'
+import LoginIcon from '@mui/icons-material/Login'
+import Logout from '@mui/icons-material/Logout'
 
 export default function ProfileMenu(): ReactElement {
     const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null)
@@ -59,15 +54,21 @@ export default function ProfileMenu(): ReactElement {
                         onClose={handleCloseUserMenu}
                     >
                         <MenuItem component={Link} to={'/profile'} onClick={handleCloseUserMenu}>
-                            <Typography textAlign="center">Profile</Typography>
+                            <ListItemIcon>
+                                <Logout fontSize="small" color="primary" />
+                            </ListItemIcon>
+                            Profile
                         </MenuItem>
                         <MenuItem onClick={handleLogout}>
-                            <Typography textAlign="center">Log out</Typography>
+                            <ListItemIcon>
+                                <Logout fontSize="small" color="primary" />
+                            </ListItemIcon>
+                            Log out
                         </MenuItem>
                     </Menu>
                 </>
             ) : (
-                <Button component={Link} to={'/sign-in'} variant="contained" color="primary">
+                <Button component={Link} to={'/sign-in'} variant="contained" color="primary" endIcon={<LoginIcon />}>
                     Sign in
                 </Button>
             )}
