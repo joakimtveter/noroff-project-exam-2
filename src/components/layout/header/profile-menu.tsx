@@ -7,6 +7,7 @@ import { RootState } from '@/store'
 import { Avatar, Box, Button, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login'
 import Logout from '@mui/icons-material/Logout'
+import AccountBoxIcon from '@mui/icons-material/AccountBox'
 
 export default function ProfileMenu(): ReactElement {
     const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null)
@@ -55,7 +56,7 @@ export default function ProfileMenu(): ReactElement {
                     >
                         <MenuItem component={Link} to={'/profile'} onClick={handleCloseUserMenu}>
                             <ListItemIcon>
-                                <Logout fontSize="small" color="primary" />
+                                <AccountBoxIcon fontSize="small" color="primary" />
                             </ListItemIcon>
                             Profile
                         </MenuItem>
