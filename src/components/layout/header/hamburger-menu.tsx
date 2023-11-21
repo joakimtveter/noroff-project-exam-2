@@ -70,7 +70,7 @@ export default function HamburgerMenu(props: HamburgerMenuProps): ReactElement {
                                 right: 14,
                                 width: 10,
                                 height: 10,
-                                bgcolor: 'background.paper',
+                                backgroundColor: 'background.paper',
                                 transform: 'translateY(-50%) rotate(45deg)',
                                 zIndex: 0,
                             },
@@ -87,7 +87,7 @@ export default function HamburgerMenu(props: HamburgerMenuProps): ReactElement {
                 ))}
                 <Divider />
                 {isLoggedIn ? (
-                    <>
+                    <Box>
                         <MenuItem component={Link} to={'/profile'} onClick={handleClose}>
                             <Avatar src={user.avatar} /> Profile
                         </MenuItem>
@@ -97,7 +97,7 @@ export default function HamburgerMenu(props: HamburgerMenuProps): ReactElement {
                             </ListItemIcon>
                             Logout
                         </MenuItem>
-                    </>
+                    </Box>
                 ) : (
                     <MenuItem component={Link} to={'/sign-in'} onClick={handleClose}>
                         <ListItemIcon>
