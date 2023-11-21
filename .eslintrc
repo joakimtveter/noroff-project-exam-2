@@ -31,7 +31,7 @@
     "rules": {
         "react/react-in-jsx-scope": "off",
         "react/jsx-uses-react": "off",
-        "@typescript-eslint/consistent-type-imports": ['error', { prefer: 'no-type-imports' }],
+        "@typescript-eslint/consistent-type-imports": ["error", { "prefer": "no-type-imports" }],
         "@typescript-eslint/no-misused-promises": [2, {
             "checksVoidReturn": {
                 "attributes": false

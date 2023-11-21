@@ -1,27 +1,14 @@
-import { resolve } from 'path';
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
-
-const root = resolve(__dirname, 'src');
-const outDir = resolve(__dirname, 'dist');
-const publicDir = resolve(__dirname, 'src/public');
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
+import { resolve } from 'path'
 
 // https://vitejs.dev/config/
+const root = resolve(__dirname, 'src')
 export default defineConfig({
-    root,
     plugins: [react()],
-    build: {
-        outDir,
-        emptyOutDir: true,
-        rollupOptions: {
-            input: {
-                main: resolve(root, 'index.html'),
-            },
-        },
-    },
     resolve: {
         alias: {
             '@': root,
         },
     },
-});
+})
