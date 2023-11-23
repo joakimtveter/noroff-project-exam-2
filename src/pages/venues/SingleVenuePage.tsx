@@ -14,6 +14,7 @@ import VenueGallery from '@/components/venue/venue-gallery'
 import VenueInfo from '@/components/venue/venue-info'
 import VenueBookingList from '@/components/venue/venue-booking-list'
 import formatCurrency from '@/utils/formatCurrency'
+import VenueMap from '@/components/venue/map'
 
 export default function SingleVenuePage(): ReactElement {
     const { venueId } = useParams()
@@ -21,6 +22,16 @@ export default function SingleVenuePage(): ReactElement {
     const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
     const userName = useSelector((state: RootState) => state.user.user.name)
     const isOwnVenue = userName === data?.owner.name
+
+    function validateCoords(lat: number | undefined, lng: number | undefined): boolean {
+        if (lat === undefined || lng === undefined) return false
+        if (lat === 0 && lng === 0) return false
+        if (lat < -90 && lat > 90) return false
+        if (lng < -180 && lng > 180) return false
+        return true
+    }
+
+    const isValidCoords = validateCoords(data?.location.lat, data?.location.lng)
 
     if (error != null) console.log(error)
 
@@ -123,6 +134,7 @@ export default function SingleVenuePage(): ReactElement {
                             />
                         </I18nProvider>
                         {isOwnVenue && <VenueBookingList bookings={data.bookings} />}
+                        {isValidCoords && <VenueMap lat={data.location.lat} lng={data.location.lng} />}
                     </Grid>
                 </Grid>
             ) : null}

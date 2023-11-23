@@ -2,12 +2,12 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import { RootState } from '@/store'
 import {
-    LoginResponse,
     UserObject,
     UserWithBookings,
     UserWithVenues,
     LoginRequest,
     RegisterUserObject,
+    LoginResponse,
 } from '@/types/user'
 import { CreateVenue, UpdateVenue, Venue, VenueDetailed } from '@/types/venue'
 import { BookingDetailed, BookingWithVenue, CreateBooking, UpdateBooking } from '@/types/booking'
@@ -46,10 +46,10 @@ export const holidazeApi = createApi({
             providesTags: ['Profile'],
         }),
         updateUserAvatar: builder.mutation<UserObject, { name: string; body: { avatar: string } }>({
-            query: (query) => ({
-                url: `profiles/${query.name}/media`,
+            query: ({ name, body }) => ({
+                url: `profiles/${name}/media`,
                 method: 'PUT',
-                body: query.body,
+                body,
             }),
             invalidatesTags: ['OwnProfile'],
         }),

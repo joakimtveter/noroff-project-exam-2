@@ -102,6 +102,10 @@ h6 {
     white-space: normal !important;
 }
 
+.map-container {
+    height: 400px;
+}
+
 .react-aria-RangeCalendar {
     --highlight-background: #DE2B68;
     --highlight-foreground: white;

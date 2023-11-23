@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
+
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { store } from '@/store'
 import { Provider } from 'react-redux'
@@ -8,20 +9,23 @@ import { ThemeProvider } from '@mui/material/styles'
 import defaultTheme from '@/themes/default'
 
 import Layout from '@/components/layout'
+
+// Pages components
 import HomePage from '@/pages'
-import AllVenuesPage from '@/pages/venues/AllVenuesPage.tsx'
+import AllVenuesPage from '@/pages/venues/AllVenuesPage'
 import VenuePage from '@/pages/venues/SingleVenuePage'
 import MyProfilePage from '@/pages/profile/MyProfilePage'
 import ProfilePage from '@/pages/profile/ProfilePage'
-import LoginPage from '@/pages/auth/SignInPage.tsx'
-import RegisterPage from '@/pages/auth/SignUpPage.tsx'
+import LoginPage from '@/pages/auth/SignInPage'
+import RegisterPage from '@/pages/auth/SignUpPage'
 import VenueAdminPage from './pages/profile/VenueAdminPage'
-import AddVenuePage from '@/pages/venues/AddVenuePage.tsx'
-import UpdateVenuePage from '@/pages/venues/UpdateVenuePage.tsx'
-import SingleBookingPage from '@/pages/bookings/SingleBooking.tsx'
+import AddVenuePage from '@/pages/venues/AddVenuePage'
+import UpdateVenuePage from '@/pages/venues/UpdateVenuePage'
+import SingleBookingPage from '@/pages/bookings/SingleBooking'
 
 import './global.css'
 import 'react-toastify/dist/ReactToastify.css'
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 const router = createBrowserRouter([
     {
