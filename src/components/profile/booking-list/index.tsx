@@ -7,7 +7,6 @@ import Placeholder from '@/assets/venue-placeholder.svg'
 
 import { dateToReadableFormat } from '@/utils/date/dateToReadableFormat.ts'
 import { BookingWithVenue } from '@/types/booking.ts'
-import { Link } from 'react-router-dom'
 import AlertDialog from '@/components/common/dialog'
 import BookingDialog from '@/components/profile/booking-dialog'
 
