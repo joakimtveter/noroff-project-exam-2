@@ -21,7 +21,6 @@ import RegisterPage from '@/pages/auth/SignUpPage'
 import VenueAdminPage from './pages/profile/VenueAdminPage'
 import AddVenuePage from '@/pages/venues/AddVenuePage'
 import UpdateVenuePage from '@/pages/venues/UpdateVenuePage'
-import SingleBookingPage from '@/pages/bookings/SingleBooking'
 
 import './global.css'
 import 'react-toastify/dist/ReactToastify.css'
@@ -59,14 +58,6 @@ const router = createBrowserRouter([
             {
                 path: 'profile',
                 element: <MyProfilePage />,
-            },
-            {
-                path: 'bookings/:bookingId',
-                element: <SingleBookingPage />,
-            },
-            {
-                path: 'bookings/edit/:bookingId',
-                element: <SingleBookingPage />,
             },
             {
                 path: 'profile/:profileName',

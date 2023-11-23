@@ -26,11 +26,11 @@ export const holidazeApi = createApi({
     }),
     tagTypes: ['Booking', 'Profile', 'OwnProfile', 'Venue', 'VenueList'],
     endpoints: (builder) => ({
-        getVenues: builder.query<Venue[], string>({
+        getVenues: builder.query<Venue[], void>({
             query: () => 'venues?sort=created',
             providesTags: ['VenueList'],
         }),
-        getTrendingVenues: builder.query<Venue[], string>({
+        getTrendingVenues: builder.query<Venue[], void>({
             query: () => 'venues?sort=price&offset=5&limit=3',
         }),
         getVenueById: builder.query<VenueDetailed, string>({
@@ -109,7 +109,7 @@ export const holidazeApi = createApi({
             }),
             invalidatesTags: ['OwnProfile', 'Venue'],
         }),
-        getBooking: builder.query<BookingWithVenue[], string>({
+        getBooking: builder.query<BookingWithVenue, string>({
             query: (bookingId) => `bookings/${bookingId}?_venue=true&_customer=true`,
             providesTags: ['Booking'],
         }),

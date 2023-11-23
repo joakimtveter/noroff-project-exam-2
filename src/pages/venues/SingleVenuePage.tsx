@@ -23,14 +23,14 @@ export default function SingleVenuePage(): ReactElement {
     const userName = useSelector((state: RootState) => state.user.user.name)
     const isOwnVenue = userName === data?.owner.name
 
+    
     function validateCoords(lat: number | undefined, lng: number | undefined): boolean {
         if (lat === undefined || lng === undefined) return false
         if (lat === 0 && lng === 0) return false
-        if (lat < -90 && lat > 90) return false
-        if (lng < -180 && lng > 180) return false
+        if (lat < -90 || lat > 90) return false
+        if (lng < -180 || lng < 180) return false
         return true
     }
-
     const isValidCoords = validateCoords(data?.location.lat, data?.location.lng)
 
     if (error != null) console.log(error)

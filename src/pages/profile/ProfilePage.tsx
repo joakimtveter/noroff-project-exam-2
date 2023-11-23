@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { useGetProfileByNameQuery } from '@/services/holidaze'
 import { RootState } from '@/store'
 
-import { Avatar, Box, Chip, CircularProgress, Stack, Typography } from '@mui/material'
+import { Avatar, Box, CircularProgress, Grid, Stack, Typography } from '@mui/material'
 
 import VenueCard from '@/components/venue/venue-card'
 
@@ -45,12 +45,12 @@ export default function ProfilePage(): ReactElement {
             ) : isLoading ? (
                 <CircularProgress />
             ) : data != null ? (
-                <Box mt={3}>
-                    <Stack direction="row" alignItems="center" gap={4}>
+                <Box marginBlock={3}>
+                    <Stack direction="row" alignItems="center" gap={4} marginBlock={4}>
                         <Avatar
                             alt={data.name.toLocaleUpperCase()}
                             src={data.avatar}
-                            sx={{ width: 200, height: 200 }}
+                            sx={{ width: { xs: 100, md: 200 }, height: { xs: 100, md: 200 } }}
                         />
                         <Stack component="hgroup" spacing={1}>
                             <Typography component="h1" variant="h3">
@@ -61,24 +61,22 @@ export default function ProfilePage(): ReactElement {
                                 {' '}
                                 {data.email}
                             </Typography>
-                            {data.venueManager === true && (
-                                <Chip label="Venue manager" color="primary" sx={{ width: 'max-content' }} />
-                            )}
                         </Stack>
                     </Stack>
                     {data.venueManager === true && data._count.venues > 0 && (
                         <Box>
-                            <Typography component="h2" variant="h4">
+                            <Typography component="h2" variant="h4" marginBlock={2}>
                                 Venues
                             </Typography>
-                            <Stack component="ul" sx={{ listStyleType: 'none', padding: 0 }}>
+                            <Grid container component="ul" spacing={2} sx={{ listStyleType: 'none', padding: 0 }}>
                                 {data.venues.map((venue) => (
-                                    <VenueCard key={venue.id} headingLevel={2} {...venue} />
+                                    <Grid item key={venue.id} component="li" xs={12} sm={6} md={4} lg={3}>
+                                        <VenueCard headingLevel={3} {...venue} />
+                                    </Grid>
                                 ))}
-                            </Stack>
+                            </Grid>
                         </Box>
                     )}
-                    <pre>{JSON.stringify(data, null, 2)}</pre>
                 </Box>
             ) : null}
         </>

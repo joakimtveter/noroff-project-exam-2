@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { ReactElement, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useGetVenuesQuery } from '@/services/holidaze'
 import {
@@ -15,6 +15,7 @@ import {
     Slider,
     TextField,
     Typography,
+    useMediaQuery,
     useTheme,
 } from '@mui/material'
 import FilterIcon from '@mui/icons-material/FilterAltOutlined'
@@ -24,9 +25,11 @@ import VenueList from '@/components/venue/venue-list'
 import { Venue } from '@/types/venue.ts'
 
 export default function AllVenuesPage(): ReactElement {
-    const { data, error, isLoading } = useGetVenuesQuery('')
+    const { data, error, isLoading } = useGetVenuesQuery()
     const [searchParams, setSearchParams] = useSearchParams()
+    const [expanded, setExpanded] = useState<boolean>(false)
     const theme = useTheme()
+    const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'))
 
     const setParams = (key: string, value: string): void => {
         if (value === 'false' || value === '' || value === '1') {
@@ -96,7 +99,7 @@ export default function AllVenuesPage(): ReactElement {
     return (
         <>
             <Typography component="h1" variant="h2" marginBlock={3}>
-                Find the perfect venue
+                Find your perfect venue
             </Typography>
             {error != null ? (
                 <p>Oh no, there was an error</p>
@@ -105,7 +108,7 @@ export default function AllVenuesPage(): ReactElement {
             ) : data != null ? (
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={3}>
-                        <Accordion sx={{ width: '100%', padding: 2 }}>
+                        <Accordion sx={{ width: '100%', padding: 2 }} expanded={isLargeScreen ? true : expanded} onChange={() => setExpanded(!expanded)}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                 <FilterIcon />
                                 <Typography component="p" variant="h6">
@@ -179,11 +182,11 @@ export default function AllVenuesPage(): ReactElement {
                                     />
                                 </Box>
                                 <TextField
-                                    fullWidth={false}
+                                    fullWidth={true}
                                     margin="normal"
                                     label={'Guests'}
                                     type={'number'}
-                                    inputProps={{ min: 1, max: 100 }}
+                                    inputProps={{ min: 1, max: 100, textAlign: 'end' }}
                                     value={searchParams.get('guests') === null ? 1 : Number(searchParams.get('guests'))}
                                     onChange={(e) => {
                                         setParams('guests', e.target.value)
