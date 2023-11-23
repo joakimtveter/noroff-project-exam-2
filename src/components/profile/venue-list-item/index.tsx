@@ -45,7 +45,7 @@ export default function VenueListItem(props: VenueCardProps): ReactElement {
     return (
         <ListItem
             key={id}
-            sx={{ maxWidth: '600px' }}
+            sx={{ maxWidth: '700px' }}
             divider={true}
             secondaryAction={
                 <Box>

@@ -1,29 +1,12 @@
-import { ChangeEvent, ReactElement, useState } from 'react'
+import { ReactElement, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-import { useDispatch, useSelector } from 'react-redux'
-import { useGetOwnProfileQuery, useUpdateUserAvatarMutation, useBecomeVenueManagerMutation } from '@/services/holidaze'
-import { updateAvatar } from '@/features/user/userSlice.ts'
+import { useSelector } from 'react-redux'
+import { useGetOwnProfileQuery, useBecomeVenueManagerMutation } from '@/services/holidaze'
 import { RootState } from '@/store'
 
-import {
-    Avatar,
-    Badge,
-    Box,
-    Button,
-    Chip,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    List,
-    Stack,
-    TextField,
-    Typography,
-} from '@mui/material'
+import { Avatar, Badge, Box, Button, Chip, CircularProgress, List, Stack, Typography } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined'
 import HolidayVillageIcon from '@mui/icons-material/HolidayVillage'
@@ -32,22 +15,18 @@ import EditIcon from '@mui/icons-material/Edit'
 
 import BookingList from '@/components/profile/booking-list'
 import VenueListItem from '@/components/profile/venue-list-item'
+import UpdateProfilePictureDialog from '@/components/profile/update-profile-picture-dialog'
 
 export default function OwnProfilePage(): ReactElement {
     // Local State
     const [open, setOpen] = useState<boolean>(false)
-    const [newAvatarURL, setNewAvatarURL] = useState<string>('')
 
     // Redux hooks
     const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
     const user = useSelector((state: RootState) => state.user.user)
-    const [updateUserAvatar] = useUpdateUserAvatarMutation()
     const [becomeVenueManager] = useBecomeVenueManagerMutation()
-    const dispatch = useDispatch()
     const navigate = useNavigate()
-    const handleUrl = (value: string): void => {
-        setNewAvatarURL(value)
-    }
+
     const handleClickOpen = (): void => {
         setOpen(true)
     }
@@ -56,33 +35,10 @@ export default function OwnProfilePage(): ReactElement {
         setOpen(false)
     }
 
-    const handleSubmit = async (): Promise<void> => {
-        try {
-            const body = { avatar: newAvatarURL }
-            await updateUserAvatar({ name: user?.name, body }).unwrap()
-            dispatch(updateAvatar(newAvatarURL))
-        } catch (error) {
-            toast.error('Something went wrong')
-            console.error(error)
-        }
-        setOpen(false)
-        setNewAvatarURL('')
-    }
-
     // If the user is not logged in, redirect to login page
     if (!isLoggedIn) {
-        toast.info('You are not logged in', {
-            position: 'top-center',
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'colored',
-            toastId: 'not-logged-in',
-        })
-        navigate('/auth')
+        toast.info('You are not logged in')
+        navigate('/sign-in')
     }
 
     const { data, error, isLoading } = useGetOwnProfileQuery(user?.name)
@@ -135,39 +91,13 @@ export default function OwnProfilePage(): ReactElement {
                             <Avatar
                                 alt={data.name.toLocaleUpperCase()}
                                 src={data.avatar}
-                                sx={{ width: 200, height: 200 }}
+                                sx={{ width: { xs: 100, md: 200 }, height: { xs: 100, md: 200 } }}
                             />
                             <Typography component="span" style={visuallyHidden}>
                                 Change Profile Picture
                             </Typography>
                         </Box>
-                        <Dialog open={open} fullWidth={true} onClose={handleClose}>
-                            <DialogTitle>Update Profile Picture</DialogTitle>
-                            <DialogContent>
-                                <DialogContentText>Enter a URL to the desired profile picture.</DialogContentText>
-                                <TextField
-                                    autoFocus
-                                    label="Avatar URL"
-                                    type="url"
-                                    fullWidth
-                                    variant="outlined"
-                                    margin="normal"
-                                    value={newAvatarURL}
-                                    onChange={(e: ChangeEvent<HTMLInputElement>): void => {
-                                        handleUrl(e.target.value)
-                                    }}
-                                />
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={handleClose} sx={{ color: 'text.secondary' }}>
-                                    Cancel
-                                </Button>
-                                {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-                                <Button variant="contained" color="success" onClick={handleSubmit}>
-                                    Update
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
+                        <UpdateProfilePictureDialog handleClose={handleClose} open={open} name={user.name} />
                         <Stack component="hgroup" spacing={1}>
                             <Typography component="h1" variant="h3">
                                 {' '}
@@ -217,7 +147,9 @@ export default function OwnProfilePage(): ReactElement {
                             </Stack>
 
                             <List component="ul" sx={{ listStyleType: 'none', padding: 0 }}>
-                                {data.venues.length < 1 && <Typography>You have no venues</Typography>}
+                                {data.venues.length < 1 && (
+                                    <Typography sx={{ marginBlock: 1 }}>You have no venues</Typography>
+                                )}
                                 {data.venues.map((venue) => (
                                     <VenueListItem key={venue.id} {...venue} />
                                 ))}

@@ -9,6 +9,7 @@ import { dateToReadableFormat } from '@/utils/date/dateToReadableFormat.ts'
 import { BookingWithVenue } from '@/types/booking.ts'
 import { Link } from 'react-router-dom'
 import AlertDialog from '@/components/common/dialog'
+import BookingDialog from '@/components/profile/booking-dialog'
 
 interface BookingListProps {
     bookings: BookingWithVenue[]
@@ -17,6 +18,7 @@ interface BookingListProps {
 export default function BookingList(props: BookingListProps): ReactElement {
     const { bookings } = props
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [bookingOpen, setBookingOpen] = useState(false)
     const [deleteBooking] = useDeleteBookingMutation()
 
     const handleClose = (): void => {
@@ -24,7 +26,6 @@ export default function BookingList(props: BookingListProps): ReactElement {
     }
 
     const handleDelete = async (id: string): Promise<void> => {
-        console.log('deleted booking: ', id)
         await deleteBooking(id)
     }
     return (
@@ -50,8 +51,9 @@ export default function BookingList(props: BookingListProps): ReactElement {
                                 <Button
                                     color="secondary"
                                     variant="outlined"
-                                    component={Link}
-                                    to={`/bookings/${booking.id}`}
+                                    onClick={() => {
+                                        setBookingOpen(true)
+                                    }}
                                     aria-label={`View booking for ${booking.venue.name} on ${
                                         booking.venue.name
                                     } on ${new Date(booking.dateFrom).toLocaleDateString('en-US', {
@@ -61,6 +63,13 @@ export default function BookingList(props: BookingListProps): ReactElement {
                                 >
                                     View
                                 </Button>
+                                <BookingDialog
+                                    handleClose={() => {
+                                        setBookingOpen(false)
+                                    }}
+                                    open={bookingOpen}
+                                    bookingId={booking.id}
+                                />
                             </Box>
                         }
                     >

@@ -36,6 +36,10 @@ export interface LoginResponse extends UserObject {
     accessToken: string
 }
 
+export interface LoginResponseObject {
+    data: LoginResponse
+}
+
 export interface LoginRequest {
     email: string
     password: string
