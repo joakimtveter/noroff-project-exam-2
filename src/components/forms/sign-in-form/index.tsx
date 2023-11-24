@@ -54,7 +54,7 @@ export default function LoginForm(): ReactElement {
                     id="email"
                     label="Email Address"
                     name="email"
-                    autoComplete="email"
+                    autoComplete="username"
                     autoFocus
                 />
                 <TextField
@@ -72,7 +72,7 @@ export default function LoginForm(): ReactElement {
                 </Button>
 
                 <Link component={RouterLink} to="/sign-up" variant="body2">
-                    {`I don't have an account. I wish to join.`}
+                     I don't have an account. I wish to join.
                 </Link>
             </Box>
         </Box>

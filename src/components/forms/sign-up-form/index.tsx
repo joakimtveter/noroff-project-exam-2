@@ -44,7 +44,7 @@ export default function SignUpForm(): ReactElement {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
-                                autoComplete="given-name"
+                                autoComplete="username"
                                 name="name"
                                 required
                                 fullWidth
@@ -78,13 +78,9 @@ export default function SignUpForm(): ReactElement {
                     <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                         Sign Up
                     </Button>
-                    <Grid container justifyContent="flex-end">
-                        <Grid item>
-                            <Link component={RouterLink} to="/sign-in" variant="body2">
-                                Already have an account? Sign in
-                            </Link>
-                        </Grid>
-                    </Grid>
+                    <Link component={RouterLink} to="/sign-in" variant="body2">
+                        I already have an account? I want to sign in
+                    </Link>
                 </Box>
             </Box>
         </>
