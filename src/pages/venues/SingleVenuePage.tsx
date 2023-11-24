@@ -28,7 +28,7 @@ export default function SingleVenuePage(): ReactElement {
         if (lat === undefined || lng === undefined) return false
         if (lat === 0 && lng === 0) return false
         if (lat < -90 || lat > 90) return false
-        if (lng < -180 || lng < 180) return false
+        if (lng < -180 || lng > 180) return false
         return true
     }
     const isValidCoords = validateCoords(data?.location.lat, data?.location.lng)
