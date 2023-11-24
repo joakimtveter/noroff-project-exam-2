@@ -1,29 +1,34 @@
-import { FormEvent, ReactElement } from 'react'
+import { ReactElement } from 'react'
 import { useNavigate, Link as RouterLink } from 'react-router-dom'
-
-import { Box, Button, Link, TextField, Typography } from '@mui/material'
+import { toast } from 'react-toastify'
 
 import { useLoginMutation } from '@/services/holidaze.ts'
 import { useDispatch } from 'react-redux'
 import { logIn } from '@/features/user/userSlice.ts'
 
-import { LoginRequest } from '@/types/user.ts'
-import { toast } from 'react-toastify'
+import { z } from "zod";
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { Box, Button, Link, TextField, Typography } from '@mui/material'
+
 
 export default function LoginForm(): ReactElement {
     const dispatch = useDispatch()
     const [login] = useLoginMutation()
     const navigate = useNavigate()
 
-    const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
-        event.preventDefault()
+    const schema = z.object({
+        email: z.string().min(1, { message: "Email is required" }).email({message: "Must be a valid email" }),
+        password: z.string().min(8, { message: "Password is not valid format" }),
+      })
+      type SigninFormSchema = z.infer<typeof schema>;
+
+      const { register, handleSubmit, formState: { errors } } = useForm<SigninFormSchema>({ resolver: zodResolver(schema) });
+
+      const onSubmit: SubmitHandler<SigninFormSchema> = async (data): Promise<void> => {
         try {
-            const data = new FormData(event.currentTarget)
-            const request: LoginRequest = {
-                email: data.get('email') as string,
-                password: data.get('password') as string,
-            }
-            const response = await login(request)
+            const response = await login(data)
             if ('data' in response) {
                 dispatch(logIn(response.data))
                 navigate('/profile')
@@ -46,26 +51,30 @@ export default function LoginForm(): ReactElement {
             <Typography component="h1" variant="h4">
                 Sign in
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
                 <TextField
                     margin="normal"
-                    required
-                    fullWidth
                     id="email"
                     label="Email Address"
-                    name="email"
                     autoComplete="username"
                     autoFocus
+                    {...register("email")}
+                    helperText={errors.email?.message}
+                    error={!!errors.email}
+                    fullWidth
+                    required
                 />
                 <TextField
                     margin="normal"
-                    required
-                    fullWidth
-                    name="password"
                     label="Password"
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    {...register("password")}
+                    helperText={errors.password?.message}
+                    error={!!errors.password}
+                    fullWidth
+                    required
                 />
                 <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                     Sign In
