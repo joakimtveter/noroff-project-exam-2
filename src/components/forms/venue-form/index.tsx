@@ -43,7 +43,6 @@ interface VenueFormProps {
     onSubmit: SubmitHandler<VenueFormSchema>
     submitButtonText: string
     defaultValues?: VenueFormSchema
-    // isLoading?: boolean
 }
 
 export default function VenueForm(props: VenueFormProps): ReactElement {

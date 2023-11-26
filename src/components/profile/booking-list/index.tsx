@@ -25,8 +25,12 @@ export default function BookingList(props: BookingListProps): ReactElement {
     }
 
     const handleDelete = async (id: string): Promise<void> => {
-        await deleteBooking(id)
+        console.log('delete: ', id)
+        // TODO: Fix delete booking
+        // await deleteBooking(id)
+        setDialogOpen(false)
     }
+    console.log(bookings)
     return (
         <List dense={false} sx={{ maxWidth: '600px' }}>
             {bookings.map((booking) => {
@@ -90,22 +94,22 @@ export default function BookingList(props: BookingListProps): ReactElement {
                             }`}
                             secondary={`${from} - ${to}`}
                         />
-                        <AlertDialog
-                            key={booking.id}
-                            open={dialogOpen}
-                            title={'Delete Booking'}
-                            text={`Are you sure you want to delete this booking for ${booking.guests} people at ${
-                                booking.venue.name
-                            } on ${new Date(booking.dateFrom).toLocaleDateString('en-US', {
-                                day: 'numeric',
-                                month: 'long',
-                            })}.`}
-                            handleClose={handleClose}
-                            primaryColor={'error'}
-                            action={async () => {
-                                await handleDelete(booking.id)
-                            }}
-                        />
+            <AlertDialog
+                key={booking.id}
+                open={dialogOpen}
+                title={'Delete Booking'}
+                text={`Are you sure you want to delete this booking for ${booking.guests} people at ${
+                    booking.venue.name
+                } on ${new Date(booking.dateFrom).toLocaleDateString('en-US', {
+                    day: 'numeric',
+                    month: 'long',
+                })}.`}
+                handleClose={handleClose}
+                primaryColor={'error'}
+                action={async () => {
+                    await handleDelete(booking.id)
+                }}
+            />
                     </ListItem>
                 )
             })}

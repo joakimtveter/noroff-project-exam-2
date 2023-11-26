@@ -8,37 +8,23 @@ import { RootState } from '@/store'
 import { Avatar, Box, CircularProgress, Grid, Stack, Typography } from '@mui/material'
 
 import VenueCard from '@/components/venue/venue-card'
+import { Helmet } from 'react-helmet'
 
 export default function ProfilePage(): ReactElement {
     const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
     const { profileName } = useParams<{ profileName: string }>()
     const navigate = useNavigate()
-
-    // If the user is not logged in and is not trying to access his own profile, redirect to login page
     if (!isLoggedIn) {
-        toast.info('You are not logged in', {
-            position: 'top-center',
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'colored',
-            toastId: 'not-logged-in',
-        })
-        navigate('/auth')
+        toast.info('You are not logged in', { toastId: 'not-logged-in' })
+        navigate('/sign-in')
     }
 
-    // Get the profile data from RTK query
-    const { data, error, isLoading } = useGetProfileByNameQuery(profileName ?? '')
-
-    // if the current user is not logged in, redirect to login page.
-    if (error != null) console.error(error)
+    const { data, isError, error, isLoading } = useGetProfileByNameQuery(profileName ?? '')
+    if (isError) console.error(error)
 
     return (
         <>
-            {error != null ? (
+            {isError ? (
                 <>
                     <p>Oh no, there was an error</p>
                 </>
@@ -46,6 +32,9 @@ export default function ProfilePage(): ReactElement {
                 <CircularProgress />
             ) : data != null ? (
                 <Box marginBlock={3}>
+                    <Helmet>
+                        <title>{`${data.name}'s profile | Holidaze`}</title>
+                    </Helmet>
                     <Stack direction="row" alignItems="center" gap={4} marginBlock={4}>
                         <Avatar
                             alt={data.name.toLocaleUpperCase()}

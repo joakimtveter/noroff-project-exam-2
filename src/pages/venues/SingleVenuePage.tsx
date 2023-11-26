@@ -16,6 +16,7 @@ import VenueBookingList from '@/components/venue/venue-booking-list'
 import formatCurrency from '@/utils/formatCurrency'
 import VenueMap from '@/components/venue/map'
 import EditIcon from '@mui/icons-material/Edit'
+import { Helmet } from 'react-helmet'
 
 export default function SingleVenuePage(): ReactElement {
     const { venueId } = useParams()
@@ -44,6 +45,10 @@ export default function SingleVenuePage(): ReactElement {
                 <CircularProgress />
             ) : data != null ? (
                 <Container maxWidth="md">
+                    <Helmet>
+                        <title>{`${data.name} | Holidaze`}</title>
+                        <meta name="description" content={data.description} />
+                    </Helmet>
                     <Box component='hgroup' sx={{marginBlock: 2}}>
                         <Typography component="h1" variant="h2">
                             {data.name}

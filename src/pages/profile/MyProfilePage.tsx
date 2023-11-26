@@ -16,12 +16,10 @@ import EditIcon from '@mui/icons-material/Edit'
 import BookingList from '@/components/profile/booking-list'
 import VenueListItem from '@/components/profile/venue-list-item'
 import UpdateProfilePictureDialog from '@/components/profile/update-profile-picture-dialog'
+import { Helmet } from 'react-helmet'
 
 export default function OwnProfilePage(): ReactElement {
-    // Local State
     const [open, setOpen] = useState<boolean>(false)
-
-    // Redux hooks
     const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
     const user = useSelector((state: RootState) => state.user.user)
     const [becomeVenueManager] = useBecomeVenueManagerMutation()
@@ -35,7 +33,6 @@ export default function OwnProfilePage(): ReactElement {
         setOpen(false)
     }
 
-    // If the user is not logged in, redirect to login page
     if (!isLoggedIn) {
         toast.info('You are not logged in')
         navigate('/sign-in')
@@ -58,6 +55,9 @@ export default function OwnProfilePage(): ReactElement {
                 <CircularProgress />
             ) : data != null ? (
                 <Box mt={3}>
+                    <Helmet>
+                        <title>{`My Profile | Holidaze`}</title>
+                    </Helmet>
                     <Stack direction="row" alignItems="center" gap={4}>
                         <Box
                             component="button"

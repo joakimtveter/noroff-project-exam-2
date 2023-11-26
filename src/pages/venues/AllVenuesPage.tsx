@@ -47,10 +47,9 @@ export default function AllVenuesPage(): ReactElement {
     }
 
     // Hardcoded value instead, due to a few very high-priced venues.
-    // const highPrice =
-    //     data?.reduce((max, current): number => {
+    // const highPrice = data?.reduce((max, current): number => {
     //         return current.price > max ? current.price : max
-    //     }, data[0].price) ?? 1000000
+    // }, data[0].price) ?? 1000000
 
     const filterVenues = (venues: Venue[], params: URLSearchParams): Venue[] => {
         return venues
@@ -109,7 +108,7 @@ export default function AllVenuesPage(): ReactElement {
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={3}>
                         <Accordion sx={{ width: '100%', padding: 2 }} expanded={isLargeScreen ? true : expanded} onChange={() => setExpanded(!expanded)}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <AccordionSummary expandIcon={isLargeScreen ? null : <ExpandMoreIcon />}>
                                 <FilterIcon />
                                 <Typography component="p" variant="h6">
                                     Filters

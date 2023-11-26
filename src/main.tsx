@@ -1,13 +1,13 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
 import { store } from '@/store'
 import { Provider } from 'react-redux'
-import { ToastContainer } from 'react-toastify'
 import { ThemeProvider } from '@mui/material/styles'
 import defaultTheme from '@/themes/default'
 
+import { ToastContainer } from 'react-toastify'
 import Layout from '@/components/layout'
 
 // Pages components
@@ -18,13 +18,13 @@ import MyProfilePage from '@/pages/profile/MyProfilePage'
 import ProfilePage from '@/pages/profile/ProfilePage'
 import LoginPage from '@/pages/auth/SignInPage'
 import RegisterPage from '@/pages/auth/SignUpPage'
-import VenueAdminPage from './pages/profile/VenueAdminPage'
 import AddVenuePage from '@/pages/venues/AddVenuePage'
 import UpdateVenuePage from '@/pages/venues/UpdateVenuePage'
 
-import './global.css'
+// Styles
 import 'react-toastify/dist/ReactToastify.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
+import './global.css'
 
 const router = createBrowserRouter([
     {
@@ -46,10 +46,6 @@ const router = createBrowserRouter([
             {
                 path: 'venues/edit/:venueId',
                 element: <UpdateVenuePage />,
-            },
-            {
-                path: 'venues/admin/:venueId',
-                element: <VenueAdminPage />,
             },
             {
                 path: 'venues/add',
@@ -75,7 +71,6 @@ const router = createBrowserRouter([
     },
 ])
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <Provider store={store}>

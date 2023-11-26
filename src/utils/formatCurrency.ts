@@ -9,7 +9,7 @@ export default function formatCurrency(amount: number): string {
         style: 'currency',
         currency: 'NOK',
         currencyDisplay: 'narrowSymbol',
-        // @ts-expect-error property does exist
+        // @ts-expect-error property does exist om Intl class
         trailingZeroDisplay: 'stripIfInteger',
     }).format(amount)
 }

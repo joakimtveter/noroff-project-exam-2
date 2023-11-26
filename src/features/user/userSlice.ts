@@ -25,7 +25,6 @@ function saveState(state: UserState): void {
         const serializedState = JSON.stringify(state)
         localStorage.setItem('user', serializedState)
     } catch (error) {
-        // ignore write errors
         console.error(error)
     }
 }
@@ -34,7 +33,6 @@ function deleteState(): void {
     try {
         localStorage.removeItem('user')
     } catch (error) {
-        // ignore write errors
         console.error(error)
     }
 }
@@ -67,7 +65,6 @@ export const userSlice = createSlice({
     },
 })
 
-// Action creators are generated for each case reducer function
 export const { logIn, logOut, updateAvatar, becomeVenueManager } = userSlice.actions
 
 export default userSlice.reducer
