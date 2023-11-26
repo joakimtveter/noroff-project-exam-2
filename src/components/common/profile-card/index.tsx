@@ -23,7 +23,7 @@ export default function ProfileCard(props: ProfileCardProps): ReactElement {
     }
 
     return (
-        <Card sx={{ maxWidth: 500, marginBlock: 3 }}>
+        <Card sx={{ maxWidth: 600, marginBlock: 3 }}>
             <CardActionArea onClick={handleClick}>
                 <CardHeader
                     avatar={

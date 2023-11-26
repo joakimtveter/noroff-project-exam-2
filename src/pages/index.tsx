@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom'
 
 import { Box, Button, CircularProgress, Grid, Stack, Typography } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
+import { useGetTrendingVenuesQuery } from '@/services/holidaze'
 
 import VenueCard from '@/components/venue/venue-card'
+import SearchBox from '@/components/common/search'
 
-import { useGetTrendingVenuesQuery } from '@/services/holidaze'
 import image from '@/assets/photo-1602002418816-5c0aeef426aa.webp'
 
 export default function HomePage(): ReactElement {
@@ -35,6 +36,7 @@ export default function HomePage(): ReactElement {
                 <img src={image} alt='A nice white beach with two sunbeds and palmtrees. The skye is blue, and the water is nice and clear' style={{objectFit: 'cover', height: '100%'}} />
             </Grid>
         </Grid>
+        <SearchBox />
             {error != null ? (
                 <p>Oh no, there was an error</p>
             ) : isLoading ? (

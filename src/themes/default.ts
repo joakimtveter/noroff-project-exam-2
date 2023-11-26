@@ -9,7 +9,7 @@ const defaultTheme = createTheme({
             dark: '#E70D57',
         },
         secondary: {
-            light: '#07F01D',
+            light: '#CAFCCE',
             main: '#25842E',
             dark: '#1C6423',
         },
