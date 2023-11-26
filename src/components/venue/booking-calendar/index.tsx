@@ -44,7 +44,7 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
     }
 
     return (
-        <Box sx={{ marginBlock: 4 }}>
+        <Box sx={{ marginBlock: 4, marginInline: 'auto', width: 'max-content' }}>
             <RangeCalendar
                 isReadOnly={!enableBooking}
                 aria-label="Trip dates"
@@ -94,7 +94,7 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
                     </MuiButton>
                 </Stack>
             ) : (
-                <Typography component="p" variant="h6" textAlign="center" marginBlock={2}>
+                <Typography component="p" variant="body1" textAlign="center" marginBlock={2} width={'100%'}>
                     {' '}
                     You must be logged in to book this venue.
                 </Typography>

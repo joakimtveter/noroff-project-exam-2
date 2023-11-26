@@ -1,115 +1,299 @@
-import { ReactElement } from 'react'
-import { Control, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form'
-import { Box, Button, Paper, Stack, Typography } from '@mui/material'
+import { ReactElement, useEffect } from 'react'
+import { SubmitHandler, set, useFieldArray, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from "zod";
 
-import CustomTextField from '@/components/forms/form-components/text-field'
-import CustomNumberField from '@/components/forms/form-components/number-field'
-import MediaFields from '@/components/forms/form-components/media'
-import CustomRating from '@/components/forms/form-components/rating'
-import CustomSwitch from '@/components/forms/form-components/switch'
+import { Box, Button, FormControlLabel, IconButton, InputAdornment, Paper, Rating, Stack, Switch, TextField, Typography } from '@mui/material'
 
-import EuroIcon from '@mui/icons-material/Euro'
 import PeopleIcon from '@mui/icons-material/People'
 import AddLocationIcon from '@mui/icons-material/AddLocation'
+import ClearIcon from '@mui/icons-material/Clear';
 
-import { FormValues } from '@/pages/venues/AddVenuePage.tsx'
+
+const schema = z.object({
+    name: z.string().min(1, { message: "Name is required" })
+        .max(255, { message: "Name can't be longer than 255 characters" }),
+    description: z.string().min(1, { message: "Description is required" }),
+    media: z.array(z.string().url({message: "Must be a valid URL"})),   
+    price: z.number().min(1, { message: "Price is required" }),
+    maxGuests: z.number().min(1, { message: "Maximum number of guests is required" }).max(100, { message: "Maximum number of guests can't be more than 100" }),
+    rating: z.number().min(0, { message: "Rating is required" }).max(5, { message: "Rating can't be more than 5" }),
+    meta: z.object({
+        wifi: z.boolean(),
+        parking: z.boolean(),
+        breakfast: z.boolean(),
+        pets: z.boolean(),
+    }),
+    location: z.object({
+        address: z.string().min(1, { message: "Address is required" }),
+        city: z.string().min(1, { message: "City is required" }),
+        zip: z.string().min(1, { message: "Zip is required" }),
+        country: z.string().min(1, { message: "Country is required" }),
+        continent: z.string().min(1, { message: "Continent is required" }),
+        lat: z.number().min(-90, { message: "Latitude can't be less than -90" }).max(90, { message: "Latitude can't be more than 90" }),
+        lng: z.number().min(-180, { message: "Longitude can't be less than -180" }).max(180, { message: "Longitude can't be more than 180" }),
+    }),
+})
+
+export type VenueFormSchema = z.infer<typeof schema>;
+type VenueFormSchemaKeys = keyof VenueFormSchema;
+
 
 interface VenueFormProps {
-    onSubmit: (e: FormValues) => void
-    handleSubmit: UseFormHandleSubmit<FormValues>
-    control: Control<FormValues>
-    register: UseFormRegister<FormValues>
-
-    submitText: string
+    onSubmit: SubmitHandler<VenueFormSchema>
+    submitButtonText: string
+    defaultValues?: VenueFormSchema
+    // isLoading?: boolean
 }
 
 export default function VenueForm(props: VenueFormProps): ReactElement {
-    const { submitText, control, handleSubmit, onSubmit, register } = props
+    const { submitButtonText, onSubmit, defaultValues } = props
+    const { register, handleSubmit, formState: { errors }, setValue, control, getValues, reset } = useForm<VenueFormSchema>({ resolver: zodResolver(schema) })
+    // @ts-expect-error - I don't know how to fix this, but it works.
+    const { fields, append, remove } = useFieldArray({ name: 'media', control: control })
+
+    const setNumberValue = (name: VenueFormSchemaKeys, value: string): void => {
+        const number = parseInt(value)
+        setValue(name, isNaN(number) ? 0 : number)
+    }
+
+    const setRating = (value: number | null): void => {
+        if (value === null) {
+            setValue('rating', 0)
+        } else {
+            setValue('rating', value)
+        }
+    }
+
+    console.log('errors: ', errors)
+
+    useEffect(() => {
+        console.log('defaultValues: ', defaultValues)
+        reset(defaultValues)
+    } , [])
+
 
     return (
-        //
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ maxWidth: '600px' }}>
-            <CustomTextField control={control} name={'name'} label={'Name'} fullWidth={true} />
-            <CustomTextField control={control} name={'description'} label={'Description'} fullWidth={true} />
+            <TextField
+                autoComplete="username"
+                id="name"
+                label="Name"
+                margin='normal'
+                {...register("name")}
+                helperText={errors.name?.message}
+                error={!!errors.name}
+                fullWidth
+                required
+            />
+
+            <TextField
+                id="description"
+                label="Description"
+                margin='normal'
+                multiline={true}
+                {...register("description")}
+                helperText={errors.description?.message}
+                error={!!errors.description}
+                fullWidth
+                required
+            />
+
             <Stack sx={{ maxWidth: '250px' }}>
-                <CustomNumberField control={control} name={'price'} label={'Price per night'} icon={<EuroIcon />} />
-                <CustomNumberField
-                    control={control}
-                    name={'maxGuests'}
-                    label={'Maximum number of guest'}
-                    icon={<PeopleIcon />}
+                <TextField
+                    id='price'
+                    label='Price per night'
+                    variant='outlined'
+                    margin='normal'
+                    inputProps={{ inputMode: 'numeric', style: { textAlign: 'end' } }}
+                    InputProps={{
+                        startAdornment: <InputAdornment position="start">kr</InputAdornment>,
+                    }}
+                    {...register("price", { valueAsNumber: true })}
+                    onChange={(event) => setNumberValue('price',event.target.value)}
+                    helperText={errors.price?.message}
+                    error={!!errors.price}
+                    fullWidth
+                />
+                <TextField
+                    id='maxGuests'
+                    label='Maximum number of guest'
+                    type='number'
+                    variant='outlined'
+                    margin='normal'
+                    inputProps={{ inputMode: 'numeric', style: { textAlign: 'end' } }}
+                    InputProps={{
+                        startAdornment: <InputAdornment position="start"><PeopleIcon /></InputAdornment>,
+                    }}
+                    {...register("maxGuests", { valueAsNumber: true })}
+                    onChange={(event) => setNumberValue('maxGuests',event.target.value)}
+                    helperText={errors.maxGuests?.message}
+                    error={!!errors.maxGuests}
+                    fullWidth
                 />
             </Stack>
-            <MediaFields control={control} register={register} />
-            <CustomRating control={control} name={'rating'} label={'Rating'} />
+
+            <Box sx={{ marginBlock: 2 }}>
+                {fields.map((field, index: number) => (
+                    <Stack key={field.id} direction="row">
+                        <TextField
+                            key={field.id}
+                            label={`Image ${index + 1}`}
+                            type="url"
+                            variant='outlined'
+                            margin='normal'
+                            {...register(`media.${index}` as const)}
+                            fullWidth
+                            error={!!errors.media?.[index]}
+                            helperText={errors.media?.[index]?.message}
+                        />
+                        <IconButton
+                            onClick={(): void => {
+                                remove(index)
+                            }}
+                        >
+                            <ClearIcon color="error" />
+                        </IconButton>
+                    </Stack>
+                ))}
+                <Button
+                    variant="outlined"
+                    type="button"
+                    onClick={() => {
+                        append(' ')
+                    }}
+                >
+                    Add Image
+                </Button>
+            </Box>
+
+            <Box>
+                <Typography component="legend">{'Rating'}</Typography>
+                <input type="hidden" {...register('rating', { valueAsNumber: true })} />
+                <Rating 
+                    size={'large'}
+                    precision={1}
+                    max={5}
+                    onChange={(_event, value) => setRating(value)} 
+                    sx={{ color: 'primary.main' }}
+                />
+            </Box>
             <Stack sx={{ maxWidth: '400px', marginBlock: 4 }}>
                 <Paper sx={{ padding: 4 }}>
                     <Typography component="legend" variant="h4">
                         Meta
                     </Typography>
-                    <CustomSwitch control={control} name={'wifi'} label={'Wifi available'} />
-                    <CustomSwitch control={control} name={'parking'} label={'Parking available'} />
-                    <CustomSwitch control={control} name={'breakfast'} label={'Breakfast included'} />
-                    <CustomSwitch control={control} name={'pets'} label={'Pets Allowed'} />
+                    <FormControlLabel
+                        control={<Switch {...register("meta.wifi")} sx={{ marginLeft: 5 }} />}
+                        label={'Wifi available'}
+                        labelPlacement="start"
+                        sx={{ width: '100%', justifyContent: 'space-between' }}
+                    />
+                    <FormControlLabel
+                        control={<Switch {...register("meta.parking")} sx={{ marginLeft: 5 }} />}
+                        label={'Parking available'}
+                        labelPlacement="start"
+                        sx={{ width: '100%', justifyContent: 'space-between' }}
+                    />
+                    <FormControlLabel
+                        control={<Switch {...register("meta.breakfast")} sx={{ marginLeft: 5 }} />}
+                        label={'Breakfast included'}
+                        labelPlacement="start"
+                        sx={{ width: '100%', justifyContent: 'space-between' }}
+                    />
+                    <FormControlLabel
+                        control={<Switch {...register("meta.pets")} sx={{ marginLeft: 5 }} />}
+                        label={'Pets Allowed'}
+                        labelPlacement="start"
+                        sx={{ width: '100%', justifyContent: 'space-between' }}
+                    />
                 </Paper>
             </Stack>
             <Typography component="h2" variant="h4">
                 Location
             </Typography>
-            <CustomTextField
-                control={control}
-                name={'address'}
-                label={'Address'}
-                fullWidth={true}
-                autoComplete={'street-address'}
+            <TextField
+                id="address"
+                label="Address"
+                {...register("location.address")}
+                margin='normal'
+                helperText={errors.location?.address?.message}
+                error={!!errors.location?.address}
+                fullWidth
+                required
             />
-            <CustomTextField
-                control={control}
-                name={'zip'}
-                label={'Zip Code'}
-                fullWidth={true}
-                autoComplete={'postal-code'}
+            <TextField
+                id="zip"
+                label="Zip Code"
+                margin='normal'
+                {...register("location.zip")}
+                helperText={errors.location?.zip?.message}
+                error={!!errors.location?.zip}
+                fullWidth
+                required
             />
-            <CustomTextField
-                control={control}
-                name={'city'}
-                label={'City'}
-                fullWidth={true}
-                autoComplete={'address-level1'}
+            <TextField
+                id="city"
+                label="City"
+                margin='normal'
+                autoComplete='address-level1'
+                {...register("location.city")}
+                helperText={errors.location?.city?.message}
+                error={!!errors.location?.city}
+                fullWidth
+                required
             />
-            <CustomTextField
-                control={control}
-                name={'country'}
-                label={'Country'}
-                fullWidth={true}
-                autoComplete={'country-name'}
+            <TextField
+                id="country"
+                label="Country"
+                margin='normal'
+                autoComplete='country-name'
+                {...register("location.country")}
+                helperText={errors.location?.country?.message}
+                error={!!errors.location?.country}
+                fullWidth
+                required
             />
-            <CustomTextField
-                control={control}
-                name={'continent'}
-                label={'Continent'}
-                fullWidth={true}
-                autoComplete={'on'}
-            />
-            <CustomNumberField
-                control={control}
-                name={'lat'}
-                label={'Latitude'}
-                fullWidth={true}
-                position={true}
-                icon={<AddLocationIcon />}
-            />
-            <CustomNumberField
-                control={control}
-                name={'lng'}
-                label={'Longitude'}
-                fullWidth={true}
-                position={true}
-                icon={<AddLocationIcon />}
-            />
-
+            <TextField
+                id="continent"
+                label="Continent"
+                margin='normal'
+                {...register("location.continent")}
+                helperText={errors.location?.continent?.message}
+                error={!!errors.location?.continent}
+                fullWidth
+                required
+            />       
+            <TextField
+                id="lat"
+                label="Latitude"
+                margin='normal'
+                inputProps={{ inputMode: 'numeric', style: { textAlign: 'end' } }}
+                InputProps={{
+                    startAdornment: <InputAdornment position="start">{<AddLocationIcon />}</InputAdornment>,
+                }}
+                {...register("location.lat", { valueAsNumber: true })}
+                helperText={errors.location?.lat?.message}
+                error={!!errors.location?.lat}
+                fullWidth
+                required
+            />       
+            <TextField
+                id="lng"
+                label="Longitude"
+                margin='normal'
+                inputProps={{ inputMode: 'numeric', style: { textAlign: 'end' } }}
+                InputProps={{
+                    startAdornment: <InputAdornment position="start">{<AddLocationIcon />}</InputAdornment>,
+                }}
+                {...register("location.lng", { valueAsNumber: true })}
+                helperText={errors.location?.lng?.message}
+                error={!!errors.location?.lng}
+                fullWidth
+                required
+            /> 
             <Button type="submit" variant="contained" sx={{ marginBlock: 3 }}>
-                {submitText}
+                {submitButtonText}
             </Button>
         </Box>
     )

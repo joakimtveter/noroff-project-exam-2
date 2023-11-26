@@ -12,21 +12,20 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Box, Button, Link, TextField, Typography } from '@mui/material'
 
+const schema = z.object({
+    email: z.string().min(1, { message: "Email is required" }).email({message: "Must be a valid email" }),
+    password: z.string().min(8, { message: "Password is not valid format" }),
+})
+
+type SigninFormSchema = z.infer<typeof schema>;
 
 export default function LoginForm(): ReactElement {
     const dispatch = useDispatch()
     const [login] = useLoginMutation()
+    const { register, handleSubmit, formState: { errors } } = useForm<SigninFormSchema>({ resolver: zodResolver(schema) });
     const navigate = useNavigate()
 
-    const schema = z.object({
-        email: z.string().min(1, { message: "Email is required" }).email({message: "Must be a valid email" }),
-        password: z.string().min(8, { message: "Password is not valid format" }),
-      })
-      type SigninFormSchema = z.infer<typeof schema>;
-
-      const { register, handleSubmit, formState: { errors } } = useForm<SigninFormSchema>({ resolver: zodResolver(schema) });
-
-      const onSubmit: SubmitHandler<SigninFormSchema> = async (data): Promise<void> => {
+    const onSubmit: SubmitHandler<SigninFormSchema> = async (data): Promise<void> => {
         try {
             const response = await login(data)
             if ('data' in response) {

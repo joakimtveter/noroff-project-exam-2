@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@/store.ts'
 import { useGetVenueByIdQuery } from '@/services/holidaze'
 
-import { Box, CircularProgress, Grid, Paper, Typography } from '@mui/material'
+import { Box, CircularProgress, Container, Grid, Icon, IconButton, Paper, Tooltip, Typography } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { I18nProvider } from 'react-aria'
 
@@ -15,6 +15,7 @@ import VenueInfo from '@/components/venue/venue-info'
 import VenueBookingList from '@/components/venue/venue-booking-list'
 import formatCurrency from '@/utils/formatCurrency'
 import VenueMap from '@/components/venue/map'
+import EditIcon from '@mui/icons-material/Edit'
 
 export default function SingleVenuePage(): ReactElement {
     const { venueId } = useParams()
@@ -42,13 +43,16 @@ export default function SingleVenuePage(): ReactElement {
             ) : isLoading ? (
                 <CircularProgress />
             ) : data != null ? (
-                <Grid container spacing={2} mt={2}>
-                    <Grid item xs={12} md={6}>
-                        <VenueGallery images={data.media} />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <Typography component="h1" variant="h2" sx={{ marginBlockEnd: 4 }}>
+                <Container maxWidth="md">
+                    <Box component='hgroup' sx={{marginBlock: 2}}>
+                        <Typography component="h1" variant="h2">
                             {data.name}
+                            {isOwnVenue && 
+                            <Tooltip title="Edit venue">
+                                <IconButton aria-label="edit venue" href={`/venues/edit/${data.id}/`}>
+                                    <EditIcon color='primary'/>
+                                </IconButton>
+                            </Tooltip>}
                         </Typography>
                         <VenueInfo
                             wifi={data.meta.wifi}
@@ -57,8 +61,10 @@ export default function SingleVenuePage(): ReactElement {
                             breakfast={data.meta.breakfast}
                             parking={data.meta.parking}
                             maxGuests={data.maxGuests}
-                        />
-                        <Typography component="p" variant="subtitle1" mb={2}>
+                            />
+                    </Box>
+                    <VenueGallery images={data.media} />
+                        <Typography component="p" variant="subtitle1" mb={2} fontSize={'120%'}>
                             {data.description}
                         </Typography>
                         <Typography component="p" variant="h4" color="primary">
@@ -67,11 +73,16 @@ export default function SingleVenuePage(): ReactElement {
                             </Box>
                             {formatCurrency(data.price)} per night
                         </Typography>
-                        <ProfileCard name={data.owner.name} avatar={data.owner.avatar} email={data.owner.email} />
-                        <Paper elevation={2} sx={{ padding: 2, maxWidth: '500px', marginBlock: 2 }}>
+                        <Box component="section" sx={{ marginBlock: 2 }}>
                             <Typography component="h2" variant="h5">
-                                Amenities
+                                Host
                             </Typography>
+                            <ProfileCard name={data.owner.name} avatar={data.owner.avatar} email={data.owner.email} />
+                        </Box>
+                        <Typography component="h2" variant="h5">
+                            Amenities
+                        </Typography>
+                        <Paper elevation={2} sx={{ padding: 2, maxWidth: '700px', marginBlock: 2 }}>
                             <Typography>
                                 <Box component="span" sx={{ fontWeight: 600 }}>
                                     {'Maximum Guests: '}
@@ -102,42 +113,60 @@ export default function SingleVenuePage(): ReactElement {
                                 </Box>
                                 {data.meta.breakfast ? 'Yes' : 'No'}
                             </Typography>
+
                         </Paper>
-                        <Paper elevation={2} sx={{ padding: 2, maxWidth: '500px', marginBlock: 2 }}>
-                            <Typography component="h2" variant="h5">
+
+
+                        <Paper component='section' elevation={2} sx={{ padding: 2, marginBlock: 2 }}>
+                            <Typography component="h2" variant="h5" marginBlockEnd={2}>
                                 Location
                             </Typography>
-                            <Typography component="address">
-                                {data.location.address}
-                                <br />
-                                {data.location.zip + ' ' + data.location.city}
-                                <br />
-                                {data.location.country + ', ' + data.location.continent}
-                            </Typography>
+                            <Grid container spacing={2}>
+                                {isValidCoords && 
+                                    <Grid item xs={12} md={8}>
+                                        <VenueMap lat={data.location.lat} lng={data.location.lng} />
+                                    </Grid>
+                                }
+                                <Grid item xs={12} md={isValidCoords ? 4 : 12}>
+                                    <Typography component="address">
+                                        {data.location.address}
+                                        <br />
+                                        {data.location.zip + ' ' + data.location.city}
+                                        <br />
+                                        {data.location.country + ', ' + data.location.continent}
+                                    </Typography>
+                                { isValidCoords && 
+                                    <Box>
+                                        <Typography component="p">
+                                                Latitude: {data.location.lat}
+                                        </Typography>
+                                        <Typography component="p">
+                                            Longitude: {data.location.lng}
+                                        </Typography>
+                                    </Box>
+                                }
+                                </Grid>
+                            </Grid>
                         </Paper>
-                        <Box sx={{ marginBlock: 2 }}>
-                            {data.location.lat != null &&
-                            data.location.lat !== 0 &&
-                            data.location.lng != null &&
-                            data.location.lng !== 0 ? (
-                                <Typography component="p">
-                                    Latitude: {data.location.lat} Longitude: {data.location.lng}
-                                </Typography>
-                            ) : null}
+                        <Paper component='section' elevation={2} sx={{ padding: 2, marginBlock: 2 }}>
+                            <I18nProvider locale="en-NO">
+                                <BookingCalendar
+                                    bookings={data.bookings}
+                                    maxGuests={data.maxGuests}
+                                    venueId={data.id}
+                                    enableBooking={isLoggedIn}
+                                    />
+                            </I18nProvider>
+                        </Paper>
+
+                    {isOwnVenue && 
+                        <Box component='section'>
+                            <VenueBookingList bookings={data.bookings} />
                         </Box>
-                        <I18nProvider locale="en-NO">
-                            <BookingCalendar
-                                bookings={data.bookings}
-                                maxGuests={data.maxGuests}
-                                venueId={data.id}
-                                enableBooking={isLoggedIn}
-                            />
-                        </I18nProvider>
-                        {isOwnVenue && <VenueBookingList bookings={data.bookings} />}
-                        {isValidCoords && <VenueMap lat={data.location.lat} lng={data.location.lng} />}
-                    </Grid>
-                </Grid>
-            ) : null}
-        </>
+                    }
+                </Container>
+                ) : null}
+
+    </>
     )
 }

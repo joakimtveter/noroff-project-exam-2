@@ -18,36 +18,38 @@ export default function VenueInfo(props: VenueInfoProps): ReactElement {
     const { wifi, pets, breakfast, parking, maxGuests, rating } = props
     const theme = useTheme()
     return (
-        <Stack spacing={3} direction={'row'} alignItems={'center'} paddingBlock={2} marginBlock={2}>
+        <Stack spacing={3} direction={{xs: 'column', md: 'row'}} alignItems={'center'} paddingBlock={2} marginBlockEnd={1}>
             <Stack spacing={1} direction={'row'} alignItems="center">
                 <Rating size="large" value={rating} readOnly style={{ color: theme.palette.primary.main }} />
                 <Typography>{rating}</Typography>
             </Stack>
-            <Tooltip title={`Maximum ${maxGuests} guests`}>
-                <Badge badgeContent={maxGuests} color="primary">
-                    <PeopleOutlinedIcon />
-                </Badge>
-            </Tooltip>
-            {wifi && (
-                <Tooltip title={'Has Wifi'}>
-                    <WifiOutlinedIcon />
+            <Stack spacing={3} direction={'row'}>
+                <Tooltip title={`Maximum ${maxGuests} guests`}>
+                    <Badge badgeContent={maxGuests} color="primary">
+                        <PeopleOutlinedIcon />
+                    </Badge>
                 </Tooltip>
-            )}
-            {pets && (
-                <Tooltip title={'Pets allowed'}>
-                    <PetsOutlinedIcon />
-                </Tooltip>
-            )}
-            {parking && (
-                <Tooltip title={'Parking available'}>
-                    <LocalParkingOutlinedIcon />
-                </Tooltip>
-            )}
-            {breakfast && (
-                <Tooltip title={'Breakfast included'}>
-                    <BakeryDiningOutlinedIcon />
-                </Tooltip>
-            )}
+                {wifi && (
+                    <Tooltip title={'Has Wifi'}>
+                        <WifiOutlinedIcon />
+                    </Tooltip>
+                )}
+                {pets && (
+                    <Tooltip title={'Pets allowed'}>
+                        <PetsOutlinedIcon />
+                    </Tooltip>
+                )}
+                {parking && (
+                    <Tooltip title={'Parking available'}>
+                        <LocalParkingOutlinedIcon />
+                    </Tooltip>
+                )}
+                {breakfast && (
+                    <Tooltip title={'Breakfast included'}>
+                        <BakeryDiningOutlinedIcon />
+                    </Tooltip>
+                )}
+            </Stack>
         </Stack>
     )
 }

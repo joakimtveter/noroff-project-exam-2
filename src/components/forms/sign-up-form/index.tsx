@@ -8,21 +8,20 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+const namePattern = /^[\w]+$/;
+const schema = z.object({
+name: z.string().min(1, { message: "Name is required" })
+    .max(20, { message: "Name can't be longer than 20 characters" })
+    .refine((value) => namePattern.test(value), {message: 'Name can only contain letters, numbers, and undercores (_)'}),
+email: z.string().min(1, { message: "Email is required" }).email({message: "Must be a valid email" }),
+password: z.string().min(8, { message: "Password must be atleast 8 characters" }),
+})
+
+type RegisterFormSchema = z.infer<typeof schema>;
+
 export default function SignUpForm(): ReactElement {
     const [registerProfile] = useRegisterProfileMutation()
     const navigate = useNavigate()
-    
-    const namePattern = /^[\w]+$/;
-    const schema = z.object({
-    name: z.string().min(1, { message: "Name is required" })
-        .max(20, { message: "Name can't be longer than 20 characters" })
-        .refine((value) => namePattern.test(value), {message: 'Name can only contain letters, numbers, and undercores (_)'}),
-    email: z.string().min(1, { message: "Email is required" }).email({message: "Must be a valid email" }),
-    password: z.string().min(8, { message: "Password must be atleast 8 characters" }),
-  })
-    
-    type RegisterFormSchema = z.infer<typeof schema>;
-
     const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormSchema>({ resolver: zodResolver(schema) });
 
     const onSubmit: SubmitHandler<RegisterFormSchema> = async (data): Promise<void> => {

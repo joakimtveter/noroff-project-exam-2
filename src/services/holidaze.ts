@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
 import { RootState } from '@/store'
 import {
     UserObject,
@@ -9,8 +8,9 @@ import {
     RegisterUserObject,
     LoginResponse,
 } from '@/types/user'
-import { CreateVenue, UpdateVenue, Venue, VenueDetailed } from '@/types/venue'
+import { Venue, VenueDetailed } from '@/types/venue'
 import { BookingDetailed, BookingWithVenue, CreateBooking, UpdateBooking } from '@/types/booking'
+import { VenueFormSchema } from '@/components/forms/venue-form'
 
 export const holidazeApi = createApi({
     reducerPath: 'holidazeApi',
@@ -31,7 +31,7 @@ export const holidazeApi = createApi({
             providesTags: ['VenueList'],
         }),
         getTrendingVenues: builder.query<Venue[], void>({
-            query: () => 'venues?sort=price&offset=5&limit=3',
+            query: () => 'venues?sort=created&sortOrder=asc&offset=5&limit=3',
         }),
         getVenueById: builder.query<VenueDetailed, string>({
             query: (id) => `venues/${id}?_owner=true&_bookings=true`,
@@ -78,7 +78,7 @@ export const holidazeApi = createApi({
             }),
             invalidatesTags: ['OwnProfile'],
         }),
-        createVenue: builder.mutation<Venue, CreateVenue>({
+        createVenue: builder.mutation<Venue, VenueFormSchema>({
             query: (body) => ({
                 url: 'venues',
                 method: 'POST',
@@ -86,7 +86,7 @@ export const holidazeApi = createApi({
             }),
             invalidatesTags: ['VenueList'],
         }),
-        updateVenue: builder.mutation<Venue, UpdateVenue>({
+        updateVenue: builder.mutation<Venue, {venueId: string, body: VenueFormSchema}>({
             query: ({ venueId, body }) => ({
                 url: `venues/${venueId}`,
                 method: 'PUT',
