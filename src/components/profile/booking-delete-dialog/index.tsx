@@ -1,7 +1,5 @@
-import { DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material"
-import { ReactElement } from "react"
-import { Dialog, Button } from "react-aria-components"
-
+import { ReactElement } from 'react'
+import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material'
 
 interface BookingDeleteDialogProps {
     handleClose: () => void
@@ -16,9 +14,7 @@ export default function BookingDeleteDialog(props: BookingDeleteDialogProps): Re
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Delete Booking</DialogTitle>
             <DialogContent>
-                <DialogContentText>
-                    Are you sure you want to delete this booking?
-                </DialogContentText>
+                <DialogContentText>Are you sure you want to delete this booking?</DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>

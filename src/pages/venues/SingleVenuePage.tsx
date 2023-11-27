@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@/store.ts'
 import { useGetVenueByIdQuery } from '@/services/holidaze'
 
-import { Box, CircularProgress, Container, Grid, Icon, IconButton, Paper, Tooltip, Typography } from '@mui/material'
+import { Box, CircularProgress, Container, Grid, IconButton, Paper, Tooltip, Typography } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { I18nProvider } from 'react-aria'
 

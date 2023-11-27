@@ -1,5 +1,5 @@
 import { ReactElement, useState } from 'react'
-import { useDeleteBookingMutation } from '@/services/holidaze.ts'
+// import { useDeleteBookingMutation } from '@/services/holidaze.ts'
 
 import { Avatar, Box, Button, IconButton, List, ListItem, ListItemAvatar, ListItemText, Tooltip } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -18,7 +18,7 @@ export default function BookingList(props: BookingListProps): ReactElement {
     const { bookings } = props
     const [dialogOpen, setDialogOpen] = useState(false)
     const [bookingOpen, setBookingOpen] = useState(false)
-    const [deleteBooking] = useDeleteBookingMutation()
+    // const [deleteBooking] = useDeleteBookingMutation()
 
     const handleClose = (): void => {
         setDialogOpen(false)

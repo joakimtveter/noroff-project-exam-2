@@ -26,6 +26,15 @@
 [ ] A repository link
 [ ] A hosted application demo link
 
+## TODOs
+
+[ ] - Fix edit venue data loading (rating and meta does not show correct value)
+[ ] - Fix delete booking
+[ ] - Custom Hook for fetching all the venues
+[ ] - Validation of booking guest number
+[ ] - Booking list on venue sort.
+[ ] - Venueform cancel button
+
 ## Tasks
 
 1. design header
