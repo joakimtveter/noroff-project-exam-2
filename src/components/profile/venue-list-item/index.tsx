@@ -44,7 +44,7 @@ export default function VenueListItem(props: VenueCardProps): ReactElement {
     return (
         <ListItem
             key={id}
-            sx={{ maxWidth: '700px' }}
+            sx={{ maxWidth: '675px' }}
             divider={true}
             secondaryAction={
                 <Box>
@@ -55,6 +55,7 @@ export default function VenueListItem(props: VenueCardProps): ReactElement {
                     </Tooltip>
                     <Button
                         variant="outlined"
+                        color="secondary"
                         component={Link}
                         to={`/venues/${id}`}
                         aria-label={`View and administer ${name} venue`}
