@@ -1,5 +1,7 @@
-import { ReactElement, useEffect } from 'react'
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
+import { ReactElement, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useDeleteVenueMutation } from '@/services/holidaze.ts'
+import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -9,7 +11,6 @@ import {
     FormControlLabel,
     IconButton,
     InputAdornment,
-    Paper,
     Rating,
     Stack,
     Switch,
@@ -20,6 +21,8 @@ import {
 import PeopleIcon from '@mui/icons-material/People'
 import AddLocationIcon from '@mui/icons-material/AddLocation'
 import ClearIcon from '@mui/icons-material/Clear'
+import AlertDialog from '@/components/common/dialog'
+import { toast } from 'react-toastify'
 
 const schema = z.object({
     name: z
@@ -27,7 +30,7 @@ const schema = z.object({
         .min(1, { message: 'Name is required' })
         .max(255, { message: "Name can't be longer than 255 characters" }),
     description: z.string().min(1, { message: 'Description is required' }),
-    media: z.array(z.string().url({ message: 'Must be a valid URL' })),
+    media: z.array(z.string().url({ message: 'Must be a valid URL' })).optional(),
     price: z.number().min(1, { message: 'Price is required' }),
     maxGuests: z
         .number()
@@ -64,10 +67,12 @@ interface VenueFormProps {
     onSubmit: SubmitHandler<VenueFormSchema>
     submitButtonText: string
     defaultValues?: VenueFormSchema
+    enableDelete?: boolean
+    id?: string
 }
 
 export default function VenueForm(props: VenueFormProps): ReactElement {
-    const { submitButtonText, onSubmit, defaultValues } = props
+    const { submitButtonText, onSubmit, defaultValues, enableDelete = false, id } = props
     const {
         register,
         handleSubmit,
@@ -78,24 +83,36 @@ export default function VenueForm(props: VenueFormProps): ReactElement {
     } = useForm<VenueFormSchema>({ resolver: zodResolver(schema) })
     // @ts-expect-error - I don't know how to fix this, but it works.
     const { fields, append, remove } = useFieldArray({ name: 'media', control })
+    const [open, setOpen] = useState(false)
+    const [deleteVenue] = useDeleteVenueMutation()
+    const navigate = useNavigate()
+
+    const goBack = (): void => {
+        navigate(-1)
+    }
+
+    const handleOpen = (): void => {
+        setOpen(true)
+    }
+    const handleClose = (): void => {
+        setOpen(false)
+    }
+    const handleDelete = async (id: string): Promise<void> => {
+        if (id === '') {
+            toast.error('Failed to delete.')
+            return
+        }
+        await deleteVenue(id).unwrap()
+        setOpen(false)
+        navigate('/profile')
+    }
 
     const setNumberValue = (name: VenueFormSchemaKeys, value: string): void => {
         const number = parseInt(value)
         setValue(name, isNaN(number) ? 0 : number)
     }
 
-    const setRating = (value: number | null): void => {
-        if (value === null) {
-            setValue('rating', 0)
-        } else {
-            setValue('rating', value)
-        }
-    }
-
-    console.log('errors: ', errors)
-
     useEffect(() => {
-        console.log('defaultValues: ', defaultValues)
         reset(defaultValues)
     }, [])
 
@@ -201,49 +218,90 @@ export default function VenueForm(props: VenueFormProps): ReactElement {
                 </Button>
             </Box>
 
-            <Box>
+            <Box component="fieldset" sx={{ border: 'none' }}>
                 <Typography component="legend">{'Rating'}</Typography>
-                <input type="hidden" {...register('rating', { valueAsNumber: true })} />
-                <Rating
-                    size={'large'}
-                    precision={1}
-                    max={5}
-                    onChange={(_event, value) => {
-                        setRating(value)
-                    }}
-                    sx={{ color: 'primary.main' }}
+                <Controller
+                    name="rating"
+                    control={control}
+                    defaultValue={0}
+                    render={({ field }) => (
+                        <Rating
+                            {...field}
+                            size={'large'}
+                            sx={{ color: 'primary.main' }}
+                            onChange={(_e, value) => {
+                                field.onChange(value ?? 0)
+                            }}
+                        />
+                    )}
                 />
             </Box>
             <Stack sx={{ maxWidth: '400px', marginBlock: 4 }}>
-                <Paper sx={{ padding: 4 }}>
+                <Box component="fieldset" sx={{ padding: 4 }}>
                     <Typography component="legend" variant="h4">
                         Meta
                     </Typography>
-                    <FormControlLabel
-                        control={<Switch {...register('meta.wifi')} sx={{ marginLeft: 5 }} />}
-                        label={'Wifi available'}
-                        labelPlacement="start"
-                        sx={{ width: '100%', justifyContent: 'space-between' }}
+                    <Controller
+                        name="meta.wifi"
+                        control={control}
+                        defaultValue={false}
+                        render={({ field }) => {
+                            return (
+                                <FormControlLabel
+                                    control={<Switch {...field} checked={field.value} sx={{ marginLeft: 5 }} />}
+                                    label={'Wifi available'}
+                                    labelPlacement="start"
+                                    sx={{ width: '100%', justifyContent: 'space-between' }}
+                                />
+                            )
+                        }}
                     />
-                    <FormControlLabel
-                        control={<Switch {...register('meta.parking')} sx={{ marginLeft: 5 }} />}
-                        label={'Parking available'}
-                        labelPlacement="start"
-                        sx={{ width: '100%', justifyContent: 'space-between' }}
+                    <Controller
+                        name="meta.parking"
+                        control={control}
+                        defaultValue={false}
+                        render={({ field }) => {
+                            return (
+                                <FormControlLabel
+                                    control={<Switch {...field} checked={field.value} sx={{ marginLeft: 5 }} />}
+                                    label={'Parking available'}
+                                    labelPlacement="start"
+                                    sx={{ width: '100%', justifyContent: 'space-between' }}
+                                />
+                            )
+                        }}
                     />
-                    <FormControlLabel
-                        control={<Switch {...register('meta.breakfast')} sx={{ marginLeft: 5 }} />}
-                        label={'Breakfast included'}
-                        labelPlacement="start"
-                        sx={{ width: '100%', justifyContent: 'space-between' }}
+                    <Controller
+                        name="meta.breakfast"
+                        control={control}
+                        defaultValue={false}
+                        render={({ field }) => {
+                            return (
+                                <FormControlLabel
+                                    control={<Switch {...field} checked={field.value} sx={{ marginLeft: 5 }} />}
+                                    label={'Breakfast included'}
+                                    labelPlacement="start"
+                                    sx={{ width: '100%', justifyContent: 'space-between' }}
+                                />
+                            )
+                        }}
                     />
-                    <FormControlLabel
-                        control={<Switch {...register('meta.pets')} sx={{ marginLeft: 5 }} />}
-                        label={'Pets Allowed'}
-                        labelPlacement="start"
-                        sx={{ width: '100%', justifyContent: 'space-between' }}
+                    <Controller
+                        name="meta.pets"
+                        control={control}
+                        defaultValue={false}
+                        render={({ field }) => {
+                            return (
+                                <FormControlLabel
+                                    control={<Switch {...field} checked={field.value} sx={{ marginLeft: 5 }} />}
+                                    label={'Pets allowed'}
+                                    labelPlacement="start"
+                                    sx={{ width: '100%', justifyContent: 'space-between' }}
+                                />
+                            )
+                        }}
                     />
-                </Paper>
+                </Box>
             </Stack>
             <Typography component="h2" variant="h4">
                 Location
@@ -330,6 +388,26 @@ export default function VenueForm(props: VenueFormProps): ReactElement {
             />
             <Button type="submit" variant="contained" sx={{ marginBlock: 3 }}>
                 {submitButtonText}
+            </Button>
+            {enableDelete && (
+                <>
+                    <Button color="error" variant="outlined" sx={{ marginInline: 2 }} onClick={handleOpen}>
+                        Delete venue
+                    </Button>
+                    <AlertDialog
+                        action={async () => {
+                            await handleDelete(id ?? '')
+                        }}
+                        handleClose={handleClose}
+                        open={open}
+                        primaryColor={'error'}
+                        text={`Are you sure you want to delete this venue ${defaultValues?.name}. This action can not be undone.`}
+                        title={`Delete venue ${defaultValues?.name}?`}
+                    />
+                </>
+            )}
+            <Button onClick={goBack} color="secondary">
+                Cancel
             </Button>
         </Box>
     )

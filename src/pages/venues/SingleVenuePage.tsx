@@ -20,12 +20,11 @@ import { Helmet } from 'react-helmet'
 
 export default function SingleVenuePage(): ReactElement {
     const { venueId } = useParams()
-    const { data, error, isLoading } = useGetVenueByIdQuery(venueId ?? '')
+    const { data, isError, error, isLoading } = useGetVenueByIdQuery(venueId ?? '')
     const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
     const userName = useSelector((state: RootState) => state.user.user.name)
     const isOwnVenue = userName === data?.owner.name
 
-    
     function validateCoords(lat: number | undefined, lng: number | undefined): boolean {
         if (lat === undefined || lng === undefined) return false
         if (lat === 0 && lng === 0) return false
@@ -35,11 +34,11 @@ export default function SingleVenuePage(): ReactElement {
     }
     const isValidCoords = validateCoords(data?.location.lat, data?.location.lng)
 
-    if (error != null) console.log(error)
+    if (error != null) console.error(error)
 
     return (
         <>
-            {error != null ? (
+            {isError ? (
                 <p>Oh no, there was an error</p>
             ) : isLoading ? (
                 <CircularProgress />
@@ -49,15 +48,16 @@ export default function SingleVenuePage(): ReactElement {
                         <title>{`${data.name} | Holidaze`}</title>
                         <meta name="description" content={data.description} />
                     </Helmet>
-                    <Box component='hgroup' sx={{marginBlock: 2}}>
+                    <Box component="hgroup" sx={{ marginBlock: 2 }}>
                         <Typography component="h1" variant="h2">
                             {data.name}
-                            {isOwnVenue && 
-                            <Tooltip title="Edit venue">
-                                <IconButton aria-label="edit venue" href={`/venues/edit/${data.id}/`}>
-                                    <EditIcon color='primary'/>
-                                </IconButton>
-                            </Tooltip>}
+                            {isOwnVenue && (
+                                <Tooltip title="Edit venue">
+                                    <IconButton aria-label="edit venue" href={`/venues/edit/${data.id}/`}>
+                                        <EditIcon color="primary" />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
                         </Typography>
                         <VenueInfo
                             wifi={data.meta.wifi}
@@ -66,112 +66,105 @@ export default function SingleVenuePage(): ReactElement {
                             breakfast={data.meta.breakfast}
                             parking={data.meta.parking}
                             maxGuests={data.maxGuests}
-                            />
+                        />
                     </Box>
                     <VenueGallery images={data.media} />
-                        <Typography component="p" variant="subtitle1" mb={2} fontSize={'120%'}>
-                            {data.description}
-                        </Typography>
-                        <Typography component="p" variant="h4" color="primary">
-                            <Box component="span" style={visuallyHidden}>
-                                Price:
-                            </Box>
-                            {formatCurrency(data.price)} per night
-                        </Typography>
-                        <Box component="section" sx={{ marginBlock: 2 }}>
-                            <Typography component="h2" variant="h5">
-                                Host
-                            </Typography>
-                            <ProfileCard name={data.owner.name} avatar={data.owner.avatar} email={data.owner.email} />
+                    <Typography component="p" variant="subtitle1" mb={2} fontSize={'120%'}>
+                        {data.description}
+                    </Typography>
+                    <Typography component="p" variant="h4" color="primary">
+                        <Box component="span" style={visuallyHidden}>
+                            Price:
                         </Box>
+                        {formatCurrency(data.price)} per night
+                    </Typography>
+                    <Box component="section" sx={{ marginBlock: 2 }}>
                         <Typography component="h2" variant="h5">
-                            Amenities
+                            Host
                         </Typography>
-                        <Paper elevation={2} sx={{ padding: 2, maxWidth: '700px', marginBlock: 2 }}>
-                            <Typography>
-                                <Box component="span" sx={{ fontWeight: 600 }}>
-                                    {'Maximum Guests: '}
-                                </Box>
-                                {data.maxGuests}
-                            </Typography>
-                            <Typography>
-                                <Box component="span" sx={{ fontWeight: 600 }}>
-                                    {'Wifi Available: '}
-                                </Box>
-                                {data.meta.wifi ? 'Yes' : 'No'}
-                            </Typography>
-                            <Typography>
-                                <Box component="span" sx={{ fontWeight: 600 }}>
-                                    {'Pets Allowed: '}
-                                </Box>
-                                {data.meta.pets ? 'Yes' : 'No'}
-                            </Typography>
-                            <Typography>
-                                <Box component="span" sx={{ fontWeight: 600 }}>
-                                    {'Parking Available: '}
-                                </Box>
-                                {data.meta.parking ? 'Yes' : 'No'}
-                            </Typography>
-                            <Typography>
-                                <Box component="span" sx={{ fontWeight: 600 }}>
-                                    {'Breakfast Included: '}
-                                </Box>
-                                {data.meta.breakfast ? 'Yes' : 'No'}
-                            </Typography>
+                        <ProfileCard name={data.owner.name} avatar={data.owner.avatar} email={data.owner.email} />
+                    </Box>
+                    <Typography component="h2" variant="h5">
+                        Amenities
+                    </Typography>
+                    <Paper elevation={2} sx={{ padding: 2, maxWidth: '700px', marginBlock: 2 }}>
+                        <Typography>
+                            <Box component="span" sx={{ fontWeight: 600 }}>
+                                {'Maximum Guests: '}
+                            </Box>
+                            {data.maxGuests}
+                        </Typography>
+                        <Typography>
+                            <Box component="span" sx={{ fontWeight: 600 }}>
+                                {'Wifi Available: '}
+                            </Box>
+                            {data.meta.wifi ? 'Yes' : 'No'}
+                        </Typography>
+                        <Typography>
+                            <Box component="span" sx={{ fontWeight: 600 }}>
+                                {'Pets Allowed: '}
+                            </Box>
+                            {data.meta.pets ? 'Yes' : 'No'}
+                        </Typography>
+                        <Typography>
+                            <Box component="span" sx={{ fontWeight: 600 }}>
+                                {'Parking Available: '}
+                            </Box>
+                            {data.meta.parking ? 'Yes' : 'No'}
+                        </Typography>
+                        <Typography>
+                            <Box component="span" sx={{ fontWeight: 600 }}>
+                                {'Breakfast Included: '}
+                            </Box>
+                            {data.meta.breakfast ? 'Yes' : 'No'}
+                        </Typography>
+                    </Paper>
 
-                        </Paper>
-
-
-                        <Paper component='section' elevation={2} sx={{ padding: 2, marginBlock: 2 }}>
-                            <Typography component="h2" variant="h5" marginBlockEnd={2}>
-                                Location
-                            </Typography>
-                            <Grid container spacing={2}>
-                                {isValidCoords && 
-                                    <Grid item xs={12} md={8}>
-                                        <VenueMap lat={data.location.lat} lng={data.location.lng} />
-                                    </Grid>
-                                }
-                                <Grid item xs={12} md={isValidCoords ? 4 : 12}>
-                                    <Typography component="address">
-                                        {data.location.address}
-                                        <br />
-                                        {data.location.zip + ' ' + data.location.city}
-                                        <br />
-                                        {data.location.country + ', ' + data.location.continent}
-                                    </Typography>
-                                { isValidCoords && 
-                                    <Box>
-                                        <Typography component="p">
-                                                Latitude: {data.location.lat}
-                                        </Typography>
-                                        <Typography component="p">
-                                            Longitude: {data.location.lng}
-                                        </Typography>
-                                    </Box>
-                                }
+                    <Paper component="section" elevation={2} sx={{ padding: 2, marginBlock: 2 }}>
+                        <Typography component="h2" variant="h5" marginBlockEnd={2}>
+                            Location
+                        </Typography>
+                        <Grid container spacing={2}>
+                            {isValidCoords && (
+                                <Grid item xs={12} md={8}>
+                                    <VenueMap lat={data.location.lat} lng={data.location.lng} />
                                 </Grid>
+                            )}
+                            <Grid item xs={12} md={isValidCoords ? 4 : 12}>
+                                <Typography component="address">
+                                    {data.location.address}
+                                    <br />
+                                    {data.location.zip + ' ' + data.location.city}
+                                    <br />
+                                    {data.location.country + ', ' + data.location.continent}
+                                </Typography>
+                                {isValidCoords && (
+                                    <Box>
+                                        <Typography component="p">Latitude: {data.location.lat}</Typography>
+                                        <Typography component="p">Longitude: {data.location.lng}</Typography>
+                                    </Box>
+                                )}
                             </Grid>
-                        </Paper>
-                        <Paper component='section' elevation={2} sx={{ padding: 2, marginBlock: 2 }}>
-                            <I18nProvider locale="en-NO">
-                                <BookingCalendar
-                                    bookings={data.bookings}
-                                    maxGuests={data.maxGuests}
-                                    venueId={data.id}
-                                    enableBooking={isLoggedIn}
-                                    />
-                            </I18nProvider>
-                        </Paper>
+                        </Grid>
+                    </Paper>
+                    <Paper component="section" elevation={2} sx={{ padding: 2, marginBlock: 2 }}>
+                        <I18nProvider locale="en-NO">
+                            <BookingCalendar
+                                bookings={data.bookings}
+                                maxGuests={data.maxGuests}
+                                venueId={data.id}
+                                enableBooking={isLoggedIn}
+                            />
+                        </I18nProvider>
+                    </Paper>
 
-                    {isOwnVenue && 
-                        <Box component='section'>
+                    {isOwnVenue && (
+                        <Box component="section">
                             <VenueBookingList bookings={data.bookings} />
                         </Box>
-                    }
+                    )}
                 </Container>
-                ) : null}
-
-    </>
+            ) : null}
+        </>
     )
 }
