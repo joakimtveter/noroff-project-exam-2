@@ -1,3 +1,3 @@
-export function dateToShortMonth(date: Date):String {
-    return new Intl.DateTimeFormat('en-US', {month: 'short'}).format(date)
+export function dateToShortMonth(date: Date): string {
+    return new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date)
 }
