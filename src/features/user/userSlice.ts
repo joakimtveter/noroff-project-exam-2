@@ -39,7 +39,7 @@ function deleteState(): void {
 
 export const userSlice = createSlice({
     name: 'counter',
-    initialState: loadState() || initialState,
+    initialState: loadState() ?? initialState,
     reducers: {
         logIn: (state, action: PayloadAction<LoginResponse>) => {
             state.isLoggedIn = true
