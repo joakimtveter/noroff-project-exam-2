@@ -64,22 +64,22 @@ export interface VenueWithBookings extends Venue {
 
 export interface VenueDetailed extends VenueWithOwner, VenueWithBookings {}
 
-export interface VenueFormTypes {
-    name: string
-    description: string
-    media: string[]
-    price: number
-    maxGuests: number
-    rating: 0 | 1 | 2 | 3 | 4 | 5
-    wifi: boolean
-    parking: boolean
-    breakfast: boolean
-    pets: boolean
-    address: string
-    city: string
-    zip: string
-    country: string
-    continent: string
-    lat: number
-    lng: number
-}
+// export interface VenueFormTypes {
+//     name: string
+//     description: string
+//     media: string[]
+//     price: number
+//     maxGuests: number
+//     rating: 0 | 1 | 2 | 3 | 4 | 5
+//     wifi: boolean
+//     parking: boolean
+//     breakfast: boolean
+//     pets: boolean
+//     address: string
+//     city: string
+//     zip: string
+//     country: string
+//     continent: string
+//     lat: number
+//     lng: number
+// }
