@@ -25,7 +25,7 @@ import VenueList from '@/components/venue/venue-list'
 import { Venue } from '@/types/venue.ts'
 
 export default function AllVenuesPage(): ReactElement {
-    const { data, error, isLoading } = useGetVenuesQuery()
+    const { data, isError, error, isLoading } = useGetVenuesQuery()
     const [searchParams, setSearchParams] = useSearchParams()
     const [expanded, setExpanded] = useState<boolean>(false)
     const theme = useTheme()
@@ -46,10 +46,12 @@ export default function AllVenuesPage(): ReactElement {
         return array.map((value) => parseInt(value))
     }
 
-    // Hardcoded value instead, due to a few very high-priced venues.
-    // const highPrice = data?.reduce((max, current): number => {
-    //         return current.price > max ? current.price : max
-    // }, data[0].price) ?? 1000000
+    const highPrice =
+        data?.reduce((max, current): number => {
+            return current.price > max ? current.price : max
+        }, data[0].price) ?? 10000
+
+    const sliderMaxValue = highPrice < 20000 ? highPrice : 20000
 
     const filterVenues = (venues: Venue[], params: URLSearchParams): Venue[] => {
         return venues
@@ -95,22 +97,30 @@ export default function AllVenuesPage(): ReactElement {
             })
     }
 
+    if (isError) console.error(error)
+
     return (
         <>
             <Typography component="h1" variant="h2" marginBlock={3}>
                 Find your perfect venue
             </Typography>
-            {error != null ? (
+            {isError ? (
                 <p>Oh no, there was an error</p>
             ) : isLoading ? (
                 <CircularProgress />
             ) : data != null ? (
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={3}>
-                        <Accordion sx={{ width: '100%', padding: 2 }} expanded={isLargeScreen ? true : expanded} onChange={() => setExpanded(!expanded)}>
+                        <Accordion
+                            sx={{ width: '100%', padding: 2 }}
+                            expanded={isLargeScreen ? true : expanded}
+                            onChange={() => {
+                                setExpanded(!expanded)
+                            }}
+                        >
                             <AccordionSummary expandIcon={isLargeScreen ? null : <ExpandMoreIcon />}>
                                 <FilterIcon />
-                                <Typography component="p" variant="h6">
+                                <Typography component="span" variant="h6">
                                     Filters
                                 </Typography>
                             </AccordionSummary>
@@ -181,11 +191,10 @@ export default function AllVenuesPage(): ReactElement {
                                     />
                                 </Box>
                                 <TextField
-                                    fullWidth={true}
                                     margin="normal"
                                     label={'Guests'}
                                     type={'number'}
-                                    inputProps={{ min: 1, max: 100, textAlign: 'end' }}
+                                    inputProps={{ min: 1, max: 100 }}
                                     value={searchParams.get('guests') === null ? 1 : Number(searchParams.get('guests'))}
                                     onChange={(e) => {
                                         setParams('guests', e.target.value)
@@ -196,7 +205,7 @@ export default function AllVenuesPage(): ReactElement {
                                     <Slider
                                         getAriaLabel={() => 'Price range'}
                                         min={1}
-                                        max={10000}
+                                        max={sliderMaxValue}
                                         value={sliderValues(searchParams.get('price'))}
                                         onChange={(_event, values): void => {
                                             if (Array.isArray(values)) {

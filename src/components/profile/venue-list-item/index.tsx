@@ -38,7 +38,6 @@ export default function VenueListItem(props: VenueCardProps): ReactElement {
     }
     const handleDelete = async (id: string): Promise<void> => {
         setOpen(false)
-        console.log('delete: ', id)
         await deleteVenue(id).unwrap()
     }
 

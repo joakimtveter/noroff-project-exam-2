@@ -1,5 +1,5 @@
 import { ReactElement, useState } from 'react'
-// import { useDeleteBookingMutation } from '@/services/holidaze.ts'
+import { useDeleteBookingMutation } from '@/services/holidaze.ts'
 
 import { Avatar, Box, Button, IconButton, List, ListItem, ListItemAvatar, ListItemText, Tooltip } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -9,6 +9,7 @@ import { dateToReadableFormat } from '@/utils/date/dateToReadableFormat.ts'
 import { BookingWithVenue } from '@/types/booking.ts'
 import AlertDialog from '@/components/common/dialog'
 import BookingDialog from '@/components/profile/booking-dialog'
+import { toast } from 'react-toastify'
 
 interface BookingListProps {
     bookings: BookingWithVenue[]
@@ -18,21 +19,19 @@ export default function BookingList(props: BookingListProps): ReactElement {
     const { bookings } = props
     const [dialogOpen, setDialogOpen] = useState(false)
     const [bookingOpen, setBookingOpen] = useState(false)
-    // const [deleteBooking] = useDeleteBookingMutation()
+    const [deleteBooking] = useDeleteBookingMutation()
 
     const handleClose = (): void => {
         setDialogOpen(false)
     }
 
     const handleDelete = async (id: string): Promise<void> => {
-        console.log('delete: ', id)
-        // TODO: Fix delete booking
-        // await deleteBooking(id)
+        await deleteBooking(id)
+        toast.info('Booking deleted')
         setDialogOpen(false)
     }
-    console.log(bookings)
     return (
-        <List dense={false} sx={{ maxWidth: '600px' }}>
+        <List dense={false} sx={{ maxWidth: '675px' }}>
             {bookings.map((booking) => {
                 const from = dateToReadableFormat(new Date(booking.dateFrom))
                 const to = dateToReadableFormat(new Date(booking.dateTo))
@@ -94,22 +93,22 @@ export default function BookingList(props: BookingListProps): ReactElement {
                             }`}
                             secondary={`${from} - ${to}`}
                         />
-            <AlertDialog
-                key={booking.id}
-                open={dialogOpen}
-                title={'Delete Booking'}
-                text={`Are you sure you want to delete this booking for ${booking.guests} people at ${
-                    booking.venue.name
-                } on ${new Date(booking.dateFrom).toLocaleDateString('en-US', {
-                    day: 'numeric',
-                    month: 'long',
-                })}.`}
-                handleClose={handleClose}
-                primaryColor={'error'}
-                action={async () => {
-                    await handleDelete(booking.id)
-                }}
-            />
+                        <AlertDialog
+                            key={booking.id}
+                            open={dialogOpen}
+                            title={'Delete Booking'}
+                            text={`Are you sure you want to delete this booking for ${booking.guests} people at ${
+                                booking.venue.name
+                            } on ${new Date(booking.dateFrom).toLocaleDateString('en-US', {
+                                day: 'numeric',
+                                month: 'long',
+                            })}.`}
+                            handleClose={handleClose}
+                            primaryColor={'error'}
+                            action={async () => {
+                                await handleDelete(booking.id)
+                            }}
+                        />
                     </ListItem>
                 )
             })}
