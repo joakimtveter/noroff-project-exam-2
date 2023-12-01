@@ -1,11 +1,13 @@
 import { ReactElement, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useDeleteVenueMutation } from '@/services/holidaze.ts'
+import { toast } from 'react-toastify'
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useDeleteVenueMutation } from '@/services/holidaze.ts'
 
 import {
+    Autocomplete,
     Box,
     Button,
     FormControlLabel,
@@ -22,7 +24,7 @@ import PeopleIcon from '@mui/icons-material/People'
 import AddLocationIcon from '@mui/icons-material/AddLocation'
 import ClearIcon from '@mui/icons-material/Clear'
 import AlertDialog from '@/components/common/dialog'
-import { toast } from 'react-toastify'
+import { countries, Country } from '@/utils/countries'
 
 const schema = z.object({
     name: z
@@ -84,6 +86,11 @@ export default function VenueForm(props: VenueFormProps): ReactElement {
     // @ts-expect-error - I don't know how to fix this, but it works.
     const { fields, append, remove } = useFieldArray({ name: 'media', control })
     const [open, setOpen] = useState(false)
+    const [localValue, setLocalValue] = useState<Country | null>(
+        countries?.find((country) => defaultValues?.location.country.toLowerCase() === country.Name.toLowerCase()) ??
+            null
+    )
+    const [inputValue, setInputValue] = useState(defaultValues?.location.country ?? '')
     const [deleteVenue] = useDeleteVenueMutation()
     const navigate = useNavigate()
 
@@ -115,6 +122,13 @@ export default function VenueForm(props: VenueFormProps): ReactElement {
     useEffect(() => {
         reset(defaultValues)
     }, [])
+
+    const handleValueChange = (value: Country | null): void => {
+        setLocalValue(value)
+        setValue('location.country', value?.Name ?? '')
+        setValue('location.continent', value?.Continent ?? '')
+        console.log(value)
+    }
 
     return (
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ maxWidth: '600px' }}>
@@ -337,27 +351,43 @@ export default function VenueForm(props: VenueFormProps): ReactElement {
                 fullWidth
                 required
             />
-            <TextField
-                id="country"
-                label="Country"
-                margin="normal"
-                autoComplete="country-name"
-                {...register('location.country')}
-                helperText={errors.location?.country?.message}
-                error={errors.location?.country != null}
-                fullWidth
-                required
+            <Autocomplete
+                sx={{ width: 300 }}
+                options={countries}
+                value={localValue}
+                onChange={(_e: any, newValue: Country | null) => {
+                    handleValueChange(newValue)
+                }}
+                inputValue={inputValue}
+                onInputChange={(_e, newInputValue) => {
+                    setInputValue(newInputValue)
+                }}
+                autoHighlight
+                getOptionLabel={(option) => option.Name}
+                renderOption={(props, option) => (
+                    <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                        <img
+                            loading="lazy"
+                            width="20"
+                            srcSet={`https://flagcdn.com/w40/${option.Code.toLowerCase()}.png 2x`}
+                            src={`https://flagcdn.com/w20/${option.Code.toLowerCase()}.png`}
+                            alt=""
+                        />
+                        {option.Name}
+                    </Box>
+                )}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Country"
+                        inputProps={{
+                            ...params.inputProps,
+                            autoComplete: 'off',
+                        }}
+                    />
+                )}
             />
-            <TextField
-                id="continent"
-                label="Continent"
-                margin="normal"
-                {...register('location.continent')}
-                helperText={errors.location?.continent?.message}
-                error={errors.location?.continent != null}
-                fullWidth
-                required
-            />
+
             <TextField
                 id="lat"
                 label="Latitude"

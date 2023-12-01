@@ -1,10 +1,10 @@
-interface Country {
+export interface Country {
     Code: string
     Name: string
     Continent: string
 }
 
-const countries: Country[] = [
+export const countries: Country[] = [
     {
         Code: 'AD',
         Name: 'Andorra',
