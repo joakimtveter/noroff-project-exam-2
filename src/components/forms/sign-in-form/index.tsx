@@ -6,31 +6,46 @@ import { useLoginMutation } from '@/services/holidaze.ts'
 import { useDispatch } from 'react-redux'
 import { logIn } from '@/features/user/userSlice.ts'
 
-import { z } from "zod";
+import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Box, Button, Link, TextField, Typography } from '@mui/material'
 
 const schema = z.object({
-    email: z.string().min(1, { message: "Email is required" }).email({message: "Must be a valid email" }),
-    password: z.string().min(8, { message: "Password is not valid format" }),
+    email: z.string().min(1, { message: 'Email is required' }).email({ message: 'Must be a valid email' }),
+    password: z.string().min(8, { message: 'Password is not valid format' }),
 })
 
-type SigninFormSchema = z.infer<typeof schema>;
+type SignInFormSchema = z.infer<typeof schema>
 
 export default function LoginForm(): ReactElement {
     const dispatch = useDispatch()
     const [login] = useLoginMutation()
-    const { register, handleSubmit, formState: { errors } } = useForm<SigninFormSchema>({ resolver: zodResolver(schema) });
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<SignInFormSchema>({ resolver: zodResolver(schema) })
     const navigate = useNavigate()
 
-    const onSubmit: SubmitHandler<SigninFormSchema> = async (data): Promise<void> => {
+    const onSubmit: SubmitHandler<SignInFormSchema> = async (data): Promise<void> => {
         try {
             const response = await login(data)
             if ('data' in response) {
                 dispatch(logIn(response.data))
                 navigate('/profile')
+            }
+            if ('error' in response) {
+                if ('status' in response.error) {
+                    if (response.error.status === 401) {
+                        toast.error('Invalid credentials.')
+                    } else {
+                        toast.error('Unable to log in')
+                    }
+                } else {
+                    toast.error(`Unable to log in`)
+                }
             }
         } catch (error) {
             console.error(error)
@@ -57,9 +72,9 @@ export default function LoginForm(): ReactElement {
                     label="Email Address"
                     autoComplete="username"
                     autoFocus
-                    {...register("email")}
+                    {...register('email')}
                     helperText={errors.email?.message}
-                    error={!!errors.email}
+                    error={errors.email != null}
                     fullWidth
                     required
                 />
@@ -69,9 +84,9 @@ export default function LoginForm(): ReactElement {
                     type="password"
                     id="password"
                     autoComplete="current-password"
-                    {...register("password")}
+                    {...register('password')}
                     helperText={errors.password?.message}
-                    error={!!errors.password}
+                    error={errors.password != null}
                     fullWidth
                     required
                 />
@@ -80,7 +95,7 @@ export default function LoginForm(): ReactElement {
                 </Button>
 
                 <Link component={RouterLink} to="/sign-up" variant="body2">
-                     I don't have an account. I wish to join.
+                    {`I don't have an account. I wish to join.`}
                 </Link>
             </Box>
         </Box>

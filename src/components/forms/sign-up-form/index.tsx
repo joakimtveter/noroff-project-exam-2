@@ -4,25 +4,40 @@ import { useRegisterProfileMutation } from '@/services/holidaze.ts'
 
 import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material'
 
-import { z } from "zod";
+import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-const namePattern = /^[\w]+$/;
+const namePattern = /^[\w]+$/
+const validEmailDomain = /@stud\.noroff\.no$/
 const schema = z.object({
-name: z.string().min(1, { message: "Name is required" })
-    .max(20, { message: "Name can't be longer than 20 characters" })
-    .refine((value) => namePattern.test(value), {message: 'Name can only contain letters, numbers, and undercores (_)'}),
-email: z.string().min(1, { message: "Email is required" }).email({message: "Must be a valid email" }),
-password: z.string().min(8, { message: "Password must be atleast 8 characters" }),
+    name: z
+        .string()
+        .min(1, { message: 'Name is required' })
+        .max(20, { message: "Name can't be longer than 20 characters" })
+        .refine((value) => namePattern.test(value), {
+            message: 'Name can only contain letters, numbers, and underscores (_)',
+        }),
+    email: z
+        .string()
+        .min(1, { message: 'Email is required' })
+        .email({ message: 'Must be a valid email' })
+        .refine((value) => validEmailDomain.test(value), {
+            message: 'Email must be a valid Noroff student email',
+        }),
+    password: z.string().min(8, { message: 'Password must be atleast 8 characters' }),
 })
 
-type RegisterFormSchema = z.infer<typeof schema>;
+type RegisterFormSchema = z.infer<typeof schema>
 
 export default function SignUpForm(): ReactElement {
     const [registerProfile] = useRegisterProfileMutation()
     const navigate = useNavigate()
-    const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormSchema>({ resolver: zodResolver(schema) });
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<RegisterFormSchema>({ resolver: zodResolver(schema) })
 
     const onSubmit: SubmitHandler<RegisterFormSchema> = async (data): Promise<void> => {
         try {
@@ -57,7 +72,7 @@ export default function SignUpForm(): ReactElement {
                                 id="name"
                                 label="Name"
                                 autoFocus
-                                {...register("name")}
+                                {...register('name')}
                                 helperText={errors.name?.message}
                                 error={!!errors.name}
                             />
@@ -69,7 +84,7 @@ export default function SignUpForm(): ReactElement {
                                 id="email"
                                 label="Email Address"
                                 autoComplete="email"
-                                {...register("email")}
+                                {...register('email')}
                                 helperText={errors.email?.message}
                                 error={!!errors.email}
                             />
@@ -82,7 +97,7 @@ export default function SignUpForm(): ReactElement {
                                 type="password"
                                 id="password"
                                 autoComplete="new-password"
-                                {...register("password")}
+                                {...register('password')}
                                 helperText={errors.password?.message}
                                 error={!!errors.password}
                             />
