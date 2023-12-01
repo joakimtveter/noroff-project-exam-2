@@ -10,7 +10,7 @@ This is my submission for the second year project exam in the [Noroff Frontend D
 
 ### Brief
 
-The brief for this project was to create a website for a fictional AirBnB site called Holidaze.
+The brief for this project was to create a website for a fictional AirBnB-like site called Holidaze.
 The API was provided by Noroff.
 
 ### Technology stack
@@ -35,19 +35,20 @@ I have also used [Prettier](https://prettier.io/), [Eslint](https://eslint.org/)
 
 These are the deliverables for this project:
 
-1. [A Gantt chart for project timing](https://github.com/users/joakimtveter/projects/5/views/4)
-2. A design prototype - TBA
-3. A style guide - TBA
-4. [A kanban project board](https://github.com/users/joakimtveter/projects/5/views/1)
-5. [A repository link](https://github.com/joakimtveter/noroff-project-exam-2)
-6. [A hosted application demo link](https://pe2.tveter.dev/)
+1. [A Gantt chart for planned dates](https://github.com/users/joakimtveter/projects/5/views/4)
+2. [A Gantt chart for actual dates](https://github.com/users/joakimtveter/projects/5/views/5)
+3. [A design prototype](https://www.figma.com/file/k6zaLFR0v7WIivbY5w0xcG/Holidaze---Noroff-Project-Exam-2?type=design&node-id=21%3A152&mode=design&t=eoKh6rgW73QG7rWb-1)
+4. [A style guide](https://www.figma.com/file/k6zaLFR0v7WIivbY5w0xcG/Holidaze---Noroff-Project-Exam-2?type=design&node-id=13-2&mode=design)
+5. [A kanban project board](https://github.com/users/joakimtveter/projects/5/views/1)
+6. [A repository link](https://github.com/joakimtveter/noroff-project-exam-2)
+7. [A hosted application demo link](https://pe2.tveter.dev/)
 
 ## Development
 
 ### Prerequisites
 
 You need to have [Node.js](https://nodejs.org/en/) installed on your machine.
-Developed on Node.js version 20, older or newer versions have not beem tested.
+Developed on `Node.js version 18 and 20`, older or newer versions have not been tested.
 This project contains an `.nvmrc`-file. If you use nvm, you can run `nvm use` to switch to the correct version.
 
 ### Up and running
