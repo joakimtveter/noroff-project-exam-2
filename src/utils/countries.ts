@@ -1,4 +1,10 @@
-const contries = [
+interface Country {
+    Code: string
+    Name: string
+    Continent: string
+}
+
+const countries: Country[] = [
     {
         Code: 'AD',
         Name: 'Andorra',

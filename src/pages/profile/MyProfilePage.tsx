@@ -1,9 +1,11 @@
-import { ReactElement, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import { toast } from 'react-toastify'
 
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useGetOwnProfileQuery, useBecomeVenueManagerMutation } from '@/services/holidaze'
+import { updateAvatar } from '@/features/user/userSlice.ts'
 import { RootState } from '@/store'
 
 import { Avatar, Badge, Box, Button, Chip, CircularProgress, List, Stack, Typography } from '@mui/material'
@@ -16,7 +18,6 @@ import EditIcon from '@mui/icons-material/Edit'
 import BookingList from '@/components/profile/booking-list'
 import VenueListItem from '@/components/profile/venue-list-item'
 import UpdateProfilePictureDialog from '@/components/profile/update-profile-picture-dialog'
-import { Helmet } from 'react-helmet'
 
 export default function OwnProfilePage(): ReactElement {
     const [open, setOpen] = useState<boolean>(false)
@@ -24,7 +25,7 @@ export default function OwnProfilePage(): ReactElement {
     const user = useSelector((state: RootState) => state.user.user)
     const [becomeVenueManager] = useBecomeVenueManagerMutation()
     const navigate = useNavigate()
-
+    const dispatch = useDispatch()
     const handleClickOpen = (): void => {
         setOpen(true)
     }
@@ -38,16 +39,21 @@ export default function OwnProfilePage(): ReactElement {
         navigate('/sign-in')
     }
 
-    const { data, error, isLoading } = useGetOwnProfileQuery(user?.name)
+    const { data, isError, error, isLoading } = useGetOwnProfileQuery(user?.name)
 
-    if (error != null) {
+    if (isError) {
         console.error(error)
         toast.error('There was an error!')
     }
+    useEffect(() => {
+        if (data?.avatar != null) {
+            dispatch(updateAvatar(data.avatar))
+        }
+    }, [])
 
     return (
         <>
-            {error != null ? (
+            {isError ? (
                 <>
                     <p>Oh no, there was an error</p>
                 </>
@@ -100,11 +106,9 @@ export default function OwnProfilePage(): ReactElement {
                         <UpdateProfilePictureDialog handleClose={handleClose} open={open} name={user.name} />
                         <Stack component="hgroup" spacing={1}>
                             <Typography component="h1" variant="h3">
-                                {' '}
                                 {data.name}
                             </Typography>
                             <Typography component="p" variant="subtitle1">
-                                {' '}
                                 {data.email}
                             </Typography>
                             {data.venueManager === true && (
@@ -159,6 +163,7 @@ export default function OwnProfilePage(): ReactElement {
                                 to="/venues/add"
                                 endIcon={<AddIcon />}
                                 variant="contained"
+                                color="secondary"
                                 sx={{ marginBlock: 2 }}
                             >
                                 Add venue
