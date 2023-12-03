@@ -74,7 +74,7 @@ export default function SignUpForm(): ReactElement {
                                 autoFocus
                                 {...register('name')}
                                 helperText={errors.name?.message}
-                                error={!!errors.name}
+                                error={errors.name != null}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -86,7 +86,7 @@ export default function SignUpForm(): ReactElement {
                                 autoComplete="email"
                                 {...register('email')}
                                 helperText={errors.email?.message}
-                                error={!!errors.email}
+                                error={errors.email != null}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -99,7 +99,7 @@ export default function SignUpForm(): ReactElement {
                                 autoComplete="new-password"
                                 {...register('password')}
                                 helperText={errors.password?.message}
-                                error={!!errors.password}
+                                error={errors.password != null}
                             />
                         </Grid>
                     </Grid>

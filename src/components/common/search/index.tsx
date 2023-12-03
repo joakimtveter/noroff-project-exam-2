@@ -8,13 +8,14 @@ export default function SearchBox(): ReactElement {
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState('')
     const navigate = useNavigate()
-    const { data, error, isLoading } = useGetVenuesQuery()
+    const { data, isError, error, isLoading } = useGetVenuesQuery()
 
     const handleSearch = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault()
         navigate(`/venues?q=${value}`)
         setValue('')
     }
+    if (isError) console.error(error)
 
     return (
         <Box
@@ -90,7 +91,7 @@ export default function SearchBox(): ReactElement {
                     )}
                 />
             </Box>
-            {error && <Typography color="error">Error loading data. Please try again later.</Typography>}
+            {isError && <Typography color="error">Error loading data. Please try again later.</Typography>}
         </Box>
     )
 }
