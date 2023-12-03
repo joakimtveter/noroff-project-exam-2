@@ -111,7 +111,7 @@ export const holidazeApi = createApi({
             }),
             invalidatesTags: ['OwnProfile', 'VenueList'],
         }),
-        getBooking: builder.query<BookingWithVenue, string>({
+        getBooking: builder.query<BookingDetailed, string>({
             query: (bookingId) => `bookings/${bookingId}?_venue=true&_customer=true`,
             providesTags: ['Booking'],
         }),

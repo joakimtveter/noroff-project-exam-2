@@ -49,6 +49,12 @@ export default function BookingDialog(props: BookingDialogProps): ReactElement {
                     <Box>
                         <DialogContentText id="booking-dialog-description">
                             <Box component="span" sx={{ fontWeight: 700 }}>
+                                {'Guest: '}
+                            </Box>
+                            {data?.customer.name}
+                        </DialogContentText>
+                        <DialogContentText id="booking-dialog-description">
+                            <Box component="span" sx={{ fontWeight: 700 }}>
                                 Arrive on:{' '}
                             </Box>
                             {arrivalDate?.toLocaleDateString('en-NO', {
