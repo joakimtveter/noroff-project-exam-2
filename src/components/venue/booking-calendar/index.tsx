@@ -1,5 +1,6 @@
 import { ChangeEvent, ReactElement, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { getLocalTimeZone, parseDate, today } from '@internationalized/date'
 import { Button, CalendarCell, CalendarGrid, DateValue, Heading, RangeCalendar } from 'react-aria-components'
 
@@ -20,7 +21,7 @@ interface BookingCalendarProps {
 export default function BookingCalendar(props: BookingCalendarProps): ReactElement {
     const { bookings, maxGuests = 100, venueId, enableBooking = false } = props
     const [createBooking] = useCreateBookingMutation()
-    const [guests, setGuests] = useState(1)
+    const [guests, setGuests] = useState<number | null>(1)
     const [dates, setDates] = useState({
         start: today(getLocalTimeZone()),
         end: today(getLocalTimeZone()),
@@ -37,14 +38,19 @@ export default function BookingCalendar(props: BookingCalendarProps): ReactEleme
     }
 
     const handleBooking = async (): Promise<void> => {
+        if (guests === null) {
+            toast.error('Booking failed. Must have number of guests.')
+            return
+        }
         const dateFrom = new Date(dates.start.toString()).toISOString()
         const dateTo = new Date(dates.end.toString()).toISOString()
+
         await createBooking({ dateTo, dateFrom, guests, venueId })
         navigate('/profile')
     }
 
     return (
-        <Box sx={{ marginBlock: 4, marginInline: 'auto', width: 'max-content' }}>
+        <Box sx={{ marginBlock: 4, width: 'max-content' }}>
             <RangeCalendar
                 isReadOnly={!enableBooking}
                 aria-label="Trip dates"
