@@ -66,7 +66,7 @@ export default function BookingDialog(props: BookingDialogProps): ReactElement {
                         </DialogContentText>
                         <DialogContentText id="booking-dialog-description">
                             <Box component="span" sx={{ fontWeight: 700 }}>
-                                Depart on:{' '}
+                                {'Depart on: '}
                             </Box>
                             {departureDate?.toLocaleDateString('en-NO', {
                                 weekday: 'long',
@@ -77,27 +77,29 @@ export default function BookingDialog(props: BookingDialogProps): ReactElement {
                         </DialogContentText>
                         <DialogContentText id="booking-dialog-description">
                             <Box component="span" sx={{ fontWeight: 700 }}>
-                                Number of nights:{' '}
+                                {'Number of nights: '}
                             </Box>
                             {numberOfNights}
                         </DialogContentText>
                         <DialogContentText id="booking-dialog-description">
                             <Box component="span" sx={{ fontWeight: 700 }}>
-                                Number of guests:{' '}
+                                {'Number of guests: '}
                             </Box>
                             {data?.guests}
                         </DialogContentText>
                         <DialogContentText id="booking-dialog-description">
                             <Box component="span" sx={{ fontWeight: 700 }}>
-                                Price per night:{' '}
+                                {'Price per night: '}
                             </Box>
                             {data?.venue.price}
+                            {' kr'}
                         </DialogContentText>
                         <DialogContentText id="booking-dialog-description">
                             <Box component="span" sx={{ fontWeight: 700 }}>
-                                Total price:{' '}
+                                {'Total price: '}
                             </Box>
                             {(data?.venue.price ?? 0) * (numberOfNights ?? 0)}
+                            {' kr'}
                         </DialogContentText>
                         <Link component={RouterLink} to={`/venues/${data?.venue.id}`} underline="hover">
                             {' '}
