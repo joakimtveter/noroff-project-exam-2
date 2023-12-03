@@ -33,7 +33,7 @@ export const holidazeApi = createApi({
         }),
         // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
         getTrendingVenues: builder.query<Venue[], void>({
-            query: () => 'venues?sort=created&sortOrder=asc&offset=5&limit=3',
+            query: () => 'venues?sort=created&sortOrder=asc&offset=7&limit=3',
         }),
         getVenueById: builder.query<VenueDetailed, string>({
             query: (id) => `venues/${id}?_owner=true&_bookings=true`,
@@ -86,7 +86,7 @@ export const holidazeApi = createApi({
                 method: 'POST',
                 body,
             }),
-            invalidatesTags: ['VenueList'],
+            invalidatesTags: ['VenueList', 'OwnProfile'],
         }),
         updateVenue: builder.mutation<Venue, { venueId: string; body: VenueFormSchema }>({
             query: ({ venueId, body }) => ({
