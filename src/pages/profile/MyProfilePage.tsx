@@ -35,7 +35,7 @@ export default function OwnProfilePage(): ReactElement {
     }
 
     if (!isLoggedIn) {
-        toast.info('You are not logged in')
+        toast.info('You are not logged in', { toastId: 'own-profile-redirect' })
         navigate('/sign-in')
     }
 

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@/store.ts'
 import { useGetVenueByIdQuery } from '@/services/holidaze'
 
-import { Box, CircularProgress, Container, Grid, IconButton, Paper, Tooltip, Typography } from '@mui/material'
+import { Box, CircularProgress, Container, Grid, IconButton, Tooltip, Typography } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { I18nProvider } from 'react-aria'
 
@@ -29,8 +29,7 @@ export default function SingleVenuePage(): ReactElement {
         if (lat === undefined || lng === undefined) return false
         if (lat === 0 && lng === 0) return false
         if (lat < -90 || lat > 90) return false
-        if (lng < -180 || lng > 180) return false
-        return true
+        return !(lng < -180 || lng > 180)
     }
     const isValidCoords = validateCoords(data?.location.lat, data?.location.lng)
 
@@ -84,10 +83,10 @@ export default function SingleVenuePage(): ReactElement {
                         </Typography>
                         <ProfileCard name={data.owner.name} avatar={data.owner.avatar} email={data.owner.email} />
                     </Box>
-                    <Typography component="h2" variant="h5">
-                        Amenities
-                    </Typography>
-                    <Paper elevation={2} sx={{ padding: 2, maxWidth: '700px', marginBlock: 2 }}>
+                    <Box sx={{ padding: 2, maxWidth: '700px', marginBlock: 2 }}>
+                        <Typography component="h2" variant="h5">
+                            Amenities
+                        </Typography>
                         <Typography>
                             <Box component="span" sx={{ fontWeight: 600 }}>
                                 {'Maximum Guests: '}
@@ -118,9 +117,9 @@ export default function SingleVenuePage(): ReactElement {
                             </Box>
                             {data.meta.breakfast ? 'Yes' : 'No'}
                         </Typography>
-                    </Paper>
+                    </Box>
 
-                    <Paper component="section" elevation={2} sx={{ padding: 2, marginBlock: 2 }}>
+                    <Box component="section" sx={{ padding: 2, marginBlock: 2 }}>
                         <Typography component="h2" variant="h5" marginBlockEnd={2}>
                             Location
                         </Typography>
@@ -131,7 +130,7 @@ export default function SingleVenuePage(): ReactElement {
                                 </Grid>
                             )}
                             <Grid item xs={12} md={isValidCoords ? 4 : 12}>
-                                <Typography component="address">
+                                <Typography component="address" variant="subtitle1">
                                     {data.location.address}
                                     <br />
                                     {data.location.zip + ' ' + data.location.city}
@@ -139,15 +138,25 @@ export default function SingleVenuePage(): ReactElement {
                                     {data.location.country + ', ' + data.location.continent}
                                 </Typography>
                                 {isValidCoords && (
-                                    <Box>
-                                        <Typography component="p">Latitude: {data.location.lat}</Typography>
-                                        <Typography component="p">Longitude: {data.location.lng}</Typography>
+                                    <Box marginBlock={2}>
+                                        <Typography component="p">
+                                            <Box component="span" sx={{ fontWeight: 600 }}>
+                                                {'Latitude: '}
+                                            </Box>
+                                            {data.location.lat}
+                                        </Typography>
+                                        <Typography component="p">
+                                            <Box component="span" sx={{ fontWeight: 600 }}>
+                                                {'Longitude: '}
+                                            </Box>
+                                            {data.location.lng}
+                                        </Typography>
                                     </Box>
                                 )}
                             </Grid>
                         </Grid>
-                    </Paper>
-                    <Paper component="section" elevation={2} sx={{ padding: 2, marginBlock: 2 }}>
+                    </Box>
+                    <Box component="section" sx={{ padding: 2, marginBlock: 2 }}>
                         <I18nProvider locale="en-NO">
                             <BookingCalendar
                                 bookings={data.bookings}
@@ -156,7 +165,7 @@ export default function SingleVenuePage(): ReactElement {
                                 enableBooking={isLoggedIn}
                             />
                         </I18nProvider>
-                    </Paper>
+                    </Box>
 
                     {isOwnVenue && (
                         <Box component="section">
